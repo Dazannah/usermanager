@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Status
  * 
- * @property int $Id
- * @property string $Name
- * @property string $DisplayName
+ * @property int $id
+ * @property string $name
+ * @property string $displayName
  * 
  * @property Collection|AuthItem[] $auth_items
  * @property Collection|Column[] $columns
@@ -22,29 +22,25 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Status extends Model
-{
-	protected $table = 'Status';
-	protected $primaryKey = 'Id';
+class Status extends Model {
+	protected $table = 'status';
+	protected $primaryKey = 'id';
 	public $timestamps = false;
 
 	protected $fillable = [
-		'Name',
-		'DisplayName'
+		'name',
+		'displayName'
 	];
 
-	public function auth_items()
-	{
-		return $this->hasMany(AuthItem::class, 'StatusId');
+	public function auth_items() {
+		return $this->hasMany(AuthItem::class, 'status_id');
 	}
 
-	public function columns()
-	{
-		return $this->hasMany(Column::class, 'StatusId');
+	public function columns() {
+		return $this->hasMany(Column::class, 'status_id');
 	}
 
-	public function sub_auth_items()
-	{
-		return $this->hasMany(SubAuthItem::class, 'StatusId');
+	public function sub_auth_items() {
+		return $this->hasMany(SubAuthItem::class, 'status_id');
 	}
 }

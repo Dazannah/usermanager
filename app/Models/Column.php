@@ -12,40 +12,37 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Column
  * 
- * @property int $Id
- * @property string $DisplayName
- * @property int $StatusId
- * @property int $Position
+ * @property int $id
+ * @property string $displayName
+ * @property int $status_id
+ * @property int $position
  * 
  * @property Status $status
  * @property Collection|AuthItem[] $auth_items
  *
  * @package App\Models
  */
-class Column extends Model
-{
-	protected $table = 'Columns';
-	protected $primaryKey = 'Id';
+class Column extends Model {
+	protected $table = 'columns';
+	protected $primaryKey = 'id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'StatusId' => 'int',
-		'Position' => 'int'
+		'status_id' => 'int',
+		'position' => 'int'
 	];
 
 	protected $fillable = [
-		'DisplayName',
-		'StatusId',
-		'Position'
+		'displayName',
+		'status_id',
+		'position'
 	];
 
-	public function status()
-	{
-		return $this->belongsTo(Status::class, 'StatusId');
+	public function status() {
+		return $this->belongsTo(Status::class, 'status_id');
 	}
 
-	public function auth_items()
-	{
-		return $this->hasMany(AuthItem::class, 'ColumnId');
+	public function auth_items() {
+		return $this->hasMany(AuthItem::class, 'column_id');
 	}
 }

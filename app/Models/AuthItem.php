@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class AuthItem
  * 
- * @property int $Id
- * @property string $DisplayName
- * @property int $ColumnId
- * @property int $StatusId
- * @property int $Position
+ * @property int $id
+ * @property string $displayName
+ * @property int $column_id
+ * @property int $status_id
+ * @property int $position
  * 
  * @property Column $column
  * @property Status $status
@@ -24,37 +24,33 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class AuthItem extends Model
-{
-	protected $table = 'AuthItems';
-	protected $primaryKey = 'Id';
+class AuthItem extends Model {
+	protected $table = 'authItems';
+	protected $primaryKey = 'id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'ColumnId' => 'int',
-		'StatusId' => 'int',
-		'Position' => 'int'
+		'column_id' => 'int',
+		'status_id' => 'int',
+		'position' => 'int'
 	];
 
 	protected $fillable = [
-		'DisplayName',
-		'ColumnId',
-		'StatusId',
-		'Position'
+		'displayName',
+		'column_id',
+		'status_id',
+		'position'
 	];
 
-	public function column()
-	{
-		return $this->belongsTo(Column::class, 'ColumnId');
+	public function column() {
+		return $this->belongsTo(Column::class, 'column_id');
 	}
 
-	public function status()
-	{
-		return $this->belongsTo(Status::class, 'StatusId');
+	public function status() {
+		return $this->belongsTo(Status::class, 'status_id');
 	}
 
-	public function sub_auth_items()
-	{
-		return $this->hasMany(SubAuthItem::class, 'AuthItemId');
+	public function sub_auth_items() {
+		return $this->hasMany(SubAuthItem::class, 'authItem_id');
 	}
 }

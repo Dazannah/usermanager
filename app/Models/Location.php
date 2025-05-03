@@ -12,27 +12,25 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Location
  * 
- * @property int $Id
- * @property string $DisplayName
- * @property string|null $Note
+ * @property int $id
+ * @property string $displayName
+ * @property string|null $note
  * 
  * @property Collection|Department[] $departments
  *
  * @package App\Models
  */
-class Location extends Model
-{
-	protected $table = 'Locations';
-	protected $primaryKey = 'Id';
+class Location extends Model {
+	protected $table = 'locations';
+	protected $primaryKey = 'id';
 	public $timestamps = false;
 
 	protected $fillable = [
-		'DisplayName',
-		'Note'
+		'displayName',
+		'note'
 	];
 
-	public function departments()
-	{
-		return $this->hasMany(Department::class, 'LocationId');
+	public function departments() {
+		return $this->hasMany(Department::class, 'location_id');
 	}
 }

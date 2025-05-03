@@ -11,43 +11,40 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class SubAuthItem
  * 
- * @property int $Id
- * @property string $DisplayName
- * @property int $AuthItemId
- * @property int $StatusId
- * @property int $Position
+ * @property int $id
+ * @property string $displayName
+ * @property int $authItem_id
+ * @property int $status_id
+ * @property int $position
  * 
  * @property AuthItem $auth_item
  * @property Status $status
  *
  * @package App\Models
  */
-class SubAuthItem extends Model
-{
-	protected $table = 'SubAuthItems';
-	protected $primaryKey = 'Id';
+class SubAuthItem extends Model {
+	protected $table = 'subAuthItems';
+	protected $primaryKey = 'id';
 	public $timestamps = false;
 
 	protected $casts = [
-		'AuthItemId' => 'int',
-		'StatusId' => 'int',
-		'Position' => 'int'
+		'authItem_id' => 'int',
+		'status_id' => 'int',
+		'position' => 'int'
 	];
 
 	protected $fillable = [
-		'DisplayName',
-		'AuthItemId',
-		'StatusId',
-		'Position'
+		'displayName',
+		'authItem_id',
+		'status_id',
+		'position'
 	];
 
-	public function auth_item()
-	{
-		return $this->belongsTo(AuthItem::class, 'AuthItemId');
+	public function auth_item() {
+		return $this->belongsTo(AuthItem::class, 'authItem_id');
 	}
 
-	public function status()
-	{
-		return $this->belongsTo(Status::class, 'StatusId');
+	public function status() {
+		return $this->belongsTo(Status::class, 'status_id');
 	}
 }
