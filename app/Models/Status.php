@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  */
 class Status extends Model {
-	protected $table = 'status';
+	protected $table = 'statuses';
 	protected $primaryKey = 'id';
 	public $timestamps = false;
 
