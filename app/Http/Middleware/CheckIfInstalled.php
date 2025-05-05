@@ -13,7 +13,7 @@ class CheckIfInstalled {
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response {
-        if (!config("app.installed") && ($request->path() != "initial-setup" && $request->path() != 'livewire/update'))
+        if (!config("app.installed") && ($request->path() != "initial-setup" && !preg_match('/livewire\/.*/', $request->path())))
             return redirect("initial-setup");
 
         if (config("app.installed") && $request->path() == "initial-setup")
