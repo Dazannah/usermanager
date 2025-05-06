@@ -50,13 +50,13 @@
             <x-input-label for="db_password" :value="__('Jelszó')" />
             <x-text-input wire:model="db_password" id="db_password" name="db_password" type="password" class="mt-1 block w-full" />
             @error('db_password') <x-input-error :messages="$message" class="mt-2" /> @enderror
-            @error('test_result_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
-            @if (session()->has('test_result'))
+            @error('db_test_result_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+            @if (session()->has('db_test_result'))
                 <div class="alert alert-success">
-                    {{ session('test_result') }}
+                    {{ session('db_test_result') }}
                 </div>
             @endif
-            <x-primary-button wire:loading.remove wire:click.prevent="test_database_connection_standalone">{{ __('Kapcsolat tesztelése') }}</x-primary-button>
+            <x-primary-button wire:click.prevent="test_database_connection_standalone">{{ __('Kapcsolat tesztelése') }}</x-primary-button>
             <x-action-message wire:loading class="me-3" on="password-updated">
               {{ __('Loading') }}
             </x-action-message>
@@ -84,8 +84,47 @@
               @error('password_confirmation') <x-input-error :messages="$message" class="mt-2" /> @enderror
           </div>
         </div>
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ __('LDAP autentikáció') }}  <input type="checkbox" wire:model="ldap_active" class="form-checkbox" />
+      </h2>
+      @if ($ldap_active === true) {{-- nem működik meg nézni miért --}}
+        <div wire:key="ldap-fields" class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+          <div class="max-w-xl">
+            <x-input-label for="ldap_host" :value="__('Szerver címe')" />
+            <x-text-input wire:model="ldap_host" id="ldap_host" name="ldap_host" type="text" class="mt-1 block w-full" />
+            @error('ldap_host') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+            <x-input-label for="ldap_port" :value="__('Port')" />
+            <x-text-input wire:model="ldap_port" id="ldap_port" name="ldap_port" type="text" class="mt-1 block w-full" />
+            @error('ldap_port') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+              <x-input-label for="ldap_username" :value="__('Felhasználónév')" />
+              <x-text-input wire:model="ldap_username" id="ldap_username" name="ldap_username" type="text" class="mt-1 block w-full" />
+              @error('ldap_username') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+              <x-input-label for="ldap_password" :value="__('Jelszó')" />
+              <x-text-input wire:model="ldap_password" id="ldap_password" name="ldap_password" type="password" class="mt-1 block w-full" />
+              @error('ldap_password') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+              <x-input-label for="ldap_base_dn" :value="__('Base DN')" />
+              <x-text-input wire:model="ldap_base_dn" id="ldap_base_dn" name="ldap_base_dn" type="text" class="mt-1 block w-full" />
+              @error('ldap_base_dn') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+              @error('ldap_test_result_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+              @if (session()->has('ldap_test_result'))
+                  <div class="alert alert-success">
+                      {{ session('ldap_test_result') }}
+                  </div>
+              @endif
+              <x-primary-button wire:click.prevent="test_ldap_connection_standalone">{{ __('LDAP tesztelése') }}</x-primary-button>
+              <x-action-message wire:loading class="me-3" on="password-updated">
+                {{ __('Loading') }}
+              </x-action-message>
+          </div>
+        </div>
+        @endif
       <div class="flex items-center gap-4">
-          <x-primary-button wire:loading.remove>{{ __('Mentés') }}</x-primary-button>
+          <x-primary-button>{{ __('Mentés') }}</x-primary-button>
 
           <x-action-message wire:loading class="me-3" on="password-updated">
             {{ __('Loading') }}
