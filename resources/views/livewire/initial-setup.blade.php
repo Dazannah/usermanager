@@ -50,12 +50,18 @@
             <x-input-label for="db_password" :value="__('Jelszó')" />
             <x-text-input wire:model="db_password" id="db_password" name="db_password" type="password" class="mt-1 block w-full" />
             @error('db_password') <x-input-error :messages="$message" class="mt-2" /> @enderror
+            @error('test_result_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+            @if (session()->has('test_result'))
+                <div class="alert alert-success">
+                    {{ session('test_result') }}
+                </div>
+            @endif
+            <x-primary-button wire:loading.remove wire:click.prevent="test_database_connection_standalone">{{ __('Kapcsolat tesztelése') }}</x-primary-button>
+            <x-action-message wire:loading class="me-3" on="password-updated">
+              {{ __('Loading') }}
+            </x-action-message>
         </div>
       </div>
-              <!--
-    public $password = '';
-    public $password_confirmation = '';
-        -->
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
           {{ __('Alapértelmezett rendszergazda fiók') }}
       </h2>
@@ -79,7 +85,11 @@
           </div>
         </div>
       <div class="flex items-center gap-4">
-          <x-primary-button>{{ __('Mentés') }}</x-primary-button>
+          <x-primary-button wire:loading.remove>{{ __('Mentés') }}</x-primary-button>
+
+          <x-action-message wire:loading class="me-3" on="password-updated">
+            {{ __('Loading') }}
+          </x-action-message>
       </div>
   </form>
   </div>
