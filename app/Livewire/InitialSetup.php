@@ -55,13 +55,56 @@ class InitialSetup extends Component {
         $this->validateOnly($propertyName);
     }
 
-    public function save() {
+    public function test_database_connection() {
+        $this->validate();
 
+        try {
+            config([
+                'database.connections.mysql.host' => $this->db_host,
+                'database.connections.mysql.port' => $this->db_port,
+                'database.connections.mysql.database' => null,
+                'database.connections.mysql.username' => $this->db_username,
+                'database.connections.mysql.password' => $this->db_password
+            ]);
+
+            DB::connection()->getPDO();
+
+            return true;
+        } catch (Exception $err) {
+            return $err->getMessage();
+        }
+    }
+
+    public function test_database_connection_standalone() {
+        $result = $this->test_database_connection();
+
+        if ($result === true) {
+            session()->flash('test_result', "Sikeres kapcsolat kiépítés.");
+
+            return;
+        } else {
+            $this->addError('test_result_error', $result);
+
+            return;
+        }
+    }
+
+    public function save() {
         $this->validate();
         $this->validate(['password' => [Rules\Password::defaults()]]);
 
+        //database 
+        $test_result = $this->test_database_connection();
+
+        if ($test_result !== true) {
+            $this->addError('test_result_error', $test_result);
+
+            return;
+        }
+
         //sikeres validáció után .env módosítása és mentése
         $env_content = $original_env_content = file_get_contents(base_path('.env'));
+        $original_database_connctions = config('database.connctions');
 
         try {
             $env_content = preg_replace('/\nAPP_NAME=.*/', "\nAPP_NAME=" . "'$this->app_name'", $env_content);
@@ -75,14 +118,16 @@ class InitialSetup extends Component {
             $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
             $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
 
-            file_put_contents(
-                base_path('.env'),
-                $env_content
-            );
-
-            //módosított .env betöltése memóriába
-            Artisan::call('config:clear');
-            Artisan::call('config:cache');
+            config([
+                'app.name' => $this->app_name,
+                'app.installed' => true,
+                'session.driver' => 'database',
+                'database.connections.mysql.host' => $this->db_host,
+                'database.connections.mysql.port' => $this->db_port,
+                'database.connections.mysql.database' => $this->db_databasename,
+                'database.connections.mysql.username' => $this->db_username,
+                'database.connections.mysql.password' => $this->db_password
+            ]);
 
             //adatbázis migráció
             Artisan::call('migrate', array(
@@ -98,6 +143,11 @@ class InitialSetup extends Component {
 
             User::create($user_data);
 
+            file_put_contents(
+                base_path('.env'),
+                $env_content
+            );
+
             return redirect()->to('/');
         } catch (Exception $err) {
             session()->flash('message', $err->getMessage());
@@ -108,13 +158,16 @@ class InitialSetup extends Component {
                 $original_env_content
             );
 
-            Artisan::call('config:clear');
+            //function elején kimentett konf vissza töltése
+            config([
+                'session.driver' => 'file',
+                'app.installed' => false,
+                'database.connections' => $original_database_connctions
+            ]);
         }
     }
 
     public function render() {
-        return view('livewire.initial-setup', [
-            'errors' => session()->get('errors') ?: new \Illuminate\Support\ViewErrorBag()
-        ])->layout('layouts.guest');
+        return view('livewire.initial-setup')->layout('layouts.guest');
     }
 }
