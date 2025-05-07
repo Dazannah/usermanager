@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Exception;
 use App\Models\User;
 use Livewire\Component;
-use LdapRecord\Container;
+use LdapRecord\Connection;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +31,10 @@ class InitialSetup extends Component {
     public $ldap_port = 389;
     public $ldap_username = '';
     public $ldap_password = '';
-    public $ldap_base_dn = 'dc=local,dc=com';
+    public $ldap_base_dn = '';
+
+    private $domain = '';
+    private $userPrincipalName = '';
 
     protected $rules = [
         'app_name' => 'required',
@@ -45,9 +48,9 @@ class InitialSetup extends Component {
         'password' => 'required|confirmed',
         'ldap_host' => 'required',
         'ldap_port' => 'required',
+        'ldap_base_dn' => 'required',
         'ldap_username' => 'required',
-        'ldap_password' => 'required',
-        'ldap_base_dn' => 'required'
+        'ldap_password' => 'required'
     ];
 
     protected $messages = [
@@ -65,9 +68,9 @@ class InitialSetup extends Component {
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
         'ldap_host.required' => 'LDAP szerver cím megadása kötelező.',
         'ldap_port.required' => 'LDAP szerver port megadása kötelező.',
+        'ldap_base_dn.required' => 'LDAP DN megadása kötelező.',
         'ldap_username.required' => 'LDAP felhasználónév megadása kötelező.',
         'ldap_password.required' => 'LDAP felhasználó jelszó megadása kötelező.',
-        'ldap_base_dn.required' => 'LDAP DN megadása kötelező.'
     ];
 
     public function updated($propertyName) {
@@ -78,22 +81,44 @@ class InitialSetup extends Component {
         $this->ldap_active = !$this->ldap_active;
     }
 
+    private function base_dn_to_domain() {
+        $parts = explode(',', $this->ldap_base_dn);
+
+        $this->domain = collect($parts)->map(fn($part) => substr($part, 3))->implode('.');
+    }
+
+    private function generate_userPrincipalName() {
+        $this->userPrincipalName = $this->ldap_username . '@' . $this->domain;
+    }
+
     public function test_ldap_connection() {
         $this->validate();
 
+        $this->base_dn_to_domain();
+        $this->generate_userPrincipalName();
+
         try {
-            config([
-                'ldap.connections.default.host' => $this->ldap_host,
-                'ldap.connections.default.port' => $this->ldap_port,
-                'ldap.connections.default.username' => $this->ldap_username,
-                'ldap.connections.default.password' => $this->ldap_password,
-                'ldap.connections.default.base_dn' => $this->ldap_base_dn,
+            $connection = new Connection([
+                // Mandatory Configuration Options
+                'hosts'            => [$this->ldap_host],
+                'base_dn'          => $this->ldap_base_dn,
+                // 'username'         => $this->ldap_username,
+                // 'password'         => $this->ldap_password,
+
+                // Optional Configuration Options
+                'port'             => $this->ldap_port,
+                'use_ssl'          => false,
+                'use_tls'          => false,
+                'version'          => 3,
+                'timeout'          => 5,
+                'follow_referrals' => false,
             ]);
 
-            $connection = Container::getConnection('default');
-
             $connection->connect();
-            $connection->auth()->attempt();
+            $user_atuh = $connection->auth()->attempt($this->userPrincipalName, $this->ldap_password);
+
+            if (!$user_atuh)
+                throw new Exception("Felhasználó adatok helytelenek.");
 
             return true;
         } catch (Exception $err) {
@@ -122,12 +147,13 @@ class InitialSetup extends Component {
             config([
                 'database.connections.mysql.host' => $this->db_host,
                 'database.connections.mysql.port' => $this->db_port,
-                'database.connections.mysql.database' => null,
+                'database.connections.mysql.database' => $this->db_databasename,
                 'database.connections.mysql.username' => $this->db_username,
                 'database.connections.mysql.password' => $this->db_password
             ]);
 
             DB::connection()->getPDO();
+            DB::disconnect();
 
             return true;
         } catch (Exception $err) {
@@ -188,6 +214,14 @@ class InitialSetup extends Component {
             $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
             $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
 
+            if ($this->ldap_active === true) {
+                $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST=" . "'$this->ldap_host'", $env_content);
+                $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME=" . "'$this->userPrincipalName'", $env_content);
+                $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD=" . "'$this->ldap_password'", $env_content);
+                $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT=" . $this->ldap_port, $env_content);
+                $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN=" . "'$this->ldap_base_dn'", $env_content);
+            }
+
             config([
                 'app.name' => $this->app_name,
                 'app.installed' => true,
@@ -197,6 +231,14 @@ class InitialSetup extends Component {
                 'database.connections.mysql.database' => $this->db_databasename,
                 'database.connections.mysql.username' => $this->db_username,
                 'database.connections.mysql.password' => $this->db_password
+            ]);
+
+            config([
+                'ldap.connections.default.hosts' => $this->ldap_host,
+                'ldap.connections.default.port' => $this->ldap_port,
+                'ldap.connections.default.base_dn' => $this->ldap_base_dn,
+                'ldap.connections.default.username' => $this->userPrincipalName,
+                'ldap.connections.default.password' => $this->ldap_password
             ]);
 
             //adatbázis migráció
@@ -220,7 +262,7 @@ class InitialSetup extends Component {
 
             return redirect()->to('/');
         } catch (Exception $err) {
-            session()->flash('message', $err->getMessage());
+            $this->addError('save_error', $err->getMessage());
 
             //hiba esetén a változatlan .env vissza töltése
             file_put_contents(
