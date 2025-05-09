@@ -4,16 +4,29 @@ namespace App\Livewire;
 
 use Exception;
 use App\Models\User;
+use App\Mail\MailTest;
 use Livewire\Component;
 use LdapRecord\Connection;
+use Livewire\WithFileUploads;
 use Illuminate\Validation\Rules;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 
 class InitialSetup extends Component {
+    use WithFileUploads;
+
     public $app_name = 'Felhasználó kezelő';
+    // public $logo;
+
+    public $mail_host = '';
+    public $mail_port = 465;
+    public $mail_username = '';
+    public $mail_password = '';
+    public $mail_test_address = '';
 
     public $db_host = '';
     public $db_port = 3306;
@@ -21,28 +34,31 @@ class InitialSetup extends Component {
     public $db_username = '';
     public $db_password = '';
 
-    public $admin_username = '';
+    public $admin_name = '';
+    public $admin_username = 'admin';
     public $admin_email = '';
     public $password = '';
     public $password_confirmation = '';
 
-    public $ldap_active = false;
+    public $ldap_active = true;
     public $ldap_host = '';
+    public $ldap_base_dn = '';
     public $ldap_port = 389;
     public $ldap_username = '';
     public $ldap_password = '';
-    public $ldap_base_dn = '';
 
     private $domain = '';
     private $userPrincipalName = '';
 
     protected $rules = [
         'app_name' => 'required',
+        //'logo' => 'required|image|max:2048',
         'db_host' => 'required',
         'db_port' => 'required|integer|min:1|max:65535',
         'db_databasename' => 'required',
         'db_username' => 'required',
         'db_password' => 'required',
+        'admin_name' => 'max:255',
         'admin_username' => 'required|max:255',
         'admin_email' => 'required|email|max:255',
         'password' => 'required|confirmed',
@@ -55,6 +71,9 @@ class InitialSetup extends Component {
 
     protected $messages = [
         'app_name.required' => 'Alkalmazás név megadása körtelező.',
+        // 'logo.required' => 'Logo feltöltése kötelező.',
+        // 'logo.image' => 'A logonak képnek kell lennie.',
+        // 'logo.max' => 'Maximum méret 10MB',
         'db_host.required' => 'Adatbázis szerver cím megadása kötelező.',
         'db_port.required' => 'Adatbázis szerver port megadása kötelező.',
         'db_databasename.required' => 'Adatbázis név megadása kötelező.',
@@ -89,6 +108,42 @@ class InitialSetup extends Component {
 
     private function generate_userPrincipalName() {
         $this->userPrincipalName = $this->ldap_username . '@' . $this->domain;
+    }
+
+    public function test_mail_connection() {
+        try {
+            config([
+                'mail.default' => 'smtp',
+                'mail.mailers.smtp.host' => $this->mail_host,
+                'mail.mailers.smtp.port' => $this->mail_port,
+                'mail.mailers.smtp.username' => $this->mail_username,
+                'mail.mailers.smtp.password' => $this->mail_password,
+                'mail.from.address' => $this->mail_username,
+                'mail.from.name' => $this->app_name,
+            ]);
+
+            $test_mail = new MailTest($this->app_name);
+
+            Mail::to($this->mail_test_address)->send($test_mail);
+
+            return true;
+        } catch (Exception $err) {
+            return $err->getMessage();
+        }
+    }
+
+    public function test_mail_connection_standalone() {
+        $result = $this->test_mail_connection();
+
+        if ($result === true) {
+            session()->flash('mail_test_result', "Sikeres levél küldés.");
+
+            return;
+        } else {
+            $this->addError('mail_test_result_error', $result);
+
+            return;
+        }
     }
 
     public function test_ldap_connection() {
@@ -179,7 +234,17 @@ class InitialSetup extends Component {
         $this->validate();
         $this->validate(['password' => [Rules\Password::defaults()]]);
 
-        //database 
+
+        //mail setup test before save
+        $mail_test_result = $this->test_mail_connection();
+
+        if ($mail_test_result !== true) {
+            $this->addError('mail_test_result_error', $mail_test_result);
+
+            return;
+        }
+
+        //database setup test before save
         $db_test_result = $this->test_database_connection();
 
         if ($db_test_result !== true) {
@@ -188,6 +253,7 @@ class InitialSetup extends Component {
             return;
         }
 
+        //ldap setup test before save
         if ($this->ldap_active === true) {
             $ldap_test_result = $this->test_ldap_connection();
 
@@ -203,17 +269,53 @@ class InitialSetup extends Component {
         $original_database_connctions = config('database.connctions');
 
         try {
-            $env_content = preg_replace('/\nAPP_NAME=.*/', "\nAPP_NAME=" . "'$this->app_name'", $env_content);
 
+            //general configs
+            $env_content = preg_replace('/\nAPP_NAME=.*/', "\nAPP_NAME=" . "'$this->app_name'", $env_content);
+            $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
+            $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
+
+            config([
+                'app.name' => $this->app_name,
+                'app.installed' => true,
+                'session.driver' => 'database',
+            ]);
+
+            //mailer configs
+            $env_content = preg_replace('/\nMAIL_MAILER=.*/', "\nMAIL_MAILER=" . "smtp", $env_content);
+            $env_content = preg_replace('/\nMAIL_HOST=.*/', "\nMAIL_HOST=" . "'$this->mail_host'", $env_content);
+            $env_content = preg_replace('/\nMAIL_PORT=.*/', "\nMAIL_PORT=" . "'$this->mail_port'", $env_content);
+            $env_content = preg_replace('/\nMAIL_USERNAME=.*/', "\nMAIL_USERNAME=" . "'$this->mail_username'", $env_content);
+            $env_content = preg_replace('/\nMAIL_PASSWORD=.*/', "\nMAIL_PASSWORD=" . "'$this->mail_password'", $env_content);
+            $env_content = preg_replace('/\nMAIL_FROM_ADDRESS=.*/', "\nMAIL_FROM_ADDRESS=" . "'$this->mail_username'", $env_content);
+
+            config([
+                'mail.default' => 'smtp',
+                'mail.mailers.smtp.host' => $this->mail_host,
+                'mail.mailers.smtp.port' => $this->mail_port,
+                'mail.mailers.smtp.username' => $this->mail_username,
+                'mail.mailers.smtp.password' => $this->mail_password,
+                'mail.from.address' => $this->mail_username,
+                'mail.from.name' => $this->app_name,
+            ]);
+
+            //database configs
             $env_content = preg_replace('/\nDB_HOST=.*/', "\nDB_HOST=" . "'$this->db_host'", $env_content);
             $env_content = preg_replace('/\nDB_PORT=.*/', "\nDB_PORT=" . "'$this->db_port'", $env_content);
             $env_content = preg_replace('/\nDB_DATABASE=.*/', "\nDB_DATABASE=" . "'$this->db_databasename'", $env_content);
             $env_content = preg_replace('/\nDB_USERNAME=.*/', "\nDB_USERNAME=" . "'$this->db_username'", $env_content);
             $env_content = preg_replace('/\nDB_PASSWORD=.*/', "\nDB_PASSWORD=" . "'$this->db_password'", $env_content);
 
-            $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
-            $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
+            config([
+                'database.connections.mysql.host' => $this->db_host,
+                'database.connections.mysql.port' => $this->db_port,
+                'database.connections.mysql.database' => $this->db_databasename,
+                'database.connections.mysql.username' => $this->db_username,
+                'database.connections.mysql.password' => $this->db_password
+            ]);
 
+
+            //ldap configs
             if ($this->ldap_active === true) {
                 $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST=" . "'$this->ldap_host'", $env_content);
                 $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME=" . "'$this->userPrincipalName'", $env_content);
@@ -221,17 +323,6 @@ class InitialSetup extends Component {
                 $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT=" . $this->ldap_port, $env_content);
                 $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN=" . "'$this->ldap_base_dn'", $env_content);
             }
-
-            config([
-                'app.name' => $this->app_name,
-                'app.installed' => true,
-                'session.driver' => 'database',
-                'database.connections.mysql.host' => $this->db_host,
-                'database.connections.mysql.port' => $this->db_port,
-                'database.connections.mysql.database' => $this->db_databasename,
-                'database.connections.mysql.username' => $this->db_username,
-                'database.connections.mysql.password' => $this->db_password
-            ]);
 
             config([
                 'ldap.connections.default.hosts' => $this->ldap_host,
@@ -249,16 +340,21 @@ class InitialSetup extends Component {
             ));
 
             //alapértelmezett rendszergazda fiók létrehozása
-            $user_data['name'] = $this->admin_username;
+            $user_data['name'] = $this->admin_name | $this->admin_username;
+            $user_data['username'] = $this->admin_username;
             $user_data['email'] = $this->admin_email;
             $user_data['password'] = Hash::make($this->password);
 
-            User::create($user_data);
+            $user = User::create($user_data);
+
+            Auth::login($user);
 
             file_put_contents(
                 base_path('.env'),
                 $env_content
             );
+
+            //$this->logo->storeAs(path: 'imgs', name: 'logo');
 
             return redirect()->to('/');
         } catch (Exception $err) {
