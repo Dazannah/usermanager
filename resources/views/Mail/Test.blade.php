@@ -1,0 +1,1 @@
+This is the setup test mail from {{$app_name}}.
