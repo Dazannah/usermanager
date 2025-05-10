@@ -20,42 +20,42 @@ use Illuminate\Support\Facades\Artisan;
 class InitialSetup extends Component {
     use WithFileUploads;
 
-    public $app_name = 'Felhasználó kezelő';
+    public $app_name;
     // public $logo;
 
-    public $mail_host = '';
-    public $mail_port = 465;
-    public $mail_username = '';
-    public $mail_password = '';
-    public $mail_test_address = '';
+    public $mail_host;
+    public $mail_port;
+    public $mail_username;
+    public $mail_password;
+    public $mail_test_address;
 
-    public $db_host = '';
-    public $db_port = 3306;
-    public $db_databasename = '';
-    public $db_username = '';
-    public $db_password = '';
+    public $db_host;
+    public $db_port;
+    public $db_databasename;
+    public $db_username;
+    public $db_password;
 
-    public $admin_name = '';
-    public $admin_username = 'admin';
-    public $admin_email = '';
-    public $password = '';
-    public $password_confirmation = '';
+    public $admin_name;
+    public $admin_username;
+    public $admin_email;
+    public $password;
+    public $password_confirmation;
 
-    public $ldap_active = true;
-    public $ldap_host = '';
-    public $ldap_base_dn = '';
-    public $ldap_port = 389;
-    public $ldap_username = '';
-    public $ldap_password = '';
+    public $ldap_active;
+    public $ldap_host;
+    public $ldap_base_dn;
+    public $ldap_port;
+    public $ldap_username;
+    public $ldap_password;
 
-    public $ispfonfig_active = false;
-    public $ispconfig_soap_uri = '';
-    public $ispconfig_soap_location = '';
-    public $ispconfig_soap_remote_username = '';
-    public $ispconfig_soap_remote_user_password = '';
+    public $ispfonfig_active;
+    public $ispconfig_soap_uri;
+    public $ispconfig_soap_location;
+    public $ispconfig_soap_remote_username;
+    public $ispconfig_soap_remote_user_password;
 
-    private $domain = '';
-    private $userPrincipalName = '';
+    private $domain;
+    private $userPrincipalName;
 
     protected $rules = [
         'app_name' => 'required',
@@ -87,7 +87,43 @@ class InitialSetup extends Component {
         'admin_email.email' => 'Email cím megadása kötelező.',
         'password.required' => 'Admin jelszó megadása kötelező.',
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
+        'ldap_host.string' => 'LDAP szerver cím megadása kötelező.'
     ];
+
+    public function mount() {
+        $this->app_name = config('app.name');
+
+        $this->mail_host = config('mail.mailers.smtp.host');
+        $this->mail_port = config('mail.mailers.smtp.port');
+        $this->mail_username = config('mail.mailers.smtp.username');
+        $this->mail_password = config('mail.mailers.smtp.password');
+        $this->mail_test_address = '';
+
+        $this->db_host = config('database.connections.mysql.host');
+        $this->db_port = config('database.connections.mysql.port');
+        $this->db_databasename = config('database.connections.mysql.database');
+        $this->db_username = config('database.connections.mysql.username');
+        $this->db_password = config('database.connections.mysql.password');
+
+        $this->admin_name = '';
+        $this->admin_username = 'usermanager_admin';
+        $this->admin_email = '';
+        $this->password = '';
+        $this->password_confirmation = '';
+
+        $this->ldap_active = config('ldap.connections.active');
+        $this->ldap_host = config('ldap.connections.default.hosts')[0];
+        $this->ldap_base_dn = config('ldap.connections.default.base_dn');
+        $this->ldap_port = config('ldap.connections.default.port');
+        $this->ldap_username = config('ldap.connections.default.username');
+        $this->ldap_password = config('ldap.connections.default.password');
+
+        $this->ispfonfig_active = config('ispconfig.soap.active');
+        $this->ispconfig_soap_uri = config('ispconfig.soap.connection.uri');
+        $this->ispconfig_soap_location = config('ispconfig.soap.connection.location');
+        $this->ispconfig_soap_remote_username = config('ispconfig.soap.connection.username');
+        $this->ispconfig_soap_remote_user_password = config('ispconfig.soap.connection.password');
+    }
 
     public function updated($propertyName) {
         $this->validateOnly($propertyName);
@@ -188,8 +224,6 @@ class InitialSetup extends Component {
     }
 
     public function test_ldap_connection(bool $test_admin_user) {
-        $this->validate();
-
         $this->base_dn_to_domain();
         $this->generate_userPrincipalName();
 
@@ -240,8 +274,6 @@ class InitialSetup extends Component {
     }
 
     public function test_database_connection() {
-        $this->validate();
-
         try {
             config([
                 'database.connections.mysql.host' => $this->db_host,
