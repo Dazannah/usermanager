@@ -60,6 +60,11 @@ class InitialSetup extends Component {
     protected $rules = [
         'app_name' => 'required',
         //'logo' => 'required|image|max:2048',
+        'mail_host' => 'required',
+        'mail_port' => 'required|integer|min:1|max:65535',
+        'mail_username' => 'required|email',
+        'mail_password' => 'required',
+        'mail_test_address' => 'required|email',
         'db_host' => 'required',
         'db_port' => 'required|integer|min:1|max:65535',
         'db_databasename' => 'required',
@@ -69,6 +74,15 @@ class InitialSetup extends Component {
         'admin_username' => 'required|max:255',
         'admin_email' => 'required|email|max:255',
         'password' => 'required|confirmed',
+        'ldap_host' => 'required_if:ldap_active,===,true',
+        'ldap_base_dn' => 'required_if:ldap_active,==,true',
+        'ldap_port' => 'required_if:ldap_active,==,true|integer|min:1|max:65535',
+        'ldap_username' => 'required_if:ldap_active,==,true',
+        'ldap_password' => 'required_if:ldap_active,==,true',
+        'ispconfig_soap_uri' => 'required_if:ispfonfig_active,==,true',
+        'ispconfig_soap_location' => 'required_if:ispfonfig_active,==,true',
+        'ispconfig_soap_remote_username' => 'required_if:ispfonfig_active,==,true',
+        'ispconfig_soap_remote_user_password' => 'required_if:ispfonfig_active,==,true',
     ];
 
     protected $messages = [
@@ -76,10 +90,23 @@ class InitialSetup extends Component {
         // 'logo.required' => 'Logo feltöltése kötelező.',
         // 'logo.image' => 'A logonak képnek kell lennie.',
         // 'logo.max' => 'Maximum méret 10MB',
+        'mail_host.required' => 'Email szerver címe megadása kötelező.',
+        'mail_port.required' => 'SMTP Port megadása kötelező.',
+        'mail_port.integer' => 'Az SMTP Portnak egész számnak kell lennie.',
+        'mail_port.min' => 'Az SMTP Port minimum 1 lehet.',
+        'mail_port.max' => 'Az SMTP Port maximum 65535 lehet.',
+        'mail_username.required' => 'Email cím megadása kötelező.',
+        'mail_username.email' => 'Nem megfelelő formátum.',
+        'mail_password.required' => 'Jelszó megadása kötelező.',
+        'mail_test_address.required' => 'Teszt címzet megadása kötelező.',
+        'mail_test_address.email' => 'Nem megfelelő formátum.',
         'db_host.required' => 'Adatbázis szerver cím megadása kötelező.',
         'db_port.required' => 'Adatbázis szerver port megadása kötelező.',
+        'db_port.integer' => 'Az adatbázis portnak egész számnak kell lennie.',
+        'db_port.min' => 'Az adatbázis port minimum 1 lehet.',
+        'db_port.max' => 'Az adatbázis port maximum 65535 lehet.',
         'db_databasename.required' => 'Adatbázis név megadása kötelező.',
-        'db_username.required' => 'Adatbázis felhasználónév megadása kötelező.',
+        'db_username.required' => 'Adatbázis felhasználó név megadása kötelező.',
         'db_password.required' => 'Adatbázis felhasználó jelszó cím megadása kötelező.',
         'admin_username.required' => 'Admin felhasználónév megadása kötelező.',
         'admin_username.max' => 'Admin felhasználónév túl hosszú.',
@@ -87,7 +114,19 @@ class InitialSetup extends Component {
         'admin_email.email' => 'Email cím megadása kötelező.',
         'password.required' => 'Admin jelszó megadása kötelező.',
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
-        'ldap_host.string' => 'LDAP szerver cím megadása kötelező.'
+        'ldap_host.required_if' => 'Szerver cím megadása kötelező.',
+        'ldap_base_dn.required_if' => 'Base DN megadása kötelező.',
+        'ldap_base_dn.regex' => 'Megfelelő formátum: dc=local,dc=com',
+        'ldap_port.required_if' => 'Port megadása kötelező.',
+        'ldap_port.integer' => 'A portnak egész számnak kell lennie.',
+        'ldap_port.min' => 'Az LDAP port minimum 1 lehet.',
+        'ldap_port.max' => 'Az LDAP port maximum 65535 lehet.',
+        'ldap_username.required_if' => 'Felhasználónév megadása kötelező.',
+        'ldap_password.required_if' => 'Jelszó megadása kötelező.',
+        'ispconfig_soap_uri.required_if' => 'ISPConfig szerver cím megadása kötelező.',
+        'ispconfig_soap_location.required_if' => 'ISPConfig soap hely megadása kötelező.',
+        'ispconfig_soap_remote_username.required_if' => 'Felhasználónév megadása kötelező.',
+        'ispconfig_soap_remote_user_password.required_if' => 'Jelszó megadása kötelező.',
     ];
 
     public function mount() {
@@ -206,6 +245,12 @@ class InitialSetup extends Component {
             return true;
         } catch (Exception $err) {
             return $err->getMessage();
+        }
+    }
+
+    public function validate_only_array($field_names) {
+        foreach ($field_names as $field_name) {
+            $this->validate($field_name);
         }
     }
 
