@@ -299,6 +299,7 @@ class InitialSetup extends Component {
 
         //ldap setup test before save
         if ($this->ldap_active === true) {
+            //test_admin_user flag set true
             $ldap_test_result = $this->test_ldap_connection(true);
 
             if ($ldap_test_result !== true) {
@@ -404,6 +405,7 @@ class InitialSetup extends Component {
             $user_data['username'] = $this->admin_username;
             $user_data['email'] = $this->admin_email;
             $user_data['password'] = Hash::make($this->password);
+            $user_data['is_admin'] = true;
 
             $user = User::create($user_data);
 
