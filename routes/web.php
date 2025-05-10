@@ -1,18 +1,26 @@
 <?php
 
 use App\Livewire\InitialSetup;
+use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('initial-setup', InitialSetup::class);
-
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::view('dashboard', 'dashboard')
+        ->name('dashboard');
+    Route::view('profile', 'profile')
+        ->name('profile');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
+    Route::middleware([IsAdmin::class])->group(function () {
+        Route::get('app-configuration', InitialSetup::class)
+            ->name('app-configuration');
+    });
+});
+
+
+
+
 
 require __DIR__ . '/auth.php';
