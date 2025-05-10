@@ -1,13 +1,13 @@
 <?php
 return [
   'soap' => [
-    'active' => env('ISPCONFIG_ACTIVE', 'false'),
+    'active' => env('ISPCONFIG_SOAP_ACTIVE', 'false'),
 
     'connection' => [
-      'uri' => env('ISPCONFIG_URI', 'https://localhost:8080/remote/'),
-      'location' => [env('ISPCONFIG_LOCATION', 'https://localhost:8080/remote')],
-      'username' => env('ISPCONFIG_USERNAME', 'remote_user'),
-      'password' => env('ISPCONFIG_PASSWORD', 'secret'),
+      'uri' => env('ISPCONFIG_SOAP_URI', 'https://localhost:8080/remote/'),
+      'location' => env('ISPCONFIG_SOAP_LOCATION', 'https://localhost:8080/remote'),
+      'username' => env('ISPCONFIG_SOAP_USERNAME', 'remote_user'),
+      'password' => env('ISPCONFIG_SOAP_PASSWORD', 'secret'),
     ],
   ]
 ];
