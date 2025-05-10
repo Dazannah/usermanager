@@ -18,6 +18,8 @@ return [
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
+    'admin_ldap_groups' => ['JogosultsagigenyAdminisztrator'],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -64,7 +66,7 @@ return [
             'driver' => 'ldap',
             'model' => LdapRecord\Models\ActiveDirectory\User::class,
             'rules' => [
-                App\Ldap\Rules\CanLogin::class,
+                App\Ldap\Rules\CanLogin::class
             ],
             'scopes' => [],
             'database' => [
