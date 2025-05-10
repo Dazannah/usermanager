@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use SoapClient;
 use Exception;
 use App\Models\User;
 use App\Mail\MailTest;
@@ -47,6 +48,12 @@ class InitialSetup extends Component {
     public $ldap_username = '';
     public $ldap_password = '';
 
+    public $ispfonfig_active = false;
+    public $ispconfig_soap_uri = '';
+    public $ispconfig_soap_location = '';
+    public $ispconfig_soap_remote_username = '';
+    public $ispconfig_soap_remote_user_password = '';
+
     private $domain = '';
     private $userPrincipalName = '';
 
@@ -62,11 +69,6 @@ class InitialSetup extends Component {
         'admin_username' => 'required|max:255',
         'admin_email' => 'required|email|max:255',
         'password' => 'required|confirmed',
-        'ldap_host' => 'required',
-        'ldap_port' => 'required',
-        'ldap_base_dn' => 'required',
-        'ldap_username' => 'required',
-        'ldap_password' => 'required'
     ];
 
     protected $messages = [
@@ -85,11 +87,6 @@ class InitialSetup extends Component {
         'admin_email.email' => 'Email cím megadása kötelező.',
         'password.required' => 'Admin jelszó megadása kötelező.',
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
-        'ldap_host.required' => 'LDAP szerver cím megadása kötelező.',
-        'ldap_port.required' => 'LDAP szerver port megadása kötelező.',
-        'ldap_base_dn.required' => 'LDAP DN megadása kötelező.',
-        'ldap_username.required' => 'LDAP felhasználónév megadása kötelező.',
-        'ldap_password.required' => 'LDAP felhasználó jelszó megadása kötelező.',
     ];
 
     public function updated($propertyName) {
@@ -100,6 +97,10 @@ class InitialSetup extends Component {
         $this->ldap_active = !$this->ldap_active;
     }
 
+    public function toggle_ispfonfig_active() {
+        $this->ispfonfig_active = !$this->ispfonfig_active;
+    }
+
     private function base_dn_to_domain() {
         $parts = explode(',', $this->ldap_base_dn);
 
@@ -108,6 +109,46 @@ class InitialSetup extends Component {
 
     private function generate_userPrincipalName() {
         $this->userPrincipalName = $this->ldap_username . '@' . $this->domain;
+    }
+
+    public function test_ispconfig_connection() {
+        try {
+            $arrContextOptions = stream_context_create(array(
+                "ssl" => array(
+                    "verify_peer" => false,
+                    "verify_peer_name" => false,
+                )
+            ));
+
+            $soap_client = new SoapClient(null, array(
+                'uri'      => $this->ispconfig_soap_uri,
+                'location' => $this->ispconfig_soap_location,
+                'trace' => 1,
+                'exceptions' => 1,
+                "stream_context" => $arrContextOptions
+
+            ));
+
+            $soap_client->login($this->ispconfig_soap_remote_username, $this->ispconfig_soap_remote_user_password);
+
+            return true;
+        } catch (Exception $err) {
+            return $err->getMessage();
+        }
+    }
+
+    public function test_ispconfig_connection_standalone() {
+        $result = $this->test_ispconfig_connection();
+
+        if ($result === true) {
+            session()->flash('ispconfig_test_result', "Sikeres bejelentkezés.");
+
+            return;
+        } else {
+            $this->addError('ispconfig_test_result_error', $result);
+
+            return;
+        }
     }
 
     public function test_mail_connection() {
@@ -146,7 +187,7 @@ class InitialSetup extends Component {
         }
     }
 
-    public function test_ldap_connection() {
+    public function test_ldap_connection(bool $test_admin_user) {
         $this->validate();
 
         $this->base_dn_to_domain();
@@ -157,8 +198,8 @@ class InitialSetup extends Component {
                 // Mandatory Configuration Options
                 'hosts'            => [$this->ldap_host],
                 'base_dn'          => $this->ldap_base_dn,
-                // 'username'         => $this->ldap_username,
-                // 'password'         => $this->ldap_password,
+                'username'         => $this->userPrincipalName,
+                'password'         => $this->ldap_password,
 
                 // Optional Configuration Options
                 'port'             => $this->ldap_port,
@@ -170,10 +211,13 @@ class InitialSetup extends Component {
             ]);
 
             $connection->connect();
-            $user_atuh = $connection->auth()->attempt($this->userPrincipalName, $this->ldap_password);
 
-            if (!$user_atuh)
-                throw new Exception("Felhasználó adatok helytelenek.");
+            if ($test_admin_user) {
+                $result = $connection->query()->where('samaccountname', '=', $this->admin_username)->first();
+
+                if ($result !== null)
+                    throw new Exception("Már létezik egy LDAP-felhasználó az alapértelmezett rendszergazda felhasználónévvel: $this->admin_username.  Kérlek, adj meg egy másikat.");
+            }
 
             return true;
         } catch (Exception $err) {
@@ -182,7 +226,7 @@ class InitialSetup extends Component {
     }
 
     public function test_ldap_connection_standalone() {
-        $result = $this->test_ldap_connection();
+        $result = $this->test_ldap_connection(false);
 
         if ($result === true) {
             session()->flash('ldap_test_result', "Sikeres kapcsolat kiépítés.");
@@ -255,7 +299,7 @@ class InitialSetup extends Component {
 
         //ldap setup test before save
         if ($this->ldap_active === true) {
-            $ldap_test_result = $this->test_ldap_connection();
+            $ldap_test_result = $this->test_ldap_connection(true);
 
             if ($ldap_test_result !== true) {
                 $this->addError('ldap_test_result_error', $ldap_test_result);
@@ -271,7 +315,7 @@ class InitialSetup extends Component {
         try {
 
             //general configs
-            $env_content = preg_replace('/\nAPP_NAME=.*/', "\nAPP_NAME=" . "'$this->app_name'", $env_content);
+            $env_content = preg_replace('/APP_NAME=.*/', "APP_NAME='$this->app_name'", $env_content);
             $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
             $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
 
@@ -282,12 +326,12 @@ class InitialSetup extends Component {
             ]);
 
             //mailer configs
-            $env_content = preg_replace('/\nMAIL_MAILER=.*/', "\nMAIL_MAILER=" . "smtp", $env_content);
-            $env_content = preg_replace('/\nMAIL_HOST=.*/', "\nMAIL_HOST=" . "'$this->mail_host'", $env_content);
-            $env_content = preg_replace('/\nMAIL_PORT=.*/', "\nMAIL_PORT=" . "'$this->mail_port'", $env_content);
-            $env_content = preg_replace('/\nMAIL_USERNAME=.*/', "\nMAIL_USERNAME=" . "'$this->mail_username'", $env_content);
-            $env_content = preg_replace('/\nMAIL_PASSWORD=.*/', "\nMAIL_PASSWORD=" . "'$this->mail_password'", $env_content);
-            $env_content = preg_replace('/\nMAIL_FROM_ADDRESS=.*/', "\nMAIL_FROM_ADDRESS=" . "'$this->mail_username'", $env_content);
+            $env_content = preg_replace('/MAIL_MAILER=.*/', "MAIL_MAILER=smtp", $env_content);
+            $env_content = preg_replace('/MAIL_HOST=.*/', "MAIL_HOST='$this->mail_host'", $env_content);
+            $env_content = preg_replace('/MAIL_PORT=.*/', "MAIL_PORT='$this->mail_port'", $env_content);
+            $env_content = preg_replace('/MAIL_USERNAME=.*/', "MAIL_USERNAME='$this->mail_username'", $env_content);
+            $env_content = preg_replace('/MAIL_PASSWORD=.*/', "MAIL_PASSWORD='$this->mail_password'", $env_content);
+            $env_content = preg_replace('/MAIL_FROM_ADDRESS=.*/', "MAIL_FROM_ADDRESS='$this->mail_username'", $env_content);
 
             config([
                 'mail.default' => 'smtp',
@@ -300,11 +344,11 @@ class InitialSetup extends Component {
             ]);
 
             //database configs
-            $env_content = preg_replace('/\nDB_HOST=.*/', "\nDB_HOST=" . "'$this->db_host'", $env_content);
-            $env_content = preg_replace('/\nDB_PORT=.*/', "\nDB_PORT=" . "'$this->db_port'", $env_content);
-            $env_content = preg_replace('/\nDB_DATABASE=.*/', "\nDB_DATABASE=" . "'$this->db_databasename'", $env_content);
-            $env_content = preg_replace('/\nDB_USERNAME=.*/', "\nDB_USERNAME=" . "'$this->db_username'", $env_content);
-            $env_content = preg_replace('/\nDB_PASSWORD=.*/', "\nDB_PASSWORD=" . "'$this->db_password'", $env_content);
+            $env_content = preg_replace('/DB_HOST=.*/', "DB_HOST='$this->db_host'", $env_content);
+            $env_content = preg_replace('/DB_PORT=.*/', "DB_PORT='$this->db_port'", $env_content);
+            $env_content = preg_replace('/DB_DATABASE=.*/', "DB_DATABASE='$this->db_databasename'", $env_content);
+            $env_content = preg_replace('/DB_USERNAME=.*/', "DB_USERNAME='$this->db_username'", $env_content);
+            $env_content = preg_replace('/DB_PASSWORD=.*/', "DB_PASSWORD='$this->db_password'", $env_content);
 
             config([
                 'database.connections.mysql.host' => $this->db_host,
@@ -317,20 +361,36 @@ class InitialSetup extends Component {
 
             //ldap configs
             if ($this->ldap_active === true) {
-                $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST=" . "'$this->ldap_host'", $env_content);
-                $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME=" . "'$this->userPrincipalName'", $env_content);
-                $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD=" . "'$this->ldap_password'", $env_content);
-                $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT=" . $this->ldap_port, $env_content);
-                $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN=" . "'$this->ldap_base_dn'", $env_content);
+                $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST='$this->ldap_host'", $env_content);
+                $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME='$this->userPrincipalName'", $env_content);
+                $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD='$this->ldap_password'", $env_content);
+                $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT='$this->ldap_port'", $env_content);
+                $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN='$this->ldap_base_dn'", $env_content);
+
+                config([
+                    'ldap.connections.default.hosts' => $this->ldap_host,
+                    'ldap.connections.default.port' => $this->ldap_port,
+                    'ldap.connections.default.base_dn' => $this->ldap_base_dn,
+                    'ldap.connections.default.username' => $this->userPrincipalName,
+                    'ldap.connections.default.password' => $this->ldap_password
+                ]);
             }
 
-            config([
-                'ldap.connections.default.hosts' => $this->ldap_host,
-                'ldap.connections.default.port' => $this->ldap_port,
-                'ldap.connections.default.base_dn' => $this->ldap_base_dn,
-                'ldap.connections.default.username' => $this->userPrincipalName,
-                'ldap.connections.default.password' => $this->ldap_password
-            ]);
+            //ispconfig soap configs
+            if ($this->ispfonfig_active === true) {
+                $env_content = preg_replace('/ISPCONFIG_SOAP_ACTIVE=.*/', "ISPCONFIG_SOAP_ACTIVE=true", $env_content);
+                $env_content = preg_replace('/ISPCONFIG_SOAP_URI=.*/', "ISPCONFIG_SOAP_URI='$this->ispconfig_soap_uri'", $env_content);
+                $env_content = preg_replace('/ISPCONFIG_SOAP_LOCATION=.*/', "ISPCONFIG_SOAP_LOCATION='$this->ispconfig_soap_location'", $env_content);
+                $env_content = preg_replace('/ISPCONFIG_SOAP_USERNAME=.*/', "ISPCONFIG_SOAP_USERNAME='$this->ispconfig_soap_remote_username'", $env_content);
+                $env_content = preg_replace('/ISPCONFIG_SOAP_PASSWORD=.*/', "ISPCONFIG_SOAP_PASSWORD='$this->ispconfig_soap_remote_user_password'", $env_content);
+
+                config([
+                    'ispconfig.soap.uri' => $this->ispconfig_soap_uri,
+                    'ispconfig.soap.location' => $this->ispconfig_soap_location,
+                    'ispconfig.soap.username' => $this->ispconfig_soap_remote_username,
+                    'ispconfig.soap.password' => $this->ispconfig_soap_remote_user_password
+                ]);
+            }
 
             //adatbázis migráció
             Artisan::call('migrate', array(

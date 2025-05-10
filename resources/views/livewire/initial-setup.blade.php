@@ -138,9 +138,11 @@
               @error('password_confirmation') <x-input-error :messages="$message" class="mt-2" /> @enderror
           </div>
         </div>
+
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-           {{ __('LDAP autentikáció') }} <input type="checkbox" wire:click="toggle_ldap_active" class="form-checkbox" />
-      </h2>
+            {{'LDAP autentikáció'}}
+            <x-text-input wire:click="toggle_ldap_active" type="checkbox" class="m-1 p-1" />
+        </h2>
       @if ($ldap_active === true)
         <div wire:key="ldap-fields" class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
           <div class="max-w-xl">
@@ -172,6 +174,46 @@
               @endif
               <x-primary-button wire:click.prevent="test_ldap_connection_standalone">{{ __('LDAP tesztelése') }}</x-primary-button>
               <x-action-message wire:loading class="me-3" on="password-updated">
+                {{ __('Loading') }}
+              </x-action-message>
+          </div>
+        </div>
+        @endif
+
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ __('ISPConfig SOAP api') }}
+          <x-text-input wire:click="toggle_ispfonfig_active" type="checkbox" class="m-1 p-1" />
+      </h2>
+      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          {{ __('Az ISPConfig SOAP api, a terjesztési listák létrehozása, szerkesztéséhez kell, amennyiben használja a szervezet az ISPConfig-ot') }}
+      </p>
+        @if ($ispfonfig_active === true)
+        <div wire:key="ispconfig-fields" class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+          <div class="max-w-xl">
+            <x-input-label for="ispconfig_soap_uri" :value="__('ISPConfig szerver címe')" />
+            <x-text-input placeholder="localhost" wire:model="ispconfig_soap_uri" id="ispconfig_soap_uri" name="ispconfig_soap_uri" type="text" class="mt-1 block w-full" />
+            @error('ispconfig_soap_uri') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+            <x-input-label for="ispconfig_soap_location" :value="__('ISPConfig soap helye')" />
+            <x-text-input placeholder="https://localhost:8080/remote/index.php" wire:model="ispconfig_soap_location" id="ispconfig_soap_location" name="ispconfig_soap_location" type="text" class="mt-1 block w-full" />
+            @error('ispconfig_soap_location') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+            <x-input-label for="ispconfig_soap_remote_username" :value="__('Felhasználónév')" />
+            <x-text-input placeholder="Felhasználónév" wire:model="ispconfig_soap_remote_username" id="ispconfig_soap_remote_username" name="ispconfig_soap_remote_username" type="text" class="mt-1 block w-full" />
+            @error('ispconfig_soap_remote_username') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+            <x-input-label for="ispconfig_soap_remote_user_password" :value="__('Jelszó')" />
+            <x-text-input placeholder="Jelszó" wire:model="ispconfig_soap_remote_user_password" id="ispconfig_soap_remote_user_password" name="ispconfig_soap_remote_user_password" type="password" class="mt-1 block w-full" />
+            @error('ispconfig_soap_remote_user_password') <x-input-error :messages="$message" class="mt-2" /> @enderror
+
+              @error('ispconfig_test_result_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+              @if (session()->has('ispconfig_test_result'))
+                  <div class="alert alert-success">
+                      {{ session('ispconfig_test_result') }}
+                  </div>
+              @endif
+              <x-primary-button wire:click.prevent="test_ispconfig_connection_standalone">{{ __('ISPConfig kapcsolat tesztelése') }}</x-primary-button>
+              <x-action-message wire:loading class="me-3" on="test_ispconfig_connection_standalone">
                 {{ __('Loading') }}
               </x-action-message>
           </div>
