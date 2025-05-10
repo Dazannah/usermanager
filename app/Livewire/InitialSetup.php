@@ -150,7 +150,7 @@ class InitialSetup extends Component {
         $this->password = '';
         $this->password_confirmation = '';
 
-        $this->ldap_active = config('ldap.connections.active');
+        $this->ldap_active = config('ldap.active');
         $this->ldap_host = config('ldap.connections.default.hosts')[0];
         $this->ldap_base_dn = config('ldap.connections.default.base_dn');
         $this->ldap_port = config('ldap.connections.default.port');
@@ -166,14 +166,6 @@ class InitialSetup extends Component {
 
     public function updated($propertyName) {
         $this->validateOnly($propertyName);
-    }
-
-    public function toggle_ldap_active() {
-        $this->ldap_active = !$this->ldap_active;
-    }
-
-    public function toggle_ispfonfig_active() {
-        $this->ispfonfig_active = !$this->ispfonfig_active;
     }
 
     private function base_dn_to_domain() {
@@ -439,6 +431,7 @@ class InitialSetup extends Component {
 
             //ldap configs
             if ($this->ldap_active === true) {
+                $env_content = preg_replace('/LDAP_ACTIVE=.*/', "LDAP_ACTIVE=true", $env_content);
                 $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST='$this->ldap_host'", $env_content);
                 $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME='$this->userPrincipalName'", $env_content);
                 $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD='$this->ldap_password'", $env_content);
@@ -515,6 +508,6 @@ class InitialSetup extends Component {
     }
 
     public function render() {
-        return view('livewire.initial-setup')->layout('layouts.guest');
+        return view('livewire.initial-setup')->layout(Auth::check() ? 'layouts.app' : 'layouts.guest');
     }
 }
