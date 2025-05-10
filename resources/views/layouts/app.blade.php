@@ -17,7 +17,6 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             <livewire:layout.navigation />
-
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white dark:bg-gray-800 shadow">
@@ -26,6 +25,11 @@
                     </div>
                 </header>
             @endif
+            <div class="py-4">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    @error('error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+                </div>
+            </div>
 
             <!-- Page Content -->
             <main>
