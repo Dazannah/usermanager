@@ -35,6 +35,33 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link {{--:href="route('new-user')" :active="request()->routeIs('new-user')"--}} wire:navigate>
+                        {{ __('Új felhasználó') }}
+                    </x-nav-link>
+
+                    <x-nav-link {{--:href="route('requests')" :active="request()->routeIs('requests')"--}} wire:navigate>
+                        {{ __('Kérelmek') }}
+                    </x-nav-link>
+
+                    {{-- Almenübe rakni ezeket
+                        <x-nav-link :href="route('allow-requests')" :active="request()->routeIs('allow-requests')" wire:navigate>
+                            {{ __('Kérelmek engedélyezése') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('permited-requests')" :active="request()->routeIs('permited-requests')" wire:navigate>
+                            {{ __('Engedélyezett kérelmek') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('closed-requests')" :active="request()->routeIs('closed-requests')" wire:navigate>
+                            {{ __('Lezárt kérelmek') }}
+                        </x-nav-link> --}}
+
+                    <x-nav-link {{--:href="route('users')" :active="request()->routeIs('users')"--}} wire:navigate>
+                        {{ __('Felhasználók') }}
+                    </x-nav-link>
+
+                    <x-nav-link {{--:href="route('distribution-lists')" :active="request()->routeIs('distribution-lists')"--}} wire:navigate>
+                        {{ __('Terjesztési listák') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -60,7 +87,7 @@ new class extends Component
 
                         @if (request()->user()->is_admin())
                             <x-dropdown-link :href="route('admin-dashboard')" wire:navigate>
-                                {{ __('Admin dashboard') }}
+                                {{ __('Rendszergazda felület') }}
                             </x-dropdown-link>
                         @endif
 
@@ -105,6 +132,12 @@ new class extends Component
                 <x-responsive-nav-link :href="route('profile')" wire:navigate>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+
+                @if (request()->user()->is_admin())
+                    <x-responsive-nav-link :href="route('admin-dashboard')" wire:navigate>
+                        {{ __('Rendszergazda felület') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">
