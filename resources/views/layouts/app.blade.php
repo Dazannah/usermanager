@@ -27,13 +27,17 @@
             @endif
             <div class="py-4">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    @error('error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+                    @session('error')
+                        <x-input-error :messages="$value" class="mt-2" /> 
+                    @endsession
                 </div>
             </div>
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="py-4">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
     </body>
