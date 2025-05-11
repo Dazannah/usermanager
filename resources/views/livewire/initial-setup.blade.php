@@ -1,4 +1,33 @@
 <div>
+      <header>
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ __('Logo') }}
+      </h2>
+    @if (config('app.installed'))
+    <form wire:submit.prevent="save_logo" class="mb-6 space-y-6">
+      <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <div class="max-w-xl">
+            @if ($logo?->isPreviewable())
+              <img src="{{ $logo->temporaryUrl() }}">
+            @else
+              @if (config('app.logo_name') != null)
+                <x-application-logo-lg class="block h-9 w-auto text-gray-800 dark:text-gray-200" />
+              @endif
+            @endif
+            <x-text-input wire:model="logo" id="logo" name="logo" type="file" class="mt-1 block w-full" />
+            @error('logo') <x-input-error :messages="$message" class="mt-2" /> @enderror
+        </div>
+        @error('save_logo_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
+        <div class="mt-2 flex items-center gap-4">
+            <x-primary-button>{{ __('Logo Mentése') }}</x-primary-button>
+
+            <x-action-message wire:loading class="me-3" on="save">
+              {{ __('Loading') }}
+            </x-action-message>
+        </div>
+      </div>
+    </form>
+  @endif
     <header>
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
           {{ __('Alap beállítások') }}
@@ -21,16 +50,6 @@
             <x-input-label for="app_name" :value="__('Alkalmazás neve')" />
             <x-text-input placeholder="Alkalmazás neve" wire:model.live="app_name" id="app_name" name="app_name" type="text" class="mt-1 block w-full" />
             @error('app_name') <x-input-error :messages="$message" class="mt-2" /> @enderror
-{{-- 
-            <x-input-label for="logo" :value="__('Logo')" />
-            @if ($logo) 
-              <img src="{{ $logo->temporaryUrl() }}">
-            @endif
-            <x-text-input wire:model="logo" id="logo" name="logo" type="file" class="mt-1 block w-full" />
-            @error('logo') <x-input-error :messages="$message" class="mt-2" /> @enderror
-            <x-action-message wire:loading class="me-3" on="password-updated">
-              {{ __('Loading') }}
-            </x-action-message> --}}
         </div>
       </div>
 
