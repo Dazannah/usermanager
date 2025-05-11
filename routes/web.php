@@ -18,7 +18,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', AdminDashboard::class)
             ->name('admin-dashboard');
         Route::get('app-configuration', InitialSetup::class)
-            ->name('app-configuration');
+            ->name('admin-app-configuration');
     });
 });
 
