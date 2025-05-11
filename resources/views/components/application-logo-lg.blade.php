@@ -1,0 +1,1 @@
+<img src="/storage/{{config('app.logo_name')}}" alt="application logo">
