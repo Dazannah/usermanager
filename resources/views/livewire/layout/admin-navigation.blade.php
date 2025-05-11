@@ -33,7 +33,7 @@ new class extends Component
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('admin-dashboard')" :active="request()->routeIs('admin-dashboard')" wire:navigate>
-                        {{ __('Admin Dashboard') }}
+                        {{ __('Összefoglaló') }}
                     </x-nav-link>
                     <x-nav-link {{--:href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')"--}} wire:navigate>
                         {{ __('Jogosultságok') }}
@@ -54,7 +54,7 @@ new class extends Component
                         {{ __('Felhasználók') }}
                     </x-nav-link>
                     <x-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
-                        {{ __('Alkalmazás beállítások') }}
+                        {{ __('Beállítások') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -76,7 +76,7 @@ new class extends Component
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile')" wire:navigate>
-                            {{ __('Profile') }}
+                            {{ __('Profil') }}
                         </x-dropdown-link>
 
                         <x-dropdown-link :href="route('dashboard')" wire:navigate>
@@ -86,7 +86,7 @@ new class extends Component
                         <!-- Authentication -->
                         <button wire:click="logout" class="w-full text-start">
                             <x-dropdown-link>
-                                {{ __('Log Out') }}
+                                {{ __('Kijelentkezés') }}
                             </x-dropdown-link>
                         </button>
                     </x-slot>
@@ -130,7 +130,7 @@ new class extends Component
                 {{ __('Felhasználók') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
-                {{ __('Alkalmazás beállítások') }}
+                {{ __('Beállítások') }}
             </x-responsive-nav-link>
         </div>
 
@@ -143,7 +143,7 @@ new class extends Component
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
+                    {{ __('Profil') }}
                 </x-responsive-nav-link>
 
                 <x-dropdown-link :href="route('dashboard')" wire:navigate>
@@ -153,7 +153,7 @@ new class extends Component
                 <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">
                     <x-responsive-nav-link>
-                        {{ __('Log Out') }}
+                        {{ __('Kijelentkezés') }}
                     </x-responsive-nav-link>
                 </button>
             </div>

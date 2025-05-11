@@ -1,7 +1,7 @@
 <div>
       <header>
       <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-          {{ __('Logo') }}
+          {{ __('Logó') }}
       </h2>
     @if (config('app.installed'))
     <form wire:submit.prevent="save_logo" class="mb-6 space-y-6">
@@ -21,8 +21,13 @@
         <div class="mt-2 flex items-center gap-4">
             <x-primary-button>{{ __('Logo Mentése') }}</x-primary-button>
 
+            @if (session()->has('save_logo_result'))
+                <div class="alert alert-success">
+                    {{ session('save_logo_result') }}
+                </div>
+            @endif
             <x-action-message wire:loading class="me-3" on="save">
-              {{ __('Loading') }}
+              {{ __('Betöltés') }}
             </x-action-message>
         </div>
       </div>
@@ -85,7 +90,7 @@
             @endif
             <x-primary-button wire:click.prevent="test_mail_connection_standalone">{{ __('Teszt email küldés') }}</x-primary-button>
             <x-action-message wire:loading class="me-3" on="test_mail_connection_standalone">
-              {{ __('Loading') }}
+              {{ __('Betöltés') }}
             </x-action-message>
         </div>
       </div>
@@ -125,7 +130,7 @@
             @endif
             <x-primary-button wire:click.prevent="test_database_connection_standalone">{{ __('Kapcsolat tesztelése') }}</x-primary-button>
             <x-action-message wire:loading class="me-3" on="test_database_connection_standalone">
-              {{ __('Loading') }}
+              {{ __('Betöltés') }}
             </x-action-message>
         </div>
       </div>
@@ -191,7 +196,7 @@
               @endif
               <x-primary-button wire:click.prevent="test_ldap_connection_standalone">{{ __('LDAP tesztelése') }}</x-primary-button>
               <x-action-message wire:loading class="me-3" on="test_ldap_connection_standalone">
-                {{ __('Loading') }}
+                {{ __('Betöltés') }}
               </x-action-message>
           </div>
         </div>
@@ -229,7 +234,7 @@
               @endif
               <x-primary-button wire:click.prevent="test_ispconfig_connection_standalone">{{ __('ISPConfig kapcsolat tesztelése') }}</x-primary-button>
               <x-action-message wire:loading class="me-3" on="test_ispconfig_connection_standalone">
-                {{ __('Loading') }}
+                {{ __('Betöltés') }}
               </x-action-message>
           </div>
         </div>
@@ -238,7 +243,7 @@
           <x-primary-button>{{ __('Mentés') }}</x-primary-button>
 
           <x-action-message wire:loading class="me-3" on="save">
-            {{ __('Loading') }}
+            {{ __('Betöltés') }}
           </x-action-message>
       </div>
   </form>

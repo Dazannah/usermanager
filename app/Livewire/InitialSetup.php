@@ -365,6 +365,8 @@ class InitialSetup extends Component {
                 base_path('.env'),
                 $env_content
             );
+
+            session()->flash('save_logo_result', "Logó sikeresen mentve.");
         } catch (Exception $err) {
             $this->addError('save_logo_error', $err->getMessage());
 
