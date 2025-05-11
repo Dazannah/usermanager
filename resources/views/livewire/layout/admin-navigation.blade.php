@@ -35,7 +35,25 @@ new class extends Component
                     <x-nav-link :href="route('admin-dashboard')" :active="request()->routeIs('admin-dashboard')" wire:navigate>
                         {{ __('Admin Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('app-configuration')" :active="request()->routeIs('app-configuration')" wire:navigate>
+                    <x-nav-link {{--:href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')"--}} wire:navigate>
+                        {{ __('Jogosultságok') }}
+                    </x-nav-link>
+                    <x-nav-link {{--:href="route('admin-sub-authorizations')" :active="request()->routeIs('admin-sub-authorizations')"--}} wire:navigate>
+                        {{ __('Aljogosultságok') }}
+                    </x-nav-link>
+                    <x-nav-link {{--:href="route('admin-departments')" :active="request()->routeIs('admin-departments')"--}} wire:navigate>
+                        {{ __('Osztályok') }}
+                    </x-nav-link>
+                    <x-nav-link {{--:href="route('admin-locations')" :active="request()->routeIs('admin-locations')"--}} wire:navigate>
+                        {{ __('Helyszínek') }}
+                    </x-nav-link>
+                    <x-nav-link {{--:href="route('admin-requests')" :active="request()->routeIs('admin-requests')"--}} wire:navigate>
+                        {{ __('Kérelmek') }}
+                    </x-nav-link>
+                    <x-nav-link {{--:href="route('admin-users')" :active="request()->routeIs('admin-users')"--}} wire:navigate>
+                        {{ __('Felhasználók') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
                         {{ __('Alkalmazás beállítások') }}
                     </x-nav-link>
                 </div>
@@ -90,8 +108,29 @@ new class extends Component
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('admin-dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                {{ __('Admin Dashboard') }}
+            <x-responsive-nav-link :href="route('admin-dashboard')" :active="request()->routeIs('admin-dashboard')" wire:navigate>
+                {{ __('Összefoglaló') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link {{--:href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')"--}} wire:navigate>
+                {{ __('Jogosultságok') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link {{--:href="route('admin-sub-authorizations')" :active="request()->routeIs('admin-sub-authorizations')"--}} wire:navigate>
+                {{ __('Aljogosultságok') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link {{--:href="route('admin-departments')" :active="request()->routeIs('admin-departments')"--}} wire:navigate>
+                {{ __('Osztályok') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link {{--:href="route('admin-locations')" :active="request()->routeIs('admin-locations')"--}} wire:navigate>
+                {{ __('Helyszínek') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link {{--:href="route('admin-requests')" :active="request()->routeIs('admin-requests')"--}} wire:navigate>
+                {{ __('Kérelmek') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link {{--:href="route('admin-users')" :active="request()->routeIs('admin-users')"--}} wire:navigate>
+                {{ __('Felhasználók') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
+                {{ __('Alkalmazás beállítások') }}
             </x-responsive-nav-link>
         </div>
 
