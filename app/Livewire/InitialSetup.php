@@ -21,7 +21,7 @@ class InitialSetup extends Component {
     use WithFileUploads;
 
     public $app_name;
-    // public $logo;
+    public $logo;
 
     public $mail_host;
     public $mail_port;
@@ -59,7 +59,7 @@ class InitialSetup extends Component {
 
     protected $rules = [
         'app_name' => 'required',
-        //'logo' => 'required|image|max:2048',
+        'logo' => 'required|image|max:2048',
         'mail_host' => 'required',
         'mail_port' => 'required|integer|min:1|max:65535',
         'mail_username' => 'required|email',
@@ -87,9 +87,9 @@ class InitialSetup extends Component {
 
     protected $messages = [
         'app_name.required' => 'Alkalmazás név megadása körtelező.',
-        // 'logo.required' => 'Logo feltöltése kötelező.',
-        // 'logo.image' => 'A logonak képnek kell lennie.',
-        // 'logo.max' => 'Maximum méret 10MB',
+        'logo.required' => 'Logo feltöltése kötelező.',
+        'logo.image' => 'A logonak képnek kell lennie.',
+        'logo.max' => 'Maximum méret 10MB',
         'mail_host.required' => 'Email szerver címe megadása kötelező.',
         'mail_port.required' => 'SMTP Port megadása kötelező.',
         'mail_port.integer' => 'Az SMTP Portnak egész számnak kell lennie.',
@@ -343,6 +343,42 @@ class InitialSetup extends Component {
         }
     }
 
+    public function save_logo() {
+        $env_content = $original_env_content = file_get_contents(base_path('.env'));
+
+        try {
+            $this->validateOnly('logo');
+
+            $filename_with_extension = 'logo.' . $this->logo->extension();
+
+            $env_content = preg_replace('/APP_LOGO_NAME=.*/', "APP_LOGO_NAME='$filename_with_extension'", $env_content);
+
+            config([
+                'app.logo_name' => $filename_with_extension,
+            ]);
+
+            $this->logo->storeAs(path: '', name: $filename_with_extension, options: 'public');
+
+            Artisan::call('storage:link');
+
+            file_put_contents(
+                base_path('.env'),
+                $env_content
+            );
+        } catch (Exception $err) {
+            $this->addError('save_logo_error', $err->getMessage());
+
+            config([
+                'app.logo_name' => null,
+            ]);
+
+            file_put_contents(
+                base_path('.env'),
+                $original_env_content
+            );
+        }
+    }
+
     public function save() {
         $this->validate();
         $this->validate(['password' => [Rules\Password::defaults()]]);
@@ -486,8 +522,6 @@ class InitialSetup extends Component {
                 $env_content
             );
 
-            //$this->logo->storeAs(path: 'imgs', name: 'logo');
-
             return redirect()->to('/');
         } catch (Exception $err) {
             $this->addError('save_error', $err->getMessage());
@@ -508,6 +542,6 @@ class InitialSetup extends Component {
     }
 
     public function render() {
-        return view('livewire.initial-setup')->layout(Auth::check() ? 'layouts.app' : 'layouts.guest');
+        return view('livewire.initial-setup')->layout(Auth::check() ? 'layouts.admin' : 'layouts.guest');
     }
 }
