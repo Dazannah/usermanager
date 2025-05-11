@@ -14,8 +14,7 @@ class IsAdmin {
      */
 
     public function handle(Request $request, Closure $next): Response {
-        $user = auth()->user();
-        if ($user->is_admin())
+        if (auth()->user()->is_admin())
             return $next($request);
 
         return redirect("/dashboard")->withErrors(['error' => 'Ehez a menüponthoz nincs jogosultságod.']);
