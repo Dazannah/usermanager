@@ -12,7 +12,7 @@ return [
 
     'installed' => env('APP_INSTALLED', false),
 
-    'logo_name' => env('LOGO_NAME', null),
+    'logo_name' => env('APP_LOGO_NAME', null),
 
     /*
     |--------------------------------------------------------------------------
