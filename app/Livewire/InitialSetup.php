@@ -144,11 +144,13 @@ class InitialSetup extends Component {
         $this->db_username = config('database.connections.mysql.username');
         $this->db_password = config('database.connections.mysql.password');
 
-        $this->admin_name = '';
-        $this->admin_username = 'usermanager_admin';
-        $this->admin_email = '';
-        $this->password = '';
-        $this->password_confirmation = '';
+        if (!config('app.installed')) {
+            $this->admin_name = '';
+            $this->admin_username = 'usermanager_admin';
+            $this->admin_email = '';
+            $this->password = '';
+            $this->password_confirmation = '';
+        }
 
         $this->ldap_active = config('ldap.active');
         $this->ldap_host = config('ldap.connections.default.hosts')[0];
@@ -509,15 +511,18 @@ class InitialSetup extends Component {
             ));
 
             //alapértelmezett rendszergazda fiók létrehozása
-            $user_data['name'] = $this->admin_name | $this->admin_username;
-            $user_data['username'] = $this->admin_username;
-            $user_data['email'] = $this->admin_email;
-            $user_data['password'] = Hash::make($this->password);
-            $user_data['is_admin'] = true;
+            if (!config('app.installed')) {
 
-            $user = User::create($user_data);
+                $user_data['name'] = $this->admin_name | $this->admin_username;
+                $user_data['username'] = $this->admin_username;
+                $user_data['email'] = $this->admin_email;
+                $user_data['password'] = Hash::make($this->password);
+                $user_data['is_admin'] = true;
 
-            Auth::login($user);
+                $user = User::create($user_data);
+
+                Auth::login($user);
+            }
 
             file_put_contents(
                 base_path('.env'),

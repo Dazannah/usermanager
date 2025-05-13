@@ -1,11 +1,16 @@
 <div>
-      <header>
-      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-          {{ __('Logó') }}
+  <header>
+    <x-slot name="header">
+      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Beállítások') }}
       </h2>
+    </x-slot>
     @if (config('app.installed'))
     <form wire:submit.prevent="save_logo" class="mb-6 space-y-6">
       <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+              <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ __('Logó') }}
+      </h2>
         <div class="max-w-xl">
             @if ($logo?->isPreviewable())
               <img src="{{ $logo->temporaryUrl() }}">
@@ -18,7 +23,7 @@
             @error('logo') <x-input-error :messages="$message" class="mt-2" /> @enderror
         </div>
         @error('save_logo_error') <x-input-error :messages="$message" class="mt-2" /> @enderror
-        <div class="mt-2 flex items-center gap-4">
+        <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Logo Mentése') }}</x-primary-button>
 
             @if (session()->has('save_logo_result'))
@@ -34,13 +39,6 @@
     </form>
   @endif
     <header>
-      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-          {{ __('Alap beállítások') }}
-      </h2>
-  
-      <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          {{ __('Ezek a beállítások később módosíthatóak az .env file-ban.') }}
-      </p>
       <div>
         @if (session()->has('message'))
             <div class="alert alert-success">
@@ -58,10 +56,11 @@
         </div>
       </div>
 
-    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-        {{ __('Technikai email fiók beállítása SMTP') }}
-    </h2>
+
       <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          {{ __('Technikai email fiók beállítása SMTP') }}
+        </h2>
         <div class="max-w-xl">
             <x-input-label for="mail_host" :value="__('Email szerver címe')" />
             <x-text-input placeholder="Szerver címe" wire:model.live="mail_host" id="mail_host" name="mail_host" type="text" class="mt-1 block w-full" />
@@ -134,7 +133,8 @@
             </x-action-message>
         </div>
       </div>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+      @if(!config('app.installed'))
+      <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
           {{ __('Alapértelmezett rendszergazda fiók') }}
       </h2>
         <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
@@ -160,6 +160,7 @@
               @error('password_confirmation') <x-input-error :messages="$message" class="mt-2" /> @enderror
           </div>
         </div>
+      @endif
 
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{'LDAP autentikáció'}}
