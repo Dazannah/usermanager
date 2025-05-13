@@ -35,7 +35,7 @@ new class extends Component
                     <x-nav-link :href="route('admin-dashboard')" :active="request()->routeIs('admin-dashboard')" wire:navigate>
                         {{ __('Összefoglaló') }}
                     </x-nav-link>
-                    <x-nav-link {{--:href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')"--}} wire:navigate>
+                    <x-nav-link :href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')" wire:navigate>
                         {{ __('Jogosultságok') }}
                     </x-nav-link>
                     <x-nav-link {{--:href="route('admin-sub-authorizations')" :active="request()->routeIs('admin-sub-authorizations')"--}} wire:navigate>
