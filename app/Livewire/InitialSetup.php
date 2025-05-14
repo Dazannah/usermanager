@@ -55,11 +55,10 @@ class InitialSetup extends Component {
     public $ispconfig_soap_remote_user_password;
 
     private $domain;
-    private $userPrincipalName;
+    private $user_principal_name;
 
     protected $rules = [
         'app_name' => 'required',
-        'logo' => 'required|image|max:2048',
         'mail_host' => 'required',
         'mail_port' => 'required|integer|min:1|max:65535',
         'mail_username' => 'required|email',
@@ -156,7 +155,7 @@ class InitialSetup extends Component {
         $this->ldap_host = config('ldap.connections.default.hosts')[0];
         $this->ldap_base_dn = config('ldap.connections.default.base_dn');
         $this->ldap_port = config('ldap.connections.default.port');
-        $this->ldap_username = config('ldap.connections.default.username');
+        $this->ldap_username = explode('@', config('ldap.connections.default.username'))[0]; // domain nélkül kell megadnia a usernek
         $this->ldap_password = config('ldap.connections.default.password');
 
         $this->ispfonfig_active = config('ispconfig.soap.active');
@@ -177,7 +176,7 @@ class InitialSetup extends Component {
     }
 
     private function generate_userPrincipalName() {
-        $this->userPrincipalName = $this->ldap_username . '@' . $this->domain;
+        $this->user_principal_name = $this->ldap_username . '@' . $this->domain;
     }
 
     public function test_ispconfig_connection() {
@@ -271,7 +270,7 @@ class InitialSetup extends Component {
                 // Mandatory Configuration Options
                 'hosts'            => [$this->ldap_host],
                 'base_dn'          => $this->ldap_base_dn,
-                'username'         => $this->userPrincipalName,
+                'username'         => $this->user_principal_name,
                 'password'         => $this->ldap_password,
 
                 // Optional Configuration Options
@@ -349,12 +348,11 @@ class InitialSetup extends Component {
         $env_content = $original_env_content = file_get_contents(base_path('.env'));
 
         try {
-            $this->validateOnly('logo');
+            $this->validate(['logo' =>  'required|image|max:2048',]);
 
             $filename_with_extension = 'logo.' . $this->logo->extension();
 
             $env_content = preg_replace('/APP_LOGO_NAME=.*/', "APP_LOGO_NAME='$filename_with_extension'", $env_content);
-
             config([
                 'app.logo_name' => $filename_with_extension,
             ]);
@@ -426,12 +424,10 @@ class InitialSetup extends Component {
 
             //general configs
             $env_content = preg_replace('/APP_NAME=.*/', "APP_NAME='$this->app_name'", $env_content);
-            $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
             $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
 
             config([
                 'app.name' => $this->app_name,
-                'app.installed' => true,
                 'session.driver' => 'database',
             ]);
 
@@ -473,7 +469,7 @@ class InitialSetup extends Component {
             if ($this->ldap_active === true) {
                 $env_content = preg_replace('/LDAP_ACTIVE=.*/', "LDAP_ACTIVE=true", $env_content);
                 $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST='$this->ldap_host'", $env_content);
-                $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME='$this->userPrincipalName'", $env_content);
+                $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME='$this->user_principal_name'", $env_content);
                 $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD='$this->ldap_password'", $env_content);
                 $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT='$this->ldap_port'", $env_content);
                 $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN='$this->ldap_base_dn'", $env_content);
@@ -482,7 +478,7 @@ class InitialSetup extends Component {
                     'ldap.connections.default.hosts' => $this->ldap_host,
                     'ldap.connections.default.port' => $this->ldap_port,
                     'ldap.connections.default.base_dn' => $this->ldap_base_dn,
-                    'ldap.connections.default.username' => $this->userPrincipalName,
+                    'ldap.connections.default.username' => $this->user_principal_name,
                     'ldap.connections.default.password' => $this->ldap_password
                 ]);
             }
@@ -524,12 +520,18 @@ class InitialSetup extends Component {
                 Auth::login($user);
             }
 
+            $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
+
+            config([
+                'app.installed' => true
+            ]);
+
             file_put_contents(
                 base_path('.env'),
                 $env_content
             );
 
-            return redirect()->to('/');
+            return $this->redirect('/', navigate: true);
         } catch (Exception $err) {
             $this->addError('save_error', $err->getMessage());
 
