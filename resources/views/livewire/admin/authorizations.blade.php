@@ -3,9 +3,12 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Jogosultságok') }}
         </h2>
+        <x-primary-button>{{ __('Oszlop hozzáadás') }}</x-primary-button>
+        <x-primary-button>{{ __('Jogosultság hozzáadás') }}</x-primary-button>
+        <x-primary-button>{{ __('Alljogosultság hozzáadás') }}</x-primary-button>
     </x-slot>
 
-    <div class="w-2/5 mx-auto break-words rounded-lg">
+    <div class="w-2/5 mx-auto break-words">
         <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
