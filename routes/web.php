@@ -3,7 +3,7 @@
 use App\Livewire\InitialSetup;
 use App\Http\Middleware\IsAdmin;
 use App\Livewire\Admin\AdminDashboard;
-use App\Livewire\Authorizations;
+use App\Livewire\Admin\Authorizations;
 use Illuminate\Support\Facades\Route;
 
 Route::get('initial-setup', InitialSetup::class);
