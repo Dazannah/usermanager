@@ -2,15 +2,16 @@
 
 namespace App\Livewire;
 
-use SoapClient;
 use Exception;
+use SoapClient;
 use App\Models\User;
 use App\Mail\MailTest;
+use App\Models\Status;
 use Livewire\Component;
 use LdapRecord\Connection;
 use Livewire\WithFileUploads;
-use Illuminate\Validation\Rules;
 
+use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -500,11 +501,21 @@ class InitialSetup extends Component {
             }
 
             //adatbázis migráció
-            Artisan::call('migrate --seed', array(
+            Artisan::call('migrate', array(
                 '--path' => 'database/migrations',
                 '--database' => 'mysql',
                 '--force' => true
             ));
+
+            Status::create([
+                'name' => 'active',
+                'displayName' => 'Aktív'
+            ]);
+
+            Status::create([
+                'name' => 'inactive',
+                'displayName' => 'Inaktív'
+            ]);
 
             //alapértelmezett rendszergazda fiók létrehozása
             if (!config('app.installed')) {
