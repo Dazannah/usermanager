@@ -12,7 +12,7 @@ return new class extends Migration {
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->text("name");
-            $table->text("diaplayName");
+            $table->text("displayName");
         });
     }
 
