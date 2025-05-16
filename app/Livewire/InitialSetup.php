@@ -500,7 +500,7 @@ class InitialSetup extends Component {
             }
 
             //adatbázis migráció
-            Artisan::call('migrate', array(
+            Artisan::call('migrate --seed', array(
                 '--path' => 'database/migrations',
                 '--database' => 'mysql',
                 '--force' => true
