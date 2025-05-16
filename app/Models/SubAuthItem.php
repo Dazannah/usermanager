@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @package App\Models
  */
 class SubAuthItem extends Model {
-	protected $table = 'subAuthItems';
+	protected $table = 'sub_auth_items';
 	protected $primaryKey = 'id';
 	public $timestamps = false;
 
