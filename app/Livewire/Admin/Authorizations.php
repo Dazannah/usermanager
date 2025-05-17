@@ -129,7 +129,7 @@ class Authorizations extends Component {
         $sub_auth_item->save();
 
         $this->reset('sub_auth_item_display_name', 'sub_auth_item_authItem_Id', 'sub_auth_item_status_id');
-        $this->sub_authorization = SubAuthItem::all();
+        $this->authorizations = AuthItem::all();
 
         $this->dispatch('sub-authitem-save-success');
     }
