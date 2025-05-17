@@ -38,13 +38,43 @@ class Authorizations extends Component {
         $this->show_add_sub_authorization_field = false;
 
         $this->statuses = Status::all();
-        $this->columns = Column::all();
+        $this->columns = Column::all_sorted_auth_items_by_position();
         $this->authorizations = AuthItem::all();
         $this->sub_authorization = SubAuthItem::all();
     }
 
     public function toggle_add_column_field() {
         $this->show_add_column_field = !$this->show_add_column_field;
+    }
+
+    public function save_order($item, $new_position) {
+        $new_position++;
+
+        $position_auth_item = AuthItem::where('id', $item)->first();
+        $original_position = $position_auth_item->position;
+
+        $column_auth_items = AuthItem::where('column_id', $position_auth_item->column_id)->orderBy('position', 'asc')->get();
+
+        foreach ($column_auth_items as $auth_item) {
+            if ($auth_item->id == $item)
+                continue;
+
+            if ($new_position > $original_position && $auth_item->position <= $new_position && $original_position <= $auth_item->position) {
+                $auth_item->position -= 1;
+                $auth_item->save();
+            }
+
+            if ($new_position < $original_position && $auth_item->position >= $new_position && $original_position >= $auth_item->position) {
+
+                $auth_item->position += 1;
+                $auth_item->save();
+            }
+        };
+
+        $position_auth_item->position = $new_position;
+        $position_auth_item->save();
+
+        $this->columns = Column::all_sorted_auth_items_by_position();
     }
 
     public function save_column() {
@@ -69,7 +99,7 @@ class Authorizations extends Component {
         $column->save();
 
         $this->reset('column_display_name', 'column_status_id');
-        $this->columns = Column::all();
+        $this->columns = Column::all_sorted_auth_items_by_position();
 
         $this->dispatch('columns-save-success');
     }
@@ -89,17 +119,20 @@ class Authorizations extends Component {
 
         $this->validate($rules, $messages);
 
+
+        $auth_item = AuthItem::where('column_id', '=', $this->authorization_column_id)->orderBy('position', 'desc')->first();
+
         $authItem = new AuthItem([
             'displayName' => $this->authorization_display_name,
             'column_id' => $this->authorization_column_id,
             'status_id' => $this->authorization_status_id,
-            'position' => $this->authorization_position
+            'position' => $auth_item?->position + 1 ?? 1
         ]);
 
         $authItem->save();
 
         $this->reset('authorization_display_name', 'authorization_column_id', 'authorization_status_id');
-        $this->authorizations = AuthItem::all();
+        $this->columns = Column::all_sorted_auth_items_by_position();
 
         $this->dispatch('authorization-save-success');
     }
@@ -119,17 +152,19 @@ class Authorizations extends Component {
 
         $this->validate($rules, $messages);
 
+        $auth_item = SubAuthItem::where('authItem_id', '=', $this->sub_auth_item_authItem_Id)->orderBy('position', 'desc')->first();
+
         $sub_auth_item = new SubAuthItem([
             'displayName' => $this->sub_auth_item_display_name,
             'authItem_id' => $this->sub_auth_item_authItem_Id,
             'status_id' => $this->sub_auth_item_status_id,
-            'position' => $this->sub_auth_item_position
+            'position' => $auth_item?->position + 1 ?? 1
         ]);
 
         $sub_auth_item->save();
 
         $this->reset('sub_auth_item_display_name', 'sub_auth_item_authItem_Id', 'sub_auth_item_status_id');
-        $this->authorizations = AuthItem::all();
+        $this->columns = Column::all_sorted_auth_items_by_position();
 
         $this->dispatch('sub-authitem-save-success');
     }
