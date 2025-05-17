@@ -45,4 +45,14 @@ class Column extends Model {
 	public function auth_items() {
 		return $this->hasMany(AuthItem::class, 'column_id');
 	}
+
+	public static function all_sorted_auth_items_by_position() {
+		$columns = Column::all();
+
+		foreach ($columns as $column) {
+			$column->auth_items = $column->auth_items->sortBy('position');
+		}
+
+		return $columns;
+	}
 }
