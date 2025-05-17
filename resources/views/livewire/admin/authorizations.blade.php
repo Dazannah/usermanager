@@ -4,6 +4,7 @@
     show_add_sub_authorization_field: false
 }">
 
+    {{-- Sub menus for creating items --}}
     <header class="bg-white dark:bg-gray-800 shadow py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -23,370 +24,91 @@
             </button>
         </div>
     </header>
+
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
         <div class="flex flex-wrap gap-2">
-            <div class="w-2/5 mx-auto break-words">
-                <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th colspan="3" class="px-6 py-3">
-                                Oszlop név
-                            </th>
-                            <th>
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Oszlop
-                                    szerkesztése</a>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
 
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Elnevezés
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Státusz
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Műveletek
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                1
-                            </th>
-                            <td class="px-6 py-4">
-                                Pc hozzáférés asdasd aa asda asd asd lkdaskjadskljsad kjlasdkljasdklj kjklj
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th rowspan="2" scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                2
-                            </th>
-                            <td class="px-6 py-4">
-                                E-mail
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td rowspan="2" class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <td colspan="2" class="px-6 py-4">
-                                <div>
+            {{-- start of tables --}}
+            @foreach ($columns as $column_idx => $column)
+                <div class="w-2/5 mx-auto break-words">
+                    <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th colspan="3" class="px-6 py-3">
+                                    {{ $column->displayName }}
+                                </th>
+                                <th>
+                                    <a href="#"
+                                        class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Oszlop
+                                        szerkesztése</a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
 
-                                </div>
-                                <div>
-                                    <span
-                                        class="font-medium text-green-600 dark:text-green-500 hover:underline hover:cursor-pointer">Normál</span>
-                                    <span
-                                        class="font-medium text-green-600 dark:text-green-500 hover:underline hover:cursor-pointer">Admin</span>
-                                    <span
-                                        class="font-medium text-red-600 dark:text-red-500 hover:underline hover:cursor-pointer">Dummy</span>
-                                </div>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Elnevezés
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Státusz
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Műveletek
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody x-sort x-sort:group="column-{{ $column_idx }}-authItems">
+                            @foreach ($column->auth_items as $authItem_idx => $auth_item)
+                                <tr x-sort:item="{{ $authItem_idx }}"
+                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ $auth_item->position }}
+                                    </td>
+                                    @if (count($auth_item->sub_auth_items) > 0)
+                                        <td colspan="2" class="w-full h-full">
+                                            <div class="flex items-center justify-center w-full h-full">
+                                                <div class="grid grid-cols-2 items-center text-center w-full h-full">
+                                                    <div class="w-full text-left">
+                                                        {{ $auth_item->displayName }}
+                                                    </div>
+                                                    <div
+                                                        class="w-full px-6 py-4 text-green-600 dark:text-green-500 text-right">
+                                                        {{ $auth_item->status->displayName }}
+                                                    </div>
+                                                    <div class="py-2 col-span-2 flex flex-wrap justify-center gap-1">
 
-                            </td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                3
-                            </th>
-                            <td class="px-6 py-4">
-                                FTP
-                            </td>
-                            <td class="px-6 py-4 text-red-600 dark:text-red-500">
-                                Inkatív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="w-2/5 mx-auto break-words rounded-lg">
-                <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th colspan="3" class="px-6 py-3">
-                                Oszlop név 2
-                            </th>
-                            <th>
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Oszlop
-                                    szerkesztése</a>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Sorszám
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Elnevezés
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Státusz
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Műveletek
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                1
-                            </th>
-                            <td class="px-6 py-4">
-                                Pc hozzáférés
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                2
-                            </th>
-                            <td class="px-6 py-4">
-                                E-mail
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                3
-                            </th>
-                            <td class="px-6 py-4">
-                                FTP
-                            </td>
-                            <td class="px-6 py-4 text-red-600 dark:text-red-500">
-                                Inkatív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                                        @foreach ($auth_item->sub_auth_items as $sub_authitem)
+                                                            <span
+                                                                class="font-medium {{ $sub_authitem->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}  underline hover:no-underline cursor-pointer">{{ $sub_authitem->displayName }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    @else
+                                        <td class="w-full text-left">
+                                            {{ $auth_item->displayName }}
+                                        </td>
+                                        <td
+                                            class="px-6 py-4 {{ $sub_authitem->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }} text-right">
+                                            {{ $auth_item->status->displayName }}
+                                        </td>
+                                    @endif
+                                    <td class="px-6 py-4">
+                                        <a href="#"
+                                            class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</a>
+                                        <a href="#"
+                                            class="font-medium text-red-600 dark:text-red-500 underline hover:no-underline">Törlés</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endforeach
 
-            <div class="w-2/5 mt-1 mx-auto break-words rounded-lg">
-                <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th colspan="3" class="px-6 py-3">
-                                Oszlop név 3
-                            </th>
-                            <th>
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Oszlop
-                                    szerkesztése</a>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Elnevezés
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Státusz
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Műveletek
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                1
-                            </th>
-                            <td class="px-6 py-4">
-                                Pc hozzáférés
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                2
-                            </th>
-                            <td class="px-6 py-4">
-                                E-mail
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                3
-                            </th>
-                            <td class="px-6 py-4">
-                                FTP
-                            </td>
-                            <td class="px-6 py-4 text-red-600 dark:text-red-500">
-                                Inkatív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="w-2/5 mt-1 mx-auto break-words rounded-lg">
-                <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th colspan="3" class="px-6 py-3">
-                                Oszlop név 3
-                            </th>
-                            <th>
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Oszlop
-                                    szerkesztése</a>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Elnevezés
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Státusz
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Műveletek
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                1
-                            </th>
-                            <td class="px-6 py-4">
-                                Pc hozzáférés
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                2
-                            </th>
-                            <td class="px-6 py-4">
-                                E-mail
-                            </td>
-                            <td class="px-6 py-4 text-green-600 dark:text-green-500">
-                                Aktív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                3
-                            </th>
-                            <td class="px-6 py-4">
-                                FTP
-                            </td>
-                            <td class="px-6 py-4 text-red-600 dark:text-red-500">
-                                Inkatív
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#"
-                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline">Szerkesztés</a>
-                                <a href="#"
-                                    class="font-medium text-red-600 dark:text-red-500 hover:underline">Törlés</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 
@@ -422,7 +144,8 @@
                                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                         placeholder=" ">
                                         @foreach ($this->statuses as $status)
-                                            <x-option value="{{ $status->id }}">{{ $status->displayName }}</x-option>
+                                            <x-option
+                                                value="{{ $status->id }}">{{ $status->displayName }}</x-option>
                                         @endforeach
                                     </select>
                                     <label for="column_status_id"
@@ -440,8 +163,7 @@
                 <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <x-danger-button
                         @click.prevent="show_add_column_field = !show_add_column_field">{{ __('Bezárás') }}</x-primary-button>
-                        <x-success-button wire:click.prevent="save_column"
-                            class="mx-2">{{ __('Mentés') }}</x-primary-button>
+                        <x-success-button class="mx-2">{{ __('Mentés') }}</x-primary-button>
                             <x-action-message wire:loading class="me-3" on="save_column">
                                 {{ __('Betöltés') }}
                             </x-action-message>
@@ -485,7 +207,8 @@
                                         placeholder=" ">
                                         <x-option>Válassz egy oszlopot</x-option>
                                         @foreach ($this->columns as $column)
-                                            <x-option value="{{ $column->id }}">{{ $column->displayName }}</x-option>
+                                            <x-option
+                                                value="{{ $column->id }}">{{ $column->displayName }}</x-option>
                                         @endforeach
                                     </select>
                                     </select>
@@ -521,9 +244,8 @@
                 </div>
                 <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <x-danger-button
-                        @click="show_add_authorization_field = !show_add_authorization_field">{{ __('Bezárás') }}</x-primary-button>
-                        <x-success-button wire:click.prevent="save_authorization"
-                            class="mx-2">{{ __('Mentés') }}</x-primary-button>
+                        @click.prevent="show_add_authorization_field = !show_add_authorization_field">{{ __('Bezárás') }}</x-primary-button>
+                        <x-success-button class="mx-2">{{ __('Mentés') }}</x-primary-button>
                             <x-action-message wire:loading class="me-3" on="save_authorization">
                                 {{ __('Betöltés') }}
                             </x-action-message>
@@ -605,8 +327,7 @@
                 <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <x-danger-button
                         @click.prevent="show_add_sub_authorization_field = !show_add_sub_authorization_field">{{ __('Bezárás') }}</x-primary-button>
-                        <x-success-button wire:click.prevent="save_sub_authorization"
-                            class="mx-2">{{ __('Mentés') }}</x-primary-button>
+                        <x-success-button class="mx-2">{{ __('Mentés') }}</x-primary-button>
 
                             <x-action-message wire:loading class="me-3" on="save_sub_authorization">
                                 {{ __('Betöltés') }}
