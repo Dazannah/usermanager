@@ -30,7 +30,7 @@
         <div class="flex flex-wrap gap-2">
 
             {{-- start of tables --}}
-            @foreach ($columns as $column_idx => $column)
+            @foreach ($columns as $column)
                 <div class="w-2/5 mx-auto break-words">
                     <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -59,14 +59,15 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody x-sort x-sort:group="column-{{ $column_idx }}-authItems">
-                            @foreach ($column->auth_items as $authItem_idx => $auth_item)
-                                <tr x-sort:item="{{ $authItem_idx }}"
+                        <tbody x-sort="handle" x-sort:group="column-{{ $column->id }}-authItems"
+                            x-data="{ handle: (item, position) => { $wire.call('save_order', item, position) } }">
+                            @foreach ($column->auth_items as $auth_item)
+                                <tr x-sort:item="{{ $auth_item->id }}"
                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $auth_item->position }}
                                     </td>
-                                    @if (count($auth_item->sub_auth_items) > 0)
+                                    @if (count($auth_item?->sub_auth_items) > 0)
                                         <td colspan="2" class="w-full h-full">
                                             <div class="flex items-center justify-center w-full h-full">
                                                 <div class="grid grid-cols-2 items-center text-center w-full h-full">
@@ -79,9 +80,9 @@
                                                     </div>
                                                     <div class="py-2 col-span-2 flex flex-wrap justify-center gap-1">
 
-                                                        @foreach ($auth_item->sub_auth_items as $sub_authitem)
+                                                        @foreach ($auth_item->sub_auth_items as $sub_auth_item)
                                                             <span
-                                                                class="font-medium {{ $sub_authitem->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}  underline hover:no-underline cursor-pointer">{{ $sub_authitem->displayName }}</span>
+                                                                class="font-medium {{ $sub_auth_item->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}  underline hover:no-underline cursor-pointer">{{ $sub_auth_item->displayName }}</span>
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -92,7 +93,7 @@
                                             {{ $auth_item->displayName }}
                                         </td>
                                         <td
-                                            class="px-6 py-4 {{ $sub_authitem->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }} text-right">
+                                            class="px-6 py-4 {{ $auth_item->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }} text-right">
                                             {{ $auth_item->status->displayName }}
                                         </td>
                                     @endif
