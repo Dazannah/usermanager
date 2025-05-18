@@ -49,6 +49,8 @@ class Column extends Model {
 	public static function all_sorted_auth_items_by_position() {
 		$columns = Column::all();
 
+		$columns = $columns->sortBy('position');
+
 		foreach ($columns as $column) {
 			$column->auth_items = $column->auth_items->sortBy('position');
 		}
