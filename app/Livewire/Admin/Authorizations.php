@@ -6,8 +6,8 @@ use App\Models\AuthItem;
 use App\Models\Column;
 use App\Models\Status;
 use App\Models\SubAuthItem;
+use Exception;
 use Livewire\Component;
-use Livewire\Attributes\On;
 
 class Authorizations extends Component {
     // trackers for show add divs
@@ -48,125 +48,148 @@ class Authorizations extends Component {
     }
 
     public function save_order($item, $new_position) {
-        $new_position++;
+        try {
+            $new_position++;
 
-        $position_auth_item = AuthItem::where('id', $item)->first();
-        $original_position = $position_auth_item->position;
+            $position_auth_item = AuthItem::where('id', $item)->first();
+            $original_position = $position_auth_item->position;
 
-        $column_auth_items = AuthItem::where('column_id', $position_auth_item->column_id)->orderBy('position', 'asc')->get();
+            $column_auth_items = AuthItem::where('column_id', $position_auth_item->column_id)->orderBy('position', 'asc')->get();
 
-        foreach ($column_auth_items as $auth_item) {
-            if ($auth_item->id == $item)
-                continue;
+            foreach ($column_auth_items as $auth_item) {
+                if ($auth_item->id == $item)
+                    continue;
 
-            if ($new_position > $original_position && $auth_item->position <= $new_position && $original_position <= $auth_item->position) {
-                $auth_item->position -= 1;
-                $auth_item->save();
-            }
+                if ($new_position > $original_position && $auth_item->position <= $new_position && $original_position <= $auth_item->position) {
+                    $auth_item->position -= 1;
+                    $auth_item->save();
+                }
 
-            if ($new_position < $original_position && $auth_item->position >= $new_position && $original_position >= $auth_item->position) {
+                if ($new_position < $original_position && $auth_item->position >= $new_position && $original_position >= $auth_item->position) {
 
-                $auth_item->position += 1;
-                $auth_item->save();
-            }
-        };
+                    $auth_item->position += 1;
+                    $auth_item->save();
+                }
+            };
 
-        $position_auth_item->position = $new_position;
-        $position_auth_item->save();
+            $position_auth_item->position = $new_position;
+            $position_auth_item->save();
 
-        $this->columns = Column::all_sorted_auth_items_by_position();
+            $this->columns = Column::all_sorted_auth_items_by_position();
+        } catch (Exception $err) {
+            $this->addError('error', $err->getMessage());
+
+            $this->mount();
+        }
     }
 
     public function save_column() {
-        $rules = [
-            'column_display_name' => 'required',
-            'column_status_id' => 'required'
-        ];
+        try {
+            $rules = [
+                'column_display_name' => 'required',
+                'column_status_id' => 'required'
+            ];
 
-        $messages = [
-            'column_display_name.required' => 'Elnevezés kitöltése kötelező',
-            'column_status_id.required' => 'Egy státuszt ki kell választani'
-        ];
+            $messages = [
+                'column_display_name.required' => 'Elnevezés kitöltése kötelező',
+                'column_status_id.required' => 'Egy státuszt ki kell választani'
+            ];
 
-        $this->validate($rules, $messages);
+            $this->validate($rules, $messages);
 
-        $column = new Column([
-            'displayName' => $this->column_display_name,
-            'status_id' => $this->column_status_id,
-            'position' => $this->column_position
-        ]);
+            $column = Column::orderBy('position', 'desc')->first();
 
-        $column->save();
+            $column = new Column([
+                'displayName' => $this->column_display_name,
+                'status_id' => $this->column_status_id,
+                'position' => $column?->position + 1 ?? 1
+            ]);
 
-        $this->reset('column_display_name', 'column_status_id');
-        $this->columns = Column::all_sorted_auth_items_by_position();
+            $column->save();
 
-        $this->dispatch('columns-save-success');
+            $this->reset('column_display_name', 'column_status_id');
+            $this->mount();
+            $this->dispatch('columns_save_success');
+        } catch (Exception $err) {
+            $this->addError('save_column_error', $err->getMessage());
+
+            $this->mount();
+        }
     }
 
     public function save_authorization() {
-        $rules = [
-            'authorization_display_name' => 'required',
-            'authorization_column_id' => 'required',
-            'authorization_status_id' => 'required'
-        ];
+        try {
+            $rules = [
+                'authorization_display_name' => 'required',
+                'authorization_column_id' => 'required',
+                'authorization_status_id' => 'required'
+            ];
 
-        $messages = [
-            'authorization_display_name.required' => 'Elnevezés kitöltése kötelező',
-            'authorization_column_id.required' => 'Egy oszlopot ki kell választani',
-            'authorization_status_id.required' => 'Egy státuszt ki kell választani'
-        ];
+            $messages = [
+                'authorization_display_name.required' => 'Elnevezés kitöltése kötelező',
+                'authorization_column_id.required' => 'Egy oszlopot ki kell választani',
+                'authorization_status_id.required' => 'Egy státuszt ki kell választani'
+            ];
 
-        $this->validate($rules, $messages);
+            $this->validate($rules, $messages);
 
 
-        $auth_item = AuthItem::where('column_id', '=', $this->authorization_column_id)->orderBy('position', 'desc')->first();
+            $auth_item = AuthItem::where('column_id', '=', $this->authorization_column_id)->orderBy('position', 'desc')->first();
 
-        $authItem = new AuthItem([
-            'displayName' => $this->authorization_display_name,
-            'column_id' => $this->authorization_column_id,
-            'status_id' => $this->authorization_status_id,
-            'position' => $auth_item?->position + 1 ?? 1
-        ]);
+            $authItem = new AuthItem([
+                'displayName' => $this->authorization_display_name,
+                'column_id' => $this->authorization_column_id,
+                'status_id' => $this->authorization_status_id,
+                'position' => $auth_item?->position + 1 ?? 1
+            ]);
 
-        $authItem->save();
+            $authItem->save();
 
-        $this->reset('authorization_display_name', 'authorization_column_id', 'authorization_status_id');
-        $this->columns = Column::all_sorted_auth_items_by_position();
+            $this->reset('authorization_display_name', 'authorization_column_id', 'authorization_status_id');
+            $this->mount();
+            $this->dispatch('authorization_save_success');
+        } catch (Exception $err) {
+            $this->addError('save_authorization_error', $err->getMessage());
 
-        $this->dispatch('authorization-save-success');
+            $this->mount();
+        }
     }
 
     public function save_sub_authorization() {
-        $rules = [
-            'sub_auth_item_display_name' => 'required',
-            'sub_auth_item_authItem_Id' => 'required',
-            'sub_auth_item_status_id' => 'required',
-        ];
+        try {
+            $rules = [
+                'sub_auth_item_display_name' => 'required',
+                'sub_auth_item_authItem_Id' => 'required',
+                'sub_auth_item_status_id' => 'required',
+            ];
 
-        $messages = [
-            'sub_auth_item_display_name.required' => 'Elnevezés kitöltése kötelező',
-            'sub_auth_item_authItem_Id.required' => 'Egy jogosultságot ki kell választani',
-            'sub_auth_item_status_id.required' => 'Egy státuszt ki kell választani',
-        ];
+            $messages = [
+                'sub_auth_item_display_name.required' => 'Elnevezés kitöltése kötelező',
+                'sub_auth_item_authItem_Id.required' => 'Egy jogosultságot ki kell választani',
+                'sub_auth_item_status_id.required' => 'Egy státuszt ki kell választani',
+            ];
 
-        $this->validate($rules, $messages);
+            $this->validate($rules, $messages);
 
-        $auth_item = SubAuthItem::where('authItem_id', '=', $this->sub_auth_item_authItem_Id)->orderBy('position', 'desc')->first();
+            $auth_item = SubAuthItem::where('authItem_id', '=', $this->sub_auth_item_authItem_Id)->orderBy('position', 'desc')->first();
 
-        $sub_auth_item = new SubAuthItem([
-            'displayName' => $this->sub_auth_item_display_name,
-            'authItem_id' => $this->sub_auth_item_authItem_Id,
-            'status_id' => $this->sub_auth_item_status_id,
-            'position' => $auth_item?->position + 1 ?? 1
-        ]);
+            $sub_auth_item = new SubAuthItem([
+                'displayName' => $this->sub_auth_item_display_name,
+                'authItem_id' => $this->sub_auth_item_authItem_Id,
+                'status_id' => $this->sub_auth_item_status_id,
+                'position' => $auth_item?->position + 1 ?? 1
+            ]);
 
-        $sub_auth_item->save();
+            $sub_auth_item->save();
 
-        $this->reset('sub_auth_item_display_name', 'sub_auth_item_authItem_Id', 'sub_auth_item_status_id');
-        $this->columns = Column::all_sorted_auth_items_by_position();
+            $this->reset('sub_auth_item_display_name', 'sub_auth_item_authItem_Id', 'sub_auth_item_status_id');
+            $this->mount();
+            $this->dispatch('sub_authitem_save_success');
+        } catch (Exception $err) {
+            $this->addError('save_sub_authorization_error', $err->getMessage());
 
-        $this->dispatch('sub-authitem-save-success');
+            $this->mount();
+        }
     }
 
     public function render() {

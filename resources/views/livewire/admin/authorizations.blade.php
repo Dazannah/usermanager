@@ -25,15 +25,22 @@
         </div>
     </header>
 
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
+        @error('error')
+            <div class="py-4">
+                <x-input-error :messages="$message" class="mt" />
+            </div>
+        @enderror
         <div class="flex flex-wrap gap-2">
+
 
             {{-- start of tables --}}
             @foreach ($columns as $column)
                 <div class="w-2/5 mx-auto break-words">
-                    <table class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <table
+                        class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-white  dark:bg-gray-800 rounded-t-md">
+                        <thead
+                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-md">
                             <tr>
                                 <th colspan="3" class="px-6 py-3">
                                     {{ $column->displayName }}
@@ -63,7 +70,7 @@
                             x-data="{ handle: (item, position) => { $wire.call('save_order', item, position) } }">
                             @foreach ($column->auth_items as $auth_item)
                                 <tr x-sort:item="{{ $auth_item->id }}"
-                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                    class="border-b dark:border-gray-700 border-gray-200">
                                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ $auth_item->position }}
                                     </td>
@@ -109,7 +116,6 @@
                     </table>
                 </div>
             @endforeach
-
         </div>
     </div>
 
@@ -161,16 +167,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
                     <x-danger-button
-                        @click.prevent="show_add_column_field = !show_add_column_field">{{ __('Bezárás') }}</x-primary-button>
-                        <x-success-button class="mx-2">{{ __('Mentés') }}</x-primary-button>
-                            <x-action-message wire:loading class="me-3" on="save_column">
-                                {{ __('Betöltés') }}
-                            </x-action-message>
-                            <x-action-message-success class="me-3" on="columns-save-success">
-                                {{ __('Sikeres mentés') }}
-                            </x-action-message-success>
+                        @click.prevent="show_add_column_field = !show_add_column_field">{{ __('Bezárás') }}
+                    </x-danger-button>
+
+                    <x-success-button class="me-3">
+                        {{ __('Mentés') }}
+                    </x-success-button>
+
+                    <x-action-message wire:loading class="me-3" on="save_column">
+                        {{ __('Betöltés') }}
+                    </x-action-message>
+
+                    <x-action-message-success class="me-3" on="columns_save_success">
+                        {{ __('Sikeres mentés') }}
+                    </x-action-message-success>
+
+                    @error('save_column_error')
+                        <div class="me-3">
+                            <x-input-error :messages="$message" />
+                        </div>
+                    @enderror
                 </div>
             </form>
         </x-modal>
@@ -243,16 +261,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
                     <x-danger-button
-                        @click.prevent="show_add_authorization_field = !show_add_authorization_field">{{ __('Bezárás') }}</x-primary-button>
-                        <x-success-button class="mx-2">{{ __('Mentés') }}</x-primary-button>
-                            <x-action-message wire:loading class="me-3" on="save_authorization">
-                                {{ __('Betöltés') }}
-                            </x-action-message>
-                            <x-action-message-success class="me-3" on="authorization-save-success">
-                                {{ __('Sikeres mentés') }}
-                            </x-action-message-success>
+                        @click.prevent="show_add_authorization_field = !show_add_authorization_field">{{ __('Bezárás') }}
+                    </x-danger-button>
+
+                    <x-success-button class="me-3">
+                        {{ __('Mentés') }}
+                    </x-success-button>
+
+                    <x-action-message wire:loading class="me-3" on="save_authorization">
+                        {{ __('Betöltés') }}
+                    </x-action-message>
+
+                    <x-action-message-success class="me-3" on="authorization_save_success">
+                        {{ __('Sikeres mentés') }}
+                    </x-action-message-success>
+
+                    @error('save_authorization_error')
+                        <div class="me-3">
+                            <x-input-error :messages="$message" />
+                        </div>
+                    @enderror
                 </div>
             </form>
         </x-modal>
@@ -325,17 +355,28 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
                     <x-danger-button
-                        @click.prevent="show_add_sub_authorization_field = !show_add_sub_authorization_field">{{ __('Bezárás') }}</x-primary-button>
-                        <x-success-button class="mx-2">{{ __('Mentés') }}</x-primary-button>
+                        @click.prevent="show_add_sub_authorization_field = !show_add_sub_authorization_field">{{ __('Bezárás') }}
+                    </x-danger-button>
 
-                            <x-action-message wire:loading class="me-3" on="save_sub_authorization">
-                                {{ __('Betöltés') }}
-                            </x-action-message>
-                            <x-action-message-success class="me-3" on="sub-authitem-save-success">
-                                {{ __('Sikeres mentés') }}
-                            </x-action-message-success>
+                    <x-success-button class="me-3">
+                        {{ __('Mentés') }}
+                    </x-success-button>
+
+                    <x-action-message wire:loading class="me-3" on="save_sub_authorization">
+                        {{ __('Betöltés') }}
+                    </x-action-message>
+
+                    <x-action-message-success class="me-3" on="sub_authitem_save_success">
+                        {{ __('Sikeres mentés') }}
+                    </x-action-message-success>
+
+                    @error('save_sub_authorization_error')
+                        <div class="me-3">
+                            <x-input-error :messages="$message" />
+                        </div>
+                    @enderror
                 </div>
             </form>
         </x-modal>
