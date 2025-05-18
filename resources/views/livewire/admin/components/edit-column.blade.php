@@ -2,7 +2,10 @@
     show = value
     if (value) $dispatch('edit_column_id', [edit_column_id])
 });
-$watch('show', value => show_edit_column_field = value)">
+$watch('show', value => show_edit_column_field = value);
+window.addEventListener('edit_columns_delete_success', () => {
+    show = false
+});">
     <x-modal :name="'Jogosultság hozzáadás'">
         <form wire:submit.prevent="save_edit_column">
             <div class="sm:flex sm:items-start">
