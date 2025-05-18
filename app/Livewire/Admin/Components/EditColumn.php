@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Components;
 
 use Exception;
 use App\Models\Column;
+use Illuminate\Database\QueryException;
 use Livewire\Component;
 use Illuminate\Validation\ValidationException;
 
@@ -41,11 +42,21 @@ class EditColumn extends Component {
             }
 
             $this->reset('edit_column_display_name', 'edit_column_status_id', 'edit_column_position');
-            $this->dispatch('refresh_authorization_mount');
+
             $this->dispatch('edit_columns_delete_success');
+        } catch (QueryException $err) {
+            $err_message = $err->getMessage();
+
+            if ($err->getCode() == 23000) {
+                $this->addError('save_edit_column_error', "Nem lehet törölni ezt az oszlopot, mert valószínűleg kapcsolódik más adatokhoz (pl. nem üres ).");
+
+                return;
+            }
+
+            $this->addError('save_edit_column_error', "Ismeretlen hiba történt: $err_message");
         } catch (Exception $err) {
             $this->addError('save_edit_column_error', $err->getMessage());
-
+        } finally {
             $this->dispatch('refresh_authorization_mount');
         }
     }
