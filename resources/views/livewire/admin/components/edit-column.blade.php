@@ -16,8 +16,9 @@ window.addEventListener('edit_columns_delete_success', () => {
                     <div class="mt-2">
                         <div class="grid grid-cols-4 gap-6">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input wire:model="edit_column_display_name" type="text"
-                                    name="edit_column_display_name" id="edit_column_display_name"
+                                <input wire:key="edit_column_display_name_{{ $edit_column_display_name }}"
+                                    wire:model="edit_column_display_name" type="text" name="edit_column_display_name"
+                                    id="edit_column_display_name"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" " />
                                 <label for="edit_column_display_name"
@@ -30,7 +31,8 @@ window.addEventListener('edit_columns_delete_success', () => {
                             </div>
 
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:model="edit_column_status_id" type="select" name="edit_column_status_id"
+                                <select wire:key="edit_column_status_id_{{ $edit_column_status_id }}"
+                                    wire:model="edit_column_status_id" type="select" name="edit_column_status_id"
                                     id="edit_column_status_id"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" ">
@@ -48,12 +50,13 @@ window.addEventListener('edit_columns_delete_success', () => {
                             </div>
 
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:model="edit_column_position" type="select" name="edit_column_position"
+                                <select wire:key="edit_column_position_{{ $edit_column_position }}"
+                                    wire:model="edit_column_position" type="select" name="edit_column_position"
                                     id="edit_column_position"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" ">
                                     @for ($i = 1; $i <= $columns_number; $i++)
-                                        <x-option value="{{ $i }}">{{ $i }}</x-option>
+                                        <x-option :value="$i">{{ $i }}</x-option>
                                     @endfor
                                 </select>
                                 <label for="edit_column_position"
@@ -109,7 +112,6 @@ window.addEventListener('edit_columns_delete_success', () => {
                 </x-action-message-success>
 
                 <x-action-message-success class="me-3" on="edit_columns_delete_success">
-                    {{-- ha ez meg jelenik: show = false --}}
                     {{ __('Sikeres törlés') }}
                 </x-action-message-success>
 

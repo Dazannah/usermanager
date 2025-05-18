@@ -11,8 +11,8 @@ $watch('show', value => show_add_sub_authorization_field = value)">
                     <div class="mt-2">
                         <div class="grid grid-cols-3 gap-6">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input wire:model="sub_auth_item_display_name" type="text"
-                                    name="sub_auth_item_display_name" id="sub_auth_item_display_name"
+                                <input wire:key="sub_auth_item_display_name" wire:model="sub_auth_item_display_name"
+                                    type="text" name="sub_auth_item_display_name" id="sub_auth_item_display_name"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" " />
                                 <label for="sub_auth_item_display_name"
@@ -24,8 +24,8 @@ $watch('show', value => show_add_sub_authorization_field = value)">
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:model="sub_auth_item_authItem_Id" type="select"
-                                    name="sub_auth_item_authItem_Id" id="sub_auth_item_authItem_Id"
+                                <select wire:key="sub_auth_item_authItem_Id" wire:model="sub_auth_item_authItem_Id"
+                                    type="select" name="sub_auth_item_authItem_Id" id="sub_auth_item_authItem_Id"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" ">
                                     <x-option>Válassz egy jogosultságot</x-option>
@@ -43,8 +43,8 @@ $watch('show', value => show_add_sub_authorization_field = value)">
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:model="sub_auth_item_status_id" type="select"
-                                    name="sub_auth_item_status_id" id="sub_auth_item_status_id"
+                                <select wire:key="sub_auth_item_status_id" wire:model="sub_auth_item_status_id"
+                                    type="select" name="sub_auth_item_status_id" id="sub_auth_item_status_id"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" ">
                                     @foreach ($this->statuses as $status)

@@ -10,8 +10,8 @@ $watch('show', value => show_add_column_field = value)">
                     <div class="mt-2">
                         <div class="grid grid-cols-2 gap-6">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input wire:model="column_display_name" type="text" name="column_display_name"
-                                    id="column_display_name"
+                                <input wire:key="column_display_name" wire:model="column_display_name" type="text"
+                                    name="column_display_name" id="column_display_name"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" " />
                                 <label for="column_display_name"
@@ -23,8 +23,8 @@ $watch('show', value => show_add_column_field = value)">
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:model="column_status_id" type="select" name="column_status_id"
-                                    id="column_status_id"
+                                <select key:wire="column_status_id" wire:model="column_status_id" type="select"
+                                    name="column_status_id" id="column_status_id"
                                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
                                     placeholder=" ">
                                     @foreach ($this->statuses as $status)
