@@ -33,6 +33,13 @@ class EditColumn extends Component {
             if (!isset($delete_result))
                 throw new Exception('Törölni kívánt oszlop nem található.');
 
+            $columns = Column::where([['position', '>', $this->edit_column->position]])->get();
+
+            foreach ($columns as $column) {
+                $column->position--;
+                $column->save();
+            }
+
             $this->reset('edit_column_display_name', 'edit_column_status_id', 'edit_column_position');
             $this->dispatch('refresh_authorization_mount');
             $this->dispatch('edit_columns_delete_success');
@@ -91,13 +98,13 @@ class EditColumn extends Component {
                     continue;
 
                 if ($new_position > $original_position && $column->position <= $new_position && $original_position <= $column->position) {
-                    $column->position -= 1;
+                    $column->position--;
                     $column->save();
                 }
 
                 if ($new_position < $original_position && $column->position >= $new_position && $original_position >= $column->position) {
 
-                    $column->position += 1;
+                    $column->position++;
                     $column->save();
                 }
             };
