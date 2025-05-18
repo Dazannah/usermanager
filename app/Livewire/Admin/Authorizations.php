@@ -10,8 +10,6 @@ use Exception;
 use Livewire\Component;
 
 class Authorizations extends Component {
-    // trackers for show add divs
-    public $show_add_column_field, $show_add_authorization_field, $show_add_sub_authorization_field;
 
     // datas
     public $statuses, $columns, $authorizations, $sub_authorization;
@@ -19,10 +17,6 @@ class Authorizations extends Component {
     protected $listeners = ['refresh_authorization_mount'];
 
     public function mount() {
-        $this->show_add_column_field = false;
-        $this->show_add_authorization_field = false;
-        $this->show_add_sub_authorization_field = false;
-
         $this->statuses = Status::all();
         $this->columns = Column::all_sorted_auth_items_by_position();
         $this->authorizations = AuthItem::all();

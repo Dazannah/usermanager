@@ -1,7 +1,9 @@
 <div x-data="{
     show_add_column_field: false,
     show_add_authorization_field: false,
-    show_add_sub_authorization_field: false
+    show_add_sub_authorization_field: false,
+    show_edit_column_field: false,
+    edit_column_id: 0
 }">
 
     {{-- Sub menus for creating items --}}
@@ -40,13 +42,18 @@
                         <thead
                             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-md">
                             <tr>
-                                <th colspan="3" class="px-6 py-3">
+                                <th colspan="2" class="px-6 py-3">
                                     {{ $column->displayName }}
                                 </th>
+                                <th
+                                    class="px-6 py-3 {{ $column->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}">
+                                    {{ $column->status->displayName }}
+                                </th>
                                 <th>
-                                    <a href="#"
+                                    <button
+                                        @click="show_edit_column_field = !show_edit_column_field; edit_column_id = {{ $column->id }}"
                                         class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Oszlop
-                                        szerkesztése</a>
+                                        szerkesztése</button>
                                 </th>
                             </tr>
                             <tr>
@@ -117,12 +124,15 @@
         </div>
     </div>
 
-    {{-- Create column modal --}}
+    {{-- Column modals --}}
     <livewire:admin.components.create-column :$statuses />
+    <livewire:admin.components.edit-column :$statuses />
 
-    {{-- Create authorization modal --}}
+    {{-- Authorization modals --}}
     <livewire:admin.components.create-authorization :$statuses :$columns />
 
-    {{-- Create sub authorization modal --}}
+    {{-- Sub authorization modals --}}
     <livewire:admin.components.create-sub-authorization :$statuses :$authorizations />
+
+
 </div>
