@@ -11,6 +11,11 @@ use Illuminate\Validation\ValidationException;
 class CreateSubAuthorization extends Component {
     public $statuses, $authorizations;
 
+    // new sub_auth_item
+    public $sub_auth_item_display_name, $sub_auth_item_authItem_Id;
+    public $sub_auth_item_status_id = 1;
+    public $sub_auth_item_position;
+
     protected $listeners = ['update_create_sub_authorization'];
 
     public function update_create_sub_authorization() {

@@ -16,13 +16,6 @@ class Authorizations extends Component {
     // datas
     public $statuses, $columns, $authorizations, $sub_authorization;
 
-    //create properties
-
-    // new sub_auth_item
-    public $sub_auth_item_display_name, $sub_auth_item_authItem_Id;
-    public $sub_auth_item_status_id = 1;
-    public $sub_auth_item_position = 0;
-
     protected $listeners = ['refresh_authorization_mount'];
 
     public function mount() {
