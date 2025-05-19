@@ -3,7 +3,7 @@
     show_add_authorization_field: false,
     show_add_sub_authorization_field: false,
     show_edit_column_field: false,
-    edit_column_id: 0
+    show_edit_authorization_field: false,
 }">
 
     {{-- Sub menus for creating items --}}
@@ -110,10 +110,9 @@
                                         </td>
                                     @endif
                                     <td class="px-6 py-4">
-                                        <a href="#"
-                                            class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</a>
-                                        <a href="#"
-                                            class="font-medium text-red-600 dark:text-red-500 underline hover:no-underline">Törlés</a>
+                                        <button
+                                            @click="show_edit_authorization_field = !show_edit_authorization_field; edit_authorization_id = {{ $auth_item->id }}"
+                                            class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -130,6 +129,7 @@
 
     {{-- Authorization modals --}}
     <livewire:admin.components.create-authorization :$statuses :$columns />
+    <livewire:admin.components.edit-authorization :$statuses :$columns />
 
     {{-- Sub authorization modals --}}
     <livewire:admin.components.create-sub-authorization :$statuses :$authorizations />
