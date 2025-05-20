@@ -44,7 +44,6 @@ class EditAuthorization extends Component {
 
             $this->reset('edit_authorization_display_name', 'edit_authorization_column_id', 'edit_authorization_status_id');
 
-            $this->dispatch('edit_columns_delete_success');
             $this->dispatch('edit_authorization_delete_success');
         } catch (QueryException $err) {
             $err_message = $err->getMessage();
