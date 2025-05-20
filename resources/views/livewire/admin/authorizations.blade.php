@@ -4,6 +4,7 @@
     show_add_sub_authorization_field: false,
     show_edit_column_field: false,
     show_edit_authorization_field: false,
+    show_edit_sub_authorization_field: false
 }">
 
     {{-- Sub menus for creating items --}}
@@ -92,9 +93,11 @@
                                                     </div>
                                                     <div class="py-2 col-span-2 flex flex-wrap justify-center gap-1">
 
+
                                                         @foreach ($auth_item->sub_auth_items as $sub_auth_item)
-                                                            <span
-                                                                class="font-medium {{ $sub_auth_item->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}  underline hover:no-underline cursor-pointer">{{ $sub_auth_item->displayName }}</span>
+                                                            <button
+                                                                @click="show_edit_sub_authorization_field = !show_edit_sub_authorization_field; edit_sub_authorization_id = {{ $sub_auth_item->id }}"
+                                                                class="font-medium {{ $sub_auth_item->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}  underline hover:no-underline cursor-pointer">{{ $sub_auth_item->displayName }}</button>
                                                         @endforeach
                                                     </div>
                                                 </div>
@@ -133,6 +136,6 @@
 
     {{-- Sub authorization modals --}}
     <livewire:admin.components.create-sub-authorization :$statuses :$authorizations />
-
+    <livewire:admin.components.edit-sub-authorization :$statuses :$authorizations />
 
 </div>
