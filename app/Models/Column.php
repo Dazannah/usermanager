@@ -53,6 +53,10 @@ class Column extends Model {
 
 		foreach ($columns as $column) {
 			$column->auth_items = $column->auth_items->sortBy('position');
+
+			foreach ($column->auth_items as $auth_item) {
+				$auth_item->sub_auth_items = $auth_item->sub_auth_items->sortBy('position');
+			}
 		}
 
 		return $columns;
