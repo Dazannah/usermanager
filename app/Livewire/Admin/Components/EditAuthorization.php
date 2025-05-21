@@ -13,7 +13,10 @@ class EditAuthorization extends Component {
     public $statuses, $columns;
 
     //edit properties
-    public $edit_authItem, $edit_authorization_display_name, $edit_authorization_column_id, $edit_authorization_status_id, $edit_authorization_original_position;
+    /** @var AuthItem $edit_authItem*/
+    public $edit_authItem;
+
+    public $edit_authorization_display_name, $edit_authorization_column_id, $edit_authorization_status_id, $edit_authorization_original_position, $edit_authorization_is_ldap;
 
     protected $listeners = ['edit_authorization_id'];
 
@@ -26,6 +29,7 @@ class EditAuthorization extends Component {
         $this->edit_authorization_column_id =  $this->edit_authItem->column->id;
         $this->edit_authorization_status_id = $this->edit_authItem->status->id;
         $this->edit_authorization_original_position = $this->edit_authItem->position;
+        $this->edit_authorization_is_ldap = $this->edit_authItem->is_ldap;
     }
 
     public function delete_edit_authorization() {
@@ -85,6 +89,7 @@ class EditAuthorization extends Component {
             $this->edit_authItem->displayName = $this->edit_authorization_display_name;
             $this->edit_authItem->column_id = $this->edit_authorization_column_id;
             $this->edit_authItem->status_id = $this->edit_authorization_status_id;
+            $this->edit_authItem->is_ldap = $this->edit_authorization_is_ldap;
 
             $this->edit_authItem->save();
 

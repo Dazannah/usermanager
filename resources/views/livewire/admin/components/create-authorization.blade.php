@@ -8,7 +8,7 @@ $watch('show', value => show_add_authorization_field = value)">
                         Jogosultság hozzáadás
                     </h3>
                     <div class="mt-2">
-                        <div class="grid grid-cols-3 gap-6">
+                        <div class="grid grid-cols-4 gap-6">
                             <div class="relative z-0 w-full mb-5 group">
                                 <input wire:key="authorization_display_name" wire:model="authorization_display_name"
                                     type="text" name="authorization_display_name" id="authorization_display_name"
@@ -55,6 +55,20 @@ $watch('show', value => show_add_authorization_field = value)">
                                     Státusz
                                 </label>
                                 @error('authorization_status_id')
+                                    <x-input-error :messages="$message" class="mt-2" />
+                                @enderror
+                            </div>
+                            <div class="flex items-start mb-5">
+                                <div class="flex items-center h-5">
+                                    <input wire:key="authorization_is_ldap" wire:model="authorization_is_ldap"
+                                        id="authorization_is_ldap" type="checkbox"
+                                        class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                                        required />
+                                </div>
+                                <label for="authorization_is_ldap"
+                                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">LDAP/AD
+                                    integráció</label>
+                                @error('authorization_is_ldap')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>

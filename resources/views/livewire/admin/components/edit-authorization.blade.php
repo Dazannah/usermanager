@@ -14,7 +14,7 @@ window.addEventListener('edit_authorization_delete_success', () => {
                         Jogosultság szerkesztése
                     </h3>
                     <div class="mt-2">
-                        <div class="grid grid-cols-4 gap-6">
+                        <div class="grid grid-cols-5 gap-6">
                             <div class="relative z-0 w-full mb-5 group">
                                 <input wire:key="edit_authorization_display_name"
                                     wire:model="edit_authorization_display_name" type="text"
@@ -64,6 +64,20 @@ window.addEventListener('edit_authorization_delete_success', () => {
                                     Státusz
                                 </label>
                                 @error('edit_authorization_status_id')
+                                    <x-input-error :messages="$message" class="mt-2" />
+                                @enderror
+                            </div>
+                            <div class="flex items-start mb-5">
+                                <div class="flex items-center h-5">
+                                    <input wire:key="edit_authorization_is_ldap" wire:model="edit_authorization_is_ldap"
+                                        id="edit_authorization_is_ldap" type="checkbox"
+                                        class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+                                        required />
+                                </div>
+                                <label for="edit_authorization_is_ldap"
+                                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">LDAP/AD
+                                    integráció</label>
+                                @error('edit_authorization_is_ldap')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>

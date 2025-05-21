@@ -15,6 +15,7 @@ class CreateAuthorization extends Component {
     public $authorization_display_name, $authorization_column_id;
     public $authorization_status_id = 1;
     public $authorization_position;
+    public $authorization_is_ldap = false;
 
     protected $listeners = ['update_create_authorization'];
 
@@ -45,7 +46,8 @@ class CreateAuthorization extends Component {
                 'displayName' => $this->authorization_display_name,
                 'column_id' => $this->authorization_column_id,
                 'status_id' => $this->authorization_status_id,
-                'position' => $auth_item?->position + 1 ?? 1
+                'position' => $auth_item?->position + 1 ?? 1,
+                'is_ldap' => $this->authorization_is_ldap
             ]);
 
             $authItem->save();

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $column_id
  * @property int $status_id
  * @property int $position
+ * @property bool $is_ldap
  * 
  * @property Column $column
  * @property Status $status
@@ -32,14 +33,16 @@ class AuthItem extends Model {
 	protected $casts = [
 		'column_id' => 'int',
 		'status_id' => 'int',
-		'position' => 'int'
+		'position' => 'int',
+		'is_ldap' => 'bool'
 	];
 
 	protected $fillable = [
 		'displayName',
 		'column_id',
 		'status_id',
-		'position'
+		'position',
+		'is_ldap'
 	];
 
 	public function column() {
