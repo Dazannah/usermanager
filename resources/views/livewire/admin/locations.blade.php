@@ -130,4 +130,5 @@
 
     {{-- location modals --}}
     <livewire:admin.components.create-location :$statuses />
+    <livewire:admin.components.edit-location :$statuses />
 </div>
