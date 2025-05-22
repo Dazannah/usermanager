@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Artisan;
 
 class InitialSetup extends Component {
+    //todo feltördelni, külön külön menthetővé tenni, nehezen kiegészíthető
     use WithFileUploads;
 
     public $app_name;
