@@ -37,11 +37,10 @@
         <div class="flex flex-wrap gap-2">
             {{-- start of tables --}}
             @foreach ($columns as $column)
-                <div class="w-2/5 mx-auto break-words">
+                <div class="max-w-1/2 relative overflow-x-auto break-words shadow-md rounded-lg">
                     <table
-                        class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-white  dark:bg-gray-800 rounded-t-md">
-                        <thead
-                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 rounded-t-md">
+                        class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th colspan="2" class="px-6 py-3">
                                     {{ $column->displayName }}
