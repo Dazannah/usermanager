@@ -4,6 +4,7 @@ use App\Livewire\InitialSetup;
 use App\Http\Middleware\IsAdmin;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\Authorizations;
+use App\Livewire\Admin\Locations;
 use Illuminate\Support\Facades\Route;
 
 Route::get('initial-setup', InitialSetup::class);
@@ -21,6 +22,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/authorizations', Authorizations::class)
             ->name('admin-authorizations');
+
+        Route::get('/locations', Locations::class)
+            ->name('admin-locations');
 
         Route::get('app-configuration', InitialSetup::class)
             ->name('admin-app-configuration');
