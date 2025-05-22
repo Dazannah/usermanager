@@ -4,16 +4,23 @@ namespace App\Livewire\Admin\Components;
 
 use Exception;
 use App\Models\Column;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Livewire\Component;
 use Illuminate\Validation\ValidationException;
 
 class EditColumn extends Component {
     //base properties
-    public $statuses, $columns_number;
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
-    //properties for edit
-    public $edit_column, $edit_column_display_name, $edit_column_status_id, $edit_column_position;
+    //on show get how many columns
+    public int $columns_number;
+
+    // livewire view properties
+    public Column $edit_column;
+    public string $edit_column_display_name;
+    public int $edit_column_status_id, $edit_column_position;
 
     protected $listeners = ['edit_column_id'];
 
@@ -85,7 +92,6 @@ class EditColumn extends Component {
 
             $this->edit_column->save();
 
-            // $this->reset('edit_column_display_name', 'edit_column_status_id', 'edit_column_position');
             $this->dispatch('refresh_authorization_mount');
             $this->dispatch('edit_columns_save_success');
         } catch (ValidationException $err) {

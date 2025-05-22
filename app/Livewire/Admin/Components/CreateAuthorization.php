@@ -6,16 +6,22 @@ use Exception;
 use Livewire\Component;
 use App\Models\AuthItem;
 use App\Models\Column;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 
 class CreateAuthorization extends Component {
-    public $statuses, $columns;
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
-    // new authorization
-    public $authorization_display_name, $authorization_column_id;
-    public $authorization_status_id = 1;
-    public $authorization_position;
-    public $authorization_is_ldap = false;
+    /** @var Collection<int,Column> $columns */
+    public Collection $columns;
+
+    // livewire view properties
+    public string $authorization_display_name;
+    public int $authorization_column_id;
+    public int $authorization_status_id = 1;
+    public int $authorization_position;
+    public bool $authorization_is_ldap = false;
 
     protected $listeners = ['update_create_authorization'];
 

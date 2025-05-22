@@ -2,25 +2,25 @@
 
 namespace App\Livewire\Admin\Components;
 
-use App\Models\AuthItem;
+use Exception;
 use App\Models\Status;
+use Livewire\Component;
+use App\Models\AuthItem;
 use App\Models\SubAuthItem;
 use Doctrine\DBAL\Query\QueryException;
-use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException as DatabaseQueryException;
-use Livewire\Component;
 
 class EditSubAuthorization extends Component {
-    /** @var Status[] $statuses */
-    public $statuses;
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
-    /** @var AuthItem[] $authorizations */
-    public $authorizations;
+    /** @var Collection<int,AuthItem> $authorizations */
+    public Collection $authorizations;
 
-    /** @var SubAuthItem $edit_subAuthItem */
-    public $edit_subAuthItem;
+    public SubAuthItem $edit_subAuthItem;
 
-    //edit properties
+    //livewire view properties
     public $edit_sub_auth_item_display_name, $edit_sub_auth_item_authItem_Id, $edit_sub_auth_item_status_id, $edit_sub_auth_item_position, $edit_subAuthItem_number;
 
     protected $listeners = ['edit_sub_authorization_id'];

@@ -12,14 +12,13 @@ use Illuminate\Validation\ValidationException;
 
 class EditLocation extends Component {
 
-    /** @var Status $statuses */
+    /** @var Collection<int,Status> $statuses */
     public Collection $statuses;
 
-    /** @var Location $edit_location */
-    public $edit_location;
-
-    //
-    public $edit_location_displayName, $edit_location_status_id, $edit_location_note;
+    // livewire view properties
+    public Location $edit_location;
+    public string $edit_location_displayName, $edit_location_note;
+    public int $edit_location_status_id;
 
     protected $listeners = ['show_edit_location_id'];
 

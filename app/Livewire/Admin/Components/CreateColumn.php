@@ -5,16 +5,18 @@ namespace App\Livewire\Admin\Components;
 use Exception;
 use App\Models\Column;
 use App\Models\Status;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 use Illuminate\Validation\ValidationException;
 
 class CreateColumn extends Component {
-    public $statuses;
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
-    // new column
-    public $column_display_name;
-    public $column_status_id = 1;
-    public $column_position;
+    // livewire view properties
+    public string $column_display_name;
+    public int $column_status_id = 1;
+    public int $column_position;
 
     public function save_column() {
         try {

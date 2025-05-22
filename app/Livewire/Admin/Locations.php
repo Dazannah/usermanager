@@ -9,10 +9,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
 class Locations extends Component {
-    //properies
-    /** @var Location $locations */
+    /** @var Collection<int,Location> $locations */
     public Collection $locations;
-    /** @var Status */
+
+    /** @var Collection<int,Status> */
     public Collection $statuses;
 
     //filter properties

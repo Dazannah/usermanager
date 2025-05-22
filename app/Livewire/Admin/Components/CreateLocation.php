@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 
 class CreateLocation extends Component {
-    /** @var Status $status */
+    /** @var Collection<int,Status> $status */
     public Collection $statuses;
 
-    //create properties
-    public $create_location_displayName, $create_location_note;
-    public $create_location_status_id = 1;
+    // livewire view properties
+    public string $create_location_displayName, $create_location_note;
+    public int $create_location_status_id = 1;
 
     //create new
     public function save_new_location() {

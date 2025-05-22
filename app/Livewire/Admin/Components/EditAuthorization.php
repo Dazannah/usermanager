@@ -6,17 +6,23 @@ use Exception;
 use App\Models\Column;
 use Livewire\Component;
 use App\Models\AuthItem;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 
 class EditAuthorization extends Component {
-    public $statuses, $columns;
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
-    //edit properties
-    /** @var AuthItem $edit_authItem*/
-    public $edit_authItem;
+    /** @var Collection<int,Column> $columns */
+    public Collection $columns;
 
-    public $edit_authorization_display_name, $edit_authorization_column_id, $edit_authorization_status_id, $edit_authorization_original_position, $edit_authorization_is_ldap;
+    // livewire view properties
+    public AuthItem $edit_authItem;
+
+    public string $edit_authorization_display_name;
+    public int $edit_authorization_column_id, $edit_authorization_status_id, $edit_authorization_original_position;
+    public bool $edit_authorization_is_ldap;
 
     protected $listeners = ['edit_authorization_id'];
 

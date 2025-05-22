@@ -7,12 +7,21 @@ use App\Models\Column;
 use App\Models\Status;
 use App\Models\SubAuthItem;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 class Authorizations extends Component {
+    /** @var Collection<int,Status> */
+    public Collection $statuses;
 
-    // datas
-    public $statuses, $columns, $authorizations, $sub_authorization;
+    /** @var Collection<int,Column> */
+    public Collection $columns;
+
+    /** @var Collection<int,AuthItem> */
+    public Collection $authorizations;
+
+    /** @var Collection<int,SubAuthItem> */
+    public Collection $sub_authorization;
 
     protected $listeners = ['refresh_authorization_mount'];
 

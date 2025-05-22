@@ -6,15 +6,21 @@ use App\Models\AuthItem;
 use Exception;
 use Livewire\Component;
 use App\Models\SubAuthItem;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 
 class CreateSubAuthorization extends Component {
-    public $statuses, $authorizations;
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
-    // new sub_auth_item
-    public $sub_auth_item_display_name, $sub_auth_item_authItem_Id;
-    public $sub_auth_item_status_id = 1;
-    public $sub_auth_item_position;
+    /** @var Collection<int,AuthItems> $authorizations */
+    public Collection $authorizations;
+
+    // livewire view properties
+    public string $sub_auth_item_display_name;
+    public int $sub_auth_item_authItem_Id;
+    public int $sub_auth_item_status_id = 1;
+    public int $sub_auth_item_position;
 
     protected $listeners = ['update_create_sub_authorization'];
 
