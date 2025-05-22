@@ -14,8 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property string $displayName
+ * @property int $status_id
  * @property string|null $note
  * 
+ * @property Status $status
  * @property Collection|Department[] $departments
  *
  * @package App\Models
@@ -27,10 +29,15 @@ class Location extends Model {
 
 	protected $fillable = [
 		'displayName',
-		'note'
+		'note',
+		'status_id'
 	];
 
 	public function departments() {
 		return $this->hasMany(Department::class, 'location_id');
+	}
+
+	public function status() {
+		return $this->belongsTo(Status::class, 'status_id');
 	}
 }
