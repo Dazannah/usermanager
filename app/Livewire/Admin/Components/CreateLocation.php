@@ -47,13 +47,13 @@ class CreateLocation extends Component {
             $this->reset('create_location_displayName', 'create_location_note');
 
             $this->dispatch('save_new_location_success');
-            $this->dispatch('refresh_locations');
+            $this->dispatch('refresh_locations_mount');
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
             $this->addError('save_new_location_error', $err->getMessage());
 
-            $this->dispatch('refresh_authorization_mount');
+            $this->dispatch('refresh_locations_mount');
         }
     }
 
