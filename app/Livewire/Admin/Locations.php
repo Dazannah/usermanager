@@ -18,9 +18,9 @@ class Locations extends Component {
     //filter properties
     public $search_location_displayName, $search_location_status, $search_location_note;
 
-    public $listeners = ['refresh_locations', 'location_filter_reset'];
+    public $listeners = ['refresh_locations_mount', 'location_filter_reset'];
 
-    public function refresh_locations() {
+    public function refresh_locations_mount() {
         $this->mount();
     }
 
@@ -36,10 +36,6 @@ class Locations extends Component {
     //search
     public function filter_locations() {
     }
-
-    //edit
-
-    //delete
 
     public function render() {
         return view('livewire.admin.locations')->layout('layouts.admin');
