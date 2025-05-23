@@ -17,7 +17,8 @@ class EditLocation extends Component {
 
     // livewire view properties
     public Location $edit_location;
-    public string $edit_location_displayName, $edit_location_note;
+    public string $edit_location_displayName;
+    public string|null $edit_location_note = null;
     public int $edit_location_status_id;
 
     protected $listeners = ['show_edit_location_id'];
@@ -76,7 +77,7 @@ class EditLocation extends Component {
 
             $this->reset('edit_location_displayName', 'edit_location_status_id', 'edit_location_note');
 
-            $this->dispatch('save_edit_location_success');
+            $this->dispatch('save_edit_delete_location_success');
         } catch (QueryException $err) {
             $err_message = $err->getMessage();
 
