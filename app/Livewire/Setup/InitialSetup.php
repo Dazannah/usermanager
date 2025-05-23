@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Setup;
 
 use Exception;
 use SoapClient;
@@ -9,8 +9,6 @@ use App\Mail\MailTest;
 use App\Models\Status;
 use Livewire\Component;
 use LdapRecord\Connection;
-use Livewire\WithFileUploads;
-
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -20,10 +18,9 @@ use Illuminate\Support\Facades\Artisan;
 
 class InitialSetup extends Component {
     //todo feltördelni, külön külön menthetővé tenni, nehezen kiegészíthető
-    use WithFileUploads;
+
 
     public $app_name;
-    public $logo;
 
     public $mail_host;
     public $mail_port;
@@ -88,9 +85,6 @@ class InitialSetup extends Component {
 
     protected $messages = [
         'app_name.required' => 'Alkalmazás név megadása körtelező.',
-        'logo.required' => 'Logo feltöltése kötelező.',
-        'logo.image' => 'A logonak képnek kell lennie.',
-        'logo.max' => 'Maximum méret 10MB',
         'mail_host.required' => 'Email szerver címe megadása kötelező.',
         'mail_port.required' => 'SMTP Port megadása kötelező.',
         'mail_port.integer' => 'Az SMTP Portnak egész számnak kell lennie.',
@@ -346,42 +340,7 @@ class InitialSetup extends Component {
         }
     }
 
-    public function save_logo() {
-        $env_content = $original_env_content = file_get_contents(base_path('.env'));
 
-        try {
-            $this->validate(['logo' =>  'required|image|max:2048',]);
-
-            $filename_with_extension = 'logo.' . $this->logo->extension();
-
-            $env_content = preg_replace('/APP_LOGO_NAME=.*/', "APP_LOGO_NAME='$filename_with_extension'", $env_content);
-            config([
-                'app.logo_name' => $filename_with_extension,
-            ]);
-
-            $this->logo->storeAs(path: '', name: $filename_with_extension, options: 'public');
-
-            Artisan::call('storage:link');
-
-            file_put_contents(
-                base_path('.env'),
-                $env_content
-            );
-
-            session()->flash('save_logo_result', "Logó sikeresen mentve.");
-        } catch (Exception $err) {
-            $this->addError('save_logo_error', $err->getMessage());
-
-            config([
-                'app.logo_name' => null,
-            ]);
-
-            file_put_contents(
-                base_path('.env'),
-                $original_env_content
-            );
-        }
-    }
 
     public function save() {
         $this->validate();
@@ -423,7 +382,6 @@ class InitialSetup extends Component {
         $original_database_connctions = config('database.connctions');
 
         try {
-
             //general configs
             $env_content = preg_replace('/APP_NAME=.*/', "APP_NAME='$this->app_name'", $env_content);
             $env_content = preg_replace('/SESSION_DRIVER=.*/', "SESSION_DRIVER=database", $env_content);
@@ -563,6 +521,6 @@ class InitialSetup extends Component {
     }
 
     public function render() {
-        return view('livewire.initial-setup')->layout(Auth::check() ? 'layouts.admin' : 'layouts.guest');
+        return view('livewire.setup.initial-setup')->layout('layouts.guest');
     }
 }
