@@ -3,7 +3,7 @@
     if (value) $dispatch('show_edit_location_id', [show_edit_location_id])
 });
 $watch('show', value => show_edit_location_field = value);
-window.addEventListener('save_edit_location_success', () => {
+window.addEventListener('save_edit_delete_location_success', () => {
     show = false
 });">
     <x-modal :name="'Helyszín hozzáadás'">
