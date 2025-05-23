@@ -28,4 +28,15 @@ class Config extends Model {
         'name',
         'value',
     ];
+
+    /**
+     * @param string $name Full name of the config ex: app.name
+     */
+    public static function get_or_create_new_by_name($name): Config {
+        return Config::where('name', '=', $name)->first() ?? new Config(
+            [
+                'name' => $name
+            ]
+        );
+    }
 }
