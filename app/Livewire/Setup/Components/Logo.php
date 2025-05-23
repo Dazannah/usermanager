@@ -30,12 +30,7 @@ class Logo extends Component {
 
             $filename_with_extension = 'logo.' . $this->logo->extension();
 
-            $logo_config = Config::where('name', '=', 'app.logo_name')->first() ?? $config = new Config(
-                [
-                    'name' => 'app.logo_name'
-                ]
-            );
-
+            $logo_config = Config::get_or_create_new_by_name('app.logo_name');
             $logo_config->value = $filename_with_extension;
 
             $this->logo->storeAs(path: '', name: $filename_with_extension, options: 'public');
