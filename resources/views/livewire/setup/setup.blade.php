@@ -14,5 +14,5 @@
         </div>
     </header>
 
-    <livewire:setup.components.logo />
+    <livewire:setup.components.app-settings-component />
 </div>
