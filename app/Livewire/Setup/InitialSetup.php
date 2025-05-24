@@ -31,20 +31,12 @@ class InitialSetup extends Component {
     public $password;
     public $password_confirmation;
 
-    public $ldap_active;
-    public $ldap_host;
-    public $ldap_base_dn;
-    public $ldap_port;
-    public $ldap_username;
-    public $ldap_password;
-
     public $ispfonfig_active;
     public $ispconfig_soap_uri;
     public $ispconfig_soap_location;
     public $ispconfig_soap_remote_username;
     public $ispconfig_soap_remote_user_password;
 
-    private $domain;
     private $user_principal_name;
 
     protected $rules = [
@@ -57,11 +49,6 @@ class InitialSetup extends Component {
         'admin_username' => 'required|max:255',
         'admin_email' => 'required|email|max:255',
         'password' => 'required|confirmed',
-        'ldap_host' => 'required_if:ldap_active,===,true',
-        'ldap_base_dn' => 'required_if:ldap_active,==,true',
-        'ldap_port' => 'required_if:ldap_active,==,true|integer|min:1|max:65535',
-        'ldap_username' => 'required_if:ldap_active,==,true',
-        'ldap_password' => 'required_if:ldap_active,==,true',
         'ispconfig_soap_uri' => 'required_if:ispfonfig_active,==,true',
         'ispconfig_soap_location' => 'required_if:ispfonfig_active,==,true',
         'ispconfig_soap_remote_username' => 'required_if:ispfonfig_active,==,true',
@@ -83,15 +70,6 @@ class InitialSetup extends Component {
         'admin_email.email' => 'Email cím megadása kötelező.',
         'password.required' => 'Admin jelszó megadása kötelező.',
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
-        'ldap_host.required_if' => 'Szerver cím megadása kötelező.',
-        'ldap_base_dn.required_if' => 'Base DN megadása kötelező.',
-        'ldap_base_dn.regex' => 'Megfelelő formátum: dc=local,dc=com',
-        'ldap_port.required_if' => 'Port megadása kötelező.',
-        'ldap_port.integer' => 'A portnak egész számnak kell lennie.',
-        'ldap_port.min' => 'Az LDAP port minimum 1 lehet.',
-        'ldap_port.max' => 'Az LDAP port maximum 65535 lehet.',
-        'ldap_username.required_if' => 'Felhasználónév megadása kötelező.',
-        'ldap_password.required_if' => 'Jelszó megadása kötelező.',
         'ispconfig_soap_uri.required_if' => 'ISPConfig szerver cím megadása kötelező.',
         'ispconfig_soap_location.required_if' => 'ISPConfig soap hely megadása kötelező.',
         'ispconfig_soap_remote_username.required_if' => 'Felhasználónév megadása kötelező.',
@@ -113,13 +91,6 @@ class InitialSetup extends Component {
             $this->password_confirmation = '';
         }
 
-        $this->ldap_active = config('ldap.active');
-        $this->ldap_host = config('ldap.connections.default.hosts')[0];
-        $this->ldap_base_dn = config('ldap.connections.default.base_dn');
-        $this->ldap_port = config('ldap.connections.default.port');
-        $this->ldap_username = explode('@', config('ldap.connections.default.username'))[0]; // domain nélkül kell megadnia a usernek
-        $this->ldap_password = config('ldap.connections.default.password');
-
         $this->ispfonfig_active = config('ispconfig.soap.active');
         $this->ispconfig_soap_uri = config('ispconfig.soap.connection.uri');
         $this->ispconfig_soap_location = config('ispconfig.soap.connection.location');
@@ -129,16 +100,6 @@ class InitialSetup extends Component {
 
     public function updated($propertyName) {
         $this->validateOnly($propertyName);
-    }
-
-    private function base_dn_to_domain() {
-        $parts = explode(',', $this->ldap_base_dn);
-
-        $this->domain = collect($parts)->map(fn($part) => substr($part, 3))->implode('.');
-    }
-
-    private function generate_userPrincipalName() {
-        $this->user_principal_name = $this->ldap_username . '@' . $this->domain;
     }
 
     public function test_ispconfig_connection() {
@@ -184,56 +145,6 @@ class InitialSetup extends Component {
     public function validate_only_array($field_names) {
         foreach ($field_names as $field_name) {
             $this->validate($field_name);
-        }
-    }
-
-    public function test_ldap_connection(bool $test_admin_user) {
-        $this->base_dn_to_domain();
-        $this->generate_userPrincipalName();
-
-        try {
-            $connection = new Connection([
-                // Mandatory Configuration Options
-                'hosts'            => [$this->ldap_host],
-                'base_dn'          => $this->ldap_base_dn,
-                'username'         => $this->user_principal_name,
-                'password'         => $this->ldap_password,
-
-                // Optional Configuration Options
-                'port'             => $this->ldap_port,
-                'use_ssl'          => false,
-                'use_tls'          => false,
-                'version'          => 3,
-                'timeout'          => 5,
-                'follow_referrals' => false,
-            ]);
-
-            $connection->connect();
-
-            if ($test_admin_user) {
-                $result = $connection->query()->where('samaccountname', '=', $this->admin_username)->first();
-
-                if ($result !== null)
-                    throw new Exception("Már létezik egy LDAP-felhasználó az alapértelmezett rendszergazda felhasználónévvel: $this->admin_username.  Kérlek, adj meg egy másikat.");
-            }
-
-            return true;
-        } catch (Exception $err) {
-            return $err->getMessage();
-        }
-    }
-
-    public function test_ldap_connection_standalone() {
-        $result = $this->test_ldap_connection(false);
-
-        if ($result === true) {
-            session()->flash('ldap_test_result', "Sikeres kapcsolat kiépítés.");
-
-            return;
-        } else {
-            $this->addError('ldap_test_result_error', $result);
-
-            return;
         }
     }
 
@@ -345,14 +256,6 @@ class InitialSetup extends Component {
                 $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD='$this->ldap_password'", $env_content);
                 $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT='$this->ldap_port'", $env_content);
                 $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN='$this->ldap_base_dn'", $env_content);
-
-                config([
-                    'ldap.connections.default.hosts' => $this->ldap_host,
-                    'ldap.connections.default.port' => $this->ldap_port,
-                    'ldap.connections.default.base_dn' => $this->ldap_base_dn,
-                    'ldap.connections.default.username' => $this->user_principal_name,
-                    'ldap.connections.default.password' => $this->ldap_password
-                ]);
             }
 
             //ispconfig soap configs

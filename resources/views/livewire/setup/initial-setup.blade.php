@@ -121,65 +121,6 @@
             @endif
 
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                {{ 'LDAP autentikáció' }}
-                <x-text-input wire:model="ldap_active" type="checkbox" class="m-1 p-1" :checked="$ldap_active" />
-            </h2>
-
-            <div wire:show="ldap_active" wire:key="ldap-fields"
-                class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    <x-input-label for="ldap_host" :value="__('Szerver címe')" />
-                    <x-text-input placeholder="Szerver címe" wire:model.live="ldap_host" id="ldap_host"
-                        name="ldap_host" type="text" class="mt-1 block w-full" />
-                    @error('ldap_host')
-                        <x-input-error :messages="$message" class="mt-2" />
-                    @enderror
-
-                    <x-input-label for="ldap_port" :value="__('Port')" />
-                    <x-text-input placeholder="389" wire:model.live="ldap_port" id="ldap_port" name="ldap_port"
-                        type="text" class="mt-1 block w-full" />
-                    @error('ldap_port')
-                        <x-input-error :messages="$message" class="mt-2" />
-                    @enderror
-
-                    <x-input-label for="ldap_base_dn" :value="__('Base DN')" />
-                    <x-text-input placeholder="dc=local,dc=com" wire:model.live="ldap_base_dn" id="ldap_base_dn"
-                        name="ldap_base_dn" type="text" class="mt-1 block w-full" />
-                    @error('ldap_base_dn')
-                        <x-input-error :messages="$message" class="mt-2" />
-                    @enderror
-
-                    <x-input-label for="ldap_username" :value="__('Felhasználónév')" />
-                    <x-text-input placeholder="Felhasználónév" wire:model.live="ldap_username" id="ldap_username"
-                        name="ldap_username" type="text" class="mt-1 block w-full" />
-                    @error('ldap_username')
-                        <x-input-error :messages="$message" class="mt-2" />
-                    @enderror
-
-                    <x-input-label for="ldap_password" :value="__('Jelszó')" />
-                    <x-text-input placeholder="Jelszó" wire:model.live="ldap_password" id="ldap_password"
-                        name="ldap_password" type="password" class="mt-1 block w-full" />
-                    @error('ldap_password')
-                        <x-input-error :messages="$message" class="mt-2" />
-                    @enderror
-
-                    @error('ldap_test_result_error')
-                        <x-input-error :messages="$message" class="mt-2" />
-                    @enderror
-                    @if (session()->has('ldap_test_result'))
-                        <div class="alert alert-success">
-                            {{ session('ldap_test_result') }}
-                        </div>
-                    @endif
-                    <x-primary-button
-                        wire:click.prevent="test_ldap_connection_standalone">{{ __('LDAP tesztelése') }}</x-primary-button>
-                    <x-action-message wire:loading class="me-3" on="test_ldap_connection_standalone">
-                        {{ __('Betöltés') }}
-                    </x-action-message>
-                </div>
-            </div>
-
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                 {{ __('ISPConfig SOAP api') }}
                 <x-text-input wire:model="ispfonfig_active" type="checkbox" class="m-1 p-1" :checked="$ispfonfig_active" />
             </h2>
