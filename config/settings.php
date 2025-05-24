@@ -1,6 +1,8 @@
 <?php
 
 use App\Settings\AppSettings;
+use App\Settings\LdapSettings;
+use App\Settings\MailSettings;
 
 return [
 
@@ -10,6 +12,8 @@ return [
      */
     'settings' => [
         AppSettings::class,
+        MailSettings::class,
+        LdapSettings::class,
     ],
 
     /*
