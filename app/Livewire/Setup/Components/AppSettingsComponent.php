@@ -36,7 +36,7 @@ class AppSettingsComponent extends Component {
     public $listeners = ['save_general'];
 
     public function __construct() {
-        $this->app_settings = app(AppSettings::class);
+        $this->app_settings = app_settings();
     }
 
     public function mount() {
