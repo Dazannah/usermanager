@@ -12,11 +12,11 @@ use Illuminate\Validation\ValidationException;
 class MailSettingsComponent extends Component {
     protected MailSettings $mail_settings;
 
-    public $mail_host;
-    public $mail_port;
-    public $mail_username;
-    public $mail_password;
-    public $mail_test_address;
+    public string|null $mail_host;
+    public int|null $mail_port;
+    public string|null $mail_username;
+    public string|null $mail_password;
+    public string|null $mail_test_address;
 
     protected $rules = [
         'mail_host' => 'required',
