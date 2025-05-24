@@ -19,15 +19,6 @@ use Illuminate\Support\Facades\Artisan;
 class InitialSetup extends Component {
     //todo feltördelni, külön külön menthetővé tenni, nehezen kiegészíthető
 
-
-    public $app_name;
-
-    public $mail_host;
-    public $mail_port;
-    public $mail_username;
-    public $mail_password;
-    public $mail_test_address;
-
     public $db_host;
     public $db_port;
     public $db_databasename;
@@ -57,12 +48,6 @@ class InitialSetup extends Component {
     private $user_principal_name;
 
     protected $rules = [
-        'app_name' => 'required',
-        'mail_host' => 'required',
-        'mail_port' => 'required|integer|min:1|max:65535',
-        'mail_username' => 'required|email',
-        'mail_password' => 'required',
-        'mail_test_address' => 'required|email',
         'db_host' => 'required',
         'db_port' => 'required|integer|min:1|max:65535',
         'db_databasename' => 'required',
@@ -84,17 +69,6 @@ class InitialSetup extends Component {
     ];
 
     protected $messages = [
-        'app_name.required' => 'Alkalmazás név megadása körtelező.',
-        'mail_host.required' => 'Email szerver címe megadása kötelező.',
-        'mail_port.required' => 'SMTP Port megadása kötelező.',
-        'mail_port.integer' => 'Az SMTP Portnak egész számnak kell lennie.',
-        'mail_port.min' => 'Az SMTP Port minimum 1 lehet.',
-        'mail_port.max' => 'Az SMTP Port maximum 65535 lehet.',
-        'mail_username.required' => 'Email cím megadása kötelező.',
-        'mail_username.email' => 'Nem megfelelő formátum.',
-        'mail_password.required' => 'Jelszó megadása kötelező.',
-        'mail_test_address.required' => 'Teszt címzet megadása kötelező.',
-        'mail_test_address.email' => 'Nem megfelelő formátum.',
         'db_host.required' => 'Adatbázis szerver cím megadása kötelező.',
         'db_port.required' => 'Adatbázis szerver port megadása kötelező.',
         'db_port.integer' => 'Az adatbázis portnak egész számnak kell lennie.',
@@ -125,14 +99,6 @@ class InitialSetup extends Component {
     ];
 
     public function mount() {
-        $this->app_name = config('app.name');
-
-        $this->mail_host = config('mail.mailers.smtp.host');
-        $this->mail_port = config('mail.mailers.smtp.port');
-        $this->mail_username = config('mail.mailers.smtp.username');
-        $this->mail_password = config('mail.mailers.smtp.password');
-        $this->mail_test_address = '';
-
         $this->db_host = config('database.connections.mysql.host');
         $this->db_port = config('database.connections.mysql.port');
         $this->db_databasename = config('database.connections.mysql.database');
@@ -215,45 +181,9 @@ class InitialSetup extends Component {
         }
     }
 
-    public function test_mail_connection() {
-        try {
-            config([
-                'mail.default' => 'smtp',
-                'mail.mailers.smtp.host' => $this->mail_host,
-                'mail.mailers.smtp.port' => $this->mail_port,
-                'mail.mailers.smtp.username' => $this->mail_username,
-                'mail.mailers.smtp.password' => $this->mail_password,
-                'mail.from.address' => $this->mail_username,
-                'mail.from.name' => $this->app_name,
-            ]);
-
-            $test_mail = new MailTest($this->app_name);
-
-            Mail::to($this->mail_test_address)->send($test_mail);
-
-            return true;
-        } catch (Exception $err) {
-            return $err->getMessage();
-        }
-    }
-
     public function validate_only_array($field_names) {
         foreach ($field_names as $field_name) {
             $this->validate($field_name);
-        }
-    }
-
-    public function test_mail_connection_standalone() {
-        $result = $this->test_mail_connection();
-
-        if ($result === true) {
-            session()->flash('mail_test_result', "Sikeres levél küldés.");
-
-            return;
-        } else {
-            $this->addError('mail_test_result_error', $result);
-
-            return;
         }
     }
 
@@ -389,24 +319,6 @@ class InitialSetup extends Component {
             config([
                 'app.name' => $this->app_name,
                 'session.driver' => 'database',
-            ]);
-
-            //mailer configs
-            $env_content = preg_replace('/MAIL_MAILER=.*/', "MAIL_MAILER=smtp", $env_content);
-            $env_content = preg_replace('/MAIL_HOST=.*/', "MAIL_HOST='$this->mail_host'", $env_content);
-            $env_content = preg_replace('/MAIL_PORT=.*/', "MAIL_PORT='$this->mail_port'", $env_content);
-            $env_content = preg_replace('/MAIL_USERNAME=.*/', "MAIL_USERNAME='$this->mail_username'", $env_content);
-            $env_content = preg_replace('/MAIL_PASSWORD=.*/', "MAIL_PASSWORD='$this->mail_password'", $env_content);
-            $env_content = preg_replace('/MAIL_FROM_ADDRESS=.*/', "MAIL_FROM_ADDRESS='$this->mail_username'", $env_content);
-
-            config([
-                'mail.default' => 'smtp',
-                'mail.mailers.smtp.host' => $this->mail_host,
-                'mail.mailers.smtp.port' => $this->mail_port,
-                'mail.mailers.smtp.username' => $this->mail_username,
-                'mail.mailers.smtp.password' => $this->mail_password,
-                'mail.from.address' => $this->mail_username,
-                'mail.from.name' => $this->app_name,
             ]);
 
             //database configs
