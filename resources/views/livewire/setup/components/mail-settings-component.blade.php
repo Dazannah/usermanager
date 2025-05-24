@@ -1,4 +1,4 @@
-<div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+<div class="mb-6 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
         {{ __('Technikai email fiók beállítása SMTP') }}
     </h2>
