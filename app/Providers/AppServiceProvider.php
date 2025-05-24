@@ -20,10 +20,6 @@ class AppServiceProvider extends ServiceProvider {
      * Bootstrap any application services.
      */
     public function boot(): void {
-        $configs = Config::all();
-
-        foreach ($configs as $config) {
-            config(["$config->name" => $config->value]);
-        }
+        //
     }
 }
