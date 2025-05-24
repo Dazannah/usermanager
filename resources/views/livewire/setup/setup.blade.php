@@ -15,4 +15,5 @@
     </header>
 
     <livewire:setup.components.app-settings-component />
+    <livewire:setup.components.mail-settings-component />
 </div>
