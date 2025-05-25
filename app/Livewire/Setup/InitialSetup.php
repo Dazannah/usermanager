@@ -49,10 +49,6 @@ class InitialSetup extends Component {
         'admin_username' => 'required|max:255',
         'admin_email' => 'required|email|max:255',
         'password' => 'required|confirmed',
-        'ispconfig_soap_uri' => 'required_if:ispfonfig_active,==,true',
-        'ispconfig_soap_location' => 'required_if:ispfonfig_active,==,true',
-        'ispconfig_soap_remote_username' => 'required_if:ispfonfig_active,==,true',
-        'ispconfig_soap_remote_user_password' => 'required_if:ispfonfig_active,==,true',
     ];
 
     protected $messages = [
@@ -70,10 +66,6 @@ class InitialSetup extends Component {
         'admin_email.email' => 'Email cím megadása kötelező.',
         'password.required' => 'Admin jelszó megadása kötelező.',
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
-        'ispconfig_soap_uri.required_if' => 'ISPConfig szerver cím megadása kötelező.',
-        'ispconfig_soap_location.required_if' => 'ISPConfig soap hely megadása kötelező.',
-        'ispconfig_soap_remote_username.required_if' => 'Felhasználónév megadása kötelező.',
-        'ispconfig_soap_remote_user_password.required_if' => 'Jelszó megadása kötelező.',
     ];
 
     public function mount() {
@@ -100,46 +92,6 @@ class InitialSetup extends Component {
 
     public function updated($propertyName) {
         $this->validateOnly($propertyName);
-    }
-
-    public function test_ispconfig_connection() {
-        try {
-            $arrContextOptions = stream_context_create(array(
-                "ssl" => array(
-                    "verify_peer" => false,
-                    "verify_peer_name" => false,
-                )
-            ));
-
-            $soap_client = new SoapClient(null, array(
-                'uri'      => $this->ispconfig_soap_uri,
-                'location' => $this->ispconfig_soap_location,
-                'trace' => 1,
-                'exceptions' => 1,
-                "stream_context" => $arrContextOptions
-
-            ));
-
-            $soap_client->login($this->ispconfig_soap_remote_username, $this->ispconfig_soap_remote_user_password);
-
-            return true;
-        } catch (Exception $err) {
-            return $err->getMessage();
-        }
-    }
-
-    public function test_ispconfig_connection_standalone() {
-        $result = $this->test_ispconfig_connection();
-
-        if ($result === true) {
-            session()->flash('ispconfig_test_result', "Sikeres bejelentkezés.");
-
-            return;
-        } else {
-            $this->addError('ispconfig_test_result_error', $result);
-
-            return;
-        }
     }
 
     public function validate_only_array($field_names) {
@@ -206,18 +158,6 @@ class InitialSetup extends Component {
             return;
         }
 
-        //ldap setup test before save
-        if ($this->ldap_active === true) {
-            //test_admin_user flag set true
-            $ldap_test_result = $this->test_ldap_connection(true);
-
-            if ($ldap_test_result !== true) {
-                $this->addError('ldap_test_result_error', $ldap_test_result);
-
-                return;
-            }
-        }
-
         //sikeres validáció után .env módosítása és mentése
         $env_content = $original_env_content = file_get_contents(base_path('.env'));
         $original_database_connctions = config('database.connctions');
@@ -246,33 +186,6 @@ class InitialSetup extends Component {
                 'database.connections.mysql.username' => $this->db_username,
                 'database.connections.mysql.password' => $this->db_password
             ]);
-
-
-            //ldap configs
-            if ($this->ldap_active === true) {
-                $env_content = preg_replace('/LDAP_ACTIVE=.*/', "LDAP_ACTIVE=true", $env_content);
-                $env_content = preg_replace('/LDAP_HOST=.*/', "LDAP_HOST='$this->ldap_host'", $env_content);
-                $env_content = preg_replace('/LDAP_USERNAME=.*/', "LDAP_USERNAME='$this->user_principal_name'", $env_content);
-                $env_content = preg_replace('/LDAP_PASSWORD=.*/', "LDAP_PASSWORD='$this->ldap_password'", $env_content);
-                $env_content = preg_replace('/LDAP_PORT=.*/', "LDAP_PORT='$this->ldap_port'", $env_content);
-                $env_content = preg_replace('/LDAP_BASE_DN=.*/', "LDAP_BASE_DN='$this->ldap_base_dn'", $env_content);
-            }
-
-            //ispconfig soap configs
-            if ($this->ispfonfig_active === true) {
-                $env_content = preg_replace('/ISPCONFIG_SOAP_ACTIVE=.*/', "ISPCONFIG_SOAP_ACTIVE=true", $env_content);
-                $env_content = preg_replace('/ISPCONFIG_SOAP_URI=.*/', "ISPCONFIG_SOAP_URI='$this->ispconfig_soap_uri'", $env_content);
-                $env_content = preg_replace('/ISPCONFIG_SOAP_LOCATION=.*/', "ISPCONFIG_SOAP_LOCATION='$this->ispconfig_soap_location'", $env_content);
-                $env_content = preg_replace('/ISPCONFIG_SOAP_USERNAME=.*/', "ISPCONFIG_SOAP_USERNAME='$this->ispconfig_soap_remote_username'", $env_content);
-                $env_content = preg_replace('/ISPCONFIG_SOAP_PASSWORD=.*/', "ISPCONFIG_SOAP_PASSWORD='$this->ispconfig_soap_remote_user_password'", $env_content);
-
-                config([
-                    'ispconfig.soap.uri' => $this->ispconfig_soap_uri,
-                    'ispconfig.soap.location' => $this->ispconfig_soap_location,
-                    'ispconfig.soap.username' => $this->ispconfig_soap_remote_username,
-                    'ispconfig.soap.password' => $this->ispconfig_soap_remote_user_password
-                ]);
-            }
 
             //adatbázis migráció
             Artisan::call('migrate', array(
