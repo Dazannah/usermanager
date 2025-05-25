@@ -82,7 +82,8 @@ class IspconfigSoapSettingsComponent extends Component {
 
     public function save_ispconfig() {
         try {
-            $this->test_ispconfig_connection();
+            if ($this->ispfonfig_active)
+                $this->test_ispconfig_connection();
 
             $this->ispconfig_soap_settings->active = $this->ispfonfig_active;
             $this->ispconfig_soap_settings->uri = $this->uri;

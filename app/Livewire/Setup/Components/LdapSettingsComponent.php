@@ -20,8 +20,8 @@ class LdapSettingsComponent extends Component {
     public string|null $ldap_username;
     public string|null $ldap_password;
 
-    private string $domain;
-    private string $user_principal_name;
+    protected string $domain;
+    protected string $user_principal_name;
 
     public function __construct() {
         $this->ldap_settings = ldap_settings();
@@ -58,6 +58,9 @@ class LdapSettingsComponent extends Component {
 
     public function test_ldap_connection_standalone() {
         try {
+            $this->base_dn_to_domain();
+            $this->generate_userPrincipalName();
+
             $this->test_ldap_connection();
         } catch (ValidationException $err) {
             throw $err;
@@ -70,9 +73,6 @@ class LdapSettingsComponent extends Component {
 
     public function test_ldap_connection() {
         $this->validate($this->rules, $this->messages);
-
-        $this->base_dn_to_domain();
-        $this->generate_userPrincipalName();
 
         $connection = new Connection([
             // Mandatory Configuration Options
@@ -105,7 +105,11 @@ class LdapSettingsComponent extends Component {
 
     public function save_ldap() {
         try {
-            $this->test_ldap_connection();
+            $this->base_dn_to_domain();
+            $this->generate_userPrincipalName();
+
+            if ($this->ldap_active)
+                $this->test_ldap_connection();
 
             $this->ldap_settings->active = $this->ldap_active;
             $this->ldap_settings->host = $this->ldap_host;
