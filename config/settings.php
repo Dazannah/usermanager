@@ -1,6 +1,7 @@
 <?php
 
 use App\Settings\AppSettings;
+use App\Settings\IspconfigSoapSettings;
 use App\Settings\LdapSettings;
 use App\Settings\MailSettings;
 
@@ -14,6 +15,7 @@ return [
         AppSettings::class,
         MailSettings::class,
         LdapSettings::class,
+        IspconfigSoapSettings::class,
     ],
 
     /*

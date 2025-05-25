@@ -13,11 +13,11 @@ return new class extends SettingsMigration {
     }
 
     public function down(): void {
-        $this->migrator->delete('ldap.active', false);
-        $this->migrator->delete('ldap.host', null);
-        $this->migrator->delete('ldap.base_dn', null);
-        $this->migrator->delete('ldap.port', null);
-        $this->migrator->delete('ldap.username', null);
-        $this->migrator->delete('ldap.password', null);
+        $this->migrator->delete('ldap.active');
+        $this->migrator->delete('ldap.host');
+        $this->migrator->delete('ldap.base_dn');
+        $this->migrator->delete('ldap.port');
+        $this->migrator->delete('ldap.username');
+        $this->migrator->delete('ldap.password');
     }
 };
