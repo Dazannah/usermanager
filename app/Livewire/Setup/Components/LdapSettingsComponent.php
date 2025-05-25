@@ -56,52 +56,51 @@ class LdapSettingsComponent extends Component {
         'ldap_password.required_if' => 'Jelszó megadása kötelező.',
     ];
 
-    public function test_ldap_connection() {
+    public function test_ldap_connection_standalone() {
         try {
-            $this->validate($this->rules, $this->messages);
-
-            $this->base_dn_to_domain();
-            $this->generate_userPrincipalName();
-
-            $connection = new Connection([
-                // Mandatory Configuration Options
-                'hosts'            => [$this->ldap_host],
-                'base_dn'          => $this->ldap_base_dn,
-                'username'         => $this->user_principal_name,
-                'password'         => $this->ldap_password,
-
-                // Optional Configuration Options
-                'port'             => $this->ldap_port,
-                'use_ssl'          => false,
-                'use_tls'          => false,
-                'version'          => 3,
-                'timeout'          => 5,
-                'follow_referrals' => false,
-            ]);
-
-            $connection->connect();
-
-            config([
-                'ldap.connections.default.hosts' => $this->ldap_host,
-                'ldap.connections.default.port' => $this->ldap_port,
-                'ldap.connections.default.base_dn' => $this->ldap_base_dn,
-                'ldap.connections.default.username' => $this->user_principal_name,
-                'ldap.connections.default.password' => $this->ldap_password
-            ]);
-
-            session()->flash('ldap_test_result', "Sikeres LDAP kapcsolat.");
+            $this->test_ldap_connection();
         } catch (ValidationException $err) {
             throw $err;
         } catch (BindException $err) {
-            if ($err->getCode() === 2) {
-                $err_message = $err->getMessage();
-                $this->addError('ldap_test_result_error', "Nem sikerült kapcsolódni az LDAP szerverhez. Részletek: $err_message");
-            }
-
-            $this->addError('ldap_test_result_error', $err->getMessage());
+            $this->handle_ldap_bind_exception($err);
         } catch (Exception $err) {
             $this->addError('ldap_test_result_error', $err->getMessage());
         }
+    }
+
+    public function test_ldap_connection() {
+        $this->validate($this->rules, $this->messages);
+
+        $this->base_dn_to_domain();
+        $this->generate_userPrincipalName();
+
+        $connection = new Connection([
+            // Mandatory Configuration Options
+            'hosts'            => [$this->ldap_host],
+            'base_dn'          => $this->ldap_base_dn,
+            'username'         => $this->user_principal_name,
+            'password'         => $this->ldap_password,
+
+            // Optional Configuration Options
+            'port'             => $this->ldap_port,
+            'use_ssl'          => false,
+            'use_tls'          => false,
+            'version'          => 3,
+            'timeout'          => 5,
+            'follow_referrals' => false,
+        ]);
+
+        $connection->connect();
+
+        config([
+            'ldap.connections.default.hosts' => $this->ldap_host,
+            'ldap.connections.default.port' => $this->ldap_port,
+            'ldap.connections.default.base_dn' => $this->ldap_base_dn,
+            'ldap.connections.default.username' => $this->user_principal_name,
+            'ldap.connections.default.password' => $this->ldap_password
+        ]);
+
+        session()->flash('ldap_test_result', "Sikeres LDAP kapcsolat.");
     }
 
     public function save_ldap() {
@@ -120,9 +119,20 @@ class LdapSettingsComponent extends Component {
             $this->dispatch('save_ldap_success');
         } catch (ValidationException $err) {
             throw $err;
+        } catch (BindException $err) {
+            $this->handle_ldap_bind_exception($err);
         } catch (Exception $err) {
             $this->addError('save_ldap_error', $err->getMessage());
         }
+    }
+
+    private function handle_ldap_bind_exception(BindException $err) {
+        if ($err->getCode() === 2) {
+            $err_message = $err->getMessage();
+            $this->addError('ldap_test_result_error', "Nem sikerült kapcsolódni az LDAP szerverhez. Részletek: $err_message");
+        }
+
+        $this->addError('ldap_test_result_error', $err->getMessage());
     }
 
     private function base_dn_to_domain() {

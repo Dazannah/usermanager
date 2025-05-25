@@ -43,42 +43,41 @@ class IspconfigSoapSettingsComponent extends Component {
         $this->password = $this->ispconfig_soap_settings->password;
     }
 
-    public function test_ispconfig_connection() {
+    public function test_ispconfig_connection_standalone() {
         try {
-            $this->validate($this->rules, $this->messages);
-
-            $arrContextOptions = stream_context_create(array(
-                "ssl" => array(
-                    "verify_peer" => false,
-                    "verify_peer_name" => false,
-                )
-            ));
-
-            $soap_client = new SoapClient(null, array(
-                'uri'      => $this->uri,
-                'location' => $this->location,
-                'trace' => 1,
-                'exceptions' => 1,
-                "stream_context" => $arrContextOptions
-
-            ));
-
-            $soap_client->login($this->username, $this->password);
-
-            session()->flash('ispconfig_test_result', "Sikeres bejelentkezés.");
+            $this->test_ispconfig_connection();
         } catch (ValidationException $err) {
             throw $err;
         } catch (SoapFault $err) {
-            if ($err->faultcode == "HTTP")
-                $this->addError('ispconfig_test_result_error', "Nemsikerűlt kapcsolódni a szerverhez.");
-
-            if ($err->faultcode == "login_failed")
-                $this->addError('ispconfig_test_result_error', "Felhasználónév vagy jelszó helytelen.");
-
-            $this->addError('ispconfig_test_result_error', $err->getMessage());
+            $this->handle_soap_error($err);
         } catch (Exception $err) {
             $this->addError('ispconfig_test_result_error', $err->getMessage());
         }
+    }
+
+    public function test_ispconfig_connection() {
+
+        $this->validate($this->rules, $this->messages);
+
+        $arrContextOptions = stream_context_create(array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            )
+        ));
+
+        $soap_client = new SoapClient(null, array(
+            'uri'      => $this->uri,
+            'location' => $this->location,
+            'trace' => 1,
+            'exceptions' => 1,
+            "stream_context" => $arrContextOptions
+
+        ));
+
+        $soap_client->login($this->username, $this->password);
+
+        session()->flash('ispconfig_test_result', "Sikeres bejelentkezés.");
     }
 
     public function save_ispconfig() {
@@ -96,12 +95,22 @@ class IspconfigSoapSettingsComponent extends Component {
             $this->dispatch("save_ispconfig_success");
         } catch (ValidationException $err) {
             throw $err;
+        } catch (SoapFault $err) {
+            $this->handle_soap_error($err);
         } catch (Exception $err) {
             $this->addError('ispconfig_test_result_error', $err->getMessage());
         }
     }
 
+    private function handle_soap_error(SoapFault $err) {
+        if ($err->faultcode == "HTTP")
+            $this->addError('ispconfig_test_result_error', "Nemsikerűlt kapcsolódni a szerverhez.");
 
+        if ($err->faultcode == "login_failed")
+            $this->addError('ispconfig_test_result_error', "Felhasználónév vagy jelszó helytelen.");
+
+        $this->addError('ispconfig_test_result_error', $err->getMessage());
+    }
 
     public function render() {
         return view('livewire.setup.components.ispconfig-soap-settings-component');

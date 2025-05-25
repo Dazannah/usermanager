@@ -54,7 +54,7 @@
 
             <div class="flex items-center gap-4">
                 <x-primary-button
-                    wire:click.prevent="test_ldap_connection">{{ __('LDAP tesztelése') }}</x-primary-button>
+                    wire:click.prevent="test_ldap_connection_standalone">{{ __('LDAP tesztelése') }}</x-primary-button>
                 <x-primary-button wire:click.prevent="save_ldap">{{ __('Mentés') }}</x-primary-button>
 
                 <x-action-message wire:loading class="me-3" on="save_ldap">
