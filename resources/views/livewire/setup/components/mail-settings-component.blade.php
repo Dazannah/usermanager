@@ -52,7 +52,7 @@
 
         <div class="flex items-center gap-4">
             <x-primary-button
-                wire:click.prevent="test_mail_connection">{{ __('Teszt email küldés') }}</x-primary-button>
+                wire:click.prevent="test_mail_connection_standalone">{{ __('Teszt email küldés') }}</x-primary-button>
             <x-primary-button wire:click.prevent="save_mail">{{ __('Mentés') }}</x-primary-button>
             <x-action-message wire:loading class="me-3" on="save_mail">
                 {{ __('Betöltés') }}

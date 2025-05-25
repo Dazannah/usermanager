@@ -50,30 +50,35 @@ class MailSettingsComponent extends Component {
         $this->mail_password = $this->mail_settings->password;
     }
 
-    public function test_mail_connection() {
+    public function test_mail_connection_standalone() {
         try {
-            $this->validate($this->rules, $this->messages);
-
-            config([
-                'mail.default' => 'smtp',
-                'mail.mailers.smtp.host' => $this->mail_host,
-                'mail.mailers.smtp.port' => $this->mail_port,
-                'mail.mailers.smtp.username' => $this->mail_username,
-                'mail.mailers.smtp.password' => $this->mail_password,
-                'mail.from.address' => $this->mail_username,
-                'mail.from.name' => app_settings()->app_name,
-            ]);
-
-            $test_mail = new MailTest(app_settings()->app_name);
-
-            Mail::to($this->mail_test_address)->send($test_mail);
-
-            session()->flash('mail_test_result', "Sikeres levél küldés.");
+            $this->test_mail_connection();
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
             $this->addError('mail_test_result_error', $err->getMessage());
         }
+    }
+
+    public function test_mail_connection() {
+
+        $this->validate($this->rules, $this->messages);
+
+        config([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp.host' => $this->mail_host,
+            'mail.mailers.smtp.port' => $this->mail_port,
+            'mail.mailers.smtp.username' => $this->mail_username,
+            'mail.mailers.smtp.password' => $this->mail_password,
+            'mail.from.address' => $this->mail_username,
+            'mail.from.name' => app_settings()->app_name,
+        ]);
+
+        $test_mail = new MailTest(app_settings()->app_name);
+
+        Mail::to($this->mail_test_address)->send($test_mail);
+
+        session()->flash('mail_test_result', "Sikeres levél küldés.");
     }
 
     public function save_mail() {
