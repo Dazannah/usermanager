@@ -6,6 +6,7 @@ use Exception;
 use Livewire\Component;
 use LdapRecord\Connection;
 use App\Settings\LdapSettings;
+use LdapRecord\Auth\BindException;
 use Illuminate\Validation\ValidationException;
 
 class LdapSettingsComponent extends Component {
@@ -91,6 +92,13 @@ class LdapSettingsComponent extends Component {
             session()->flash('ldap_test_result', "Sikeres LDAP kapcsolat.");
         } catch (ValidationException $err) {
             throw $err;
+        } catch (BindException $err) {
+            if ($err->getCode() === 2) {
+                $err_message = $err->getMessage();
+                $this->addError('ldap_test_result_error', "Nem sikerült kapcsolódni az LDAP szerverhez. Részletek: $err_message");
+            }
+
+            $this->addError('ldap_test_result_error', $err->getMessage());
         } catch (Exception $err) {
             $this->addError('ldap_test_result_error', $err->getMessage());
         }
