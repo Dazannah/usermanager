@@ -12,7 +12,7 @@ class IspconfigSoapSettings extends Settings {
     public string|null $password;
 
     public static function group(): string {
-        return 'default';
+        return 'ispconfig_soap';
     }
 
     public static function encrypted(): array {
