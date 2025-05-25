@@ -1,4 +1,4 @@
-    <form wire:submit.prevent="save_general" class="mb-6 space-y-6" x-init="window.addEventListener('app-name-updated', event => {
+    <div class="mb-6 space-y-6" x-init="window.addEventListener('app-name-updated', event => {
         if (event.detail[0])
             document.title = event.detail[0];
     });">
@@ -28,6 +28,7 @@
                 @endif
                 <x-text-input wire:model="logo" id="logo" name="logo" type="file"
                     class="mt-1 block w-full" />
+                <x-primary-button wire:click.prevent="delete_logo">{{ __('Logó törlése') }}</x-primary-button>
                 @error('logo')
                     <x-input-error :messages="$message" class="mt-2" />
                 @enderror
@@ -36,7 +37,7 @@
                 <x-input-error :messages="$message" class="mt-2" />
             @enderror
             <div class="flex items-center gap-4">
-                <x-primary-button>{{ __('Mentés') }}</x-primary-button>
+                <x-primary-button wire:click.prevent="save_general">{{ __('Mentés') }}</x-primary-button>
 
                 <x-action-message-success class="me-3" on="save_general_success">
                     {{ __('Sikeres mentés') }}
@@ -47,4 +48,4 @@
                 </x-action-message>
             </div>
         </div>
-    </form>
+    </div>

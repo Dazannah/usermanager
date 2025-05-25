@@ -63,8 +63,6 @@ class AppSettingsComponent extends Component {
 
             $this->dispatch('app-name-updated', $this->app_settings->app_name);
 
-
-
             $this->dispatch('save_general_success');
         } catch (Exception $err) {
             $this->addError('save_general_error', $err->getMessage());
@@ -73,5 +71,10 @@ class AppSettingsComponent extends Component {
 
     public function render() {
         return view('livewire.setup.components.app-settings-component');
+    }
+
+    public function delete_logo() {
+        $this->app_settings->logo_name = null;
+        $this->app_settings->save();
     }
 }
