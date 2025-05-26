@@ -173,7 +173,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <button
-                                    @click="show_edit_department_field = !show_edit_department_field; show_edit_location_id = {{ $department->id }}"
+                                    @click="show_edit_department_field = !show_edit_department_field; edit_department_id = {{ $department->id }}"
                                     class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                             </td>
                         </tr>
@@ -186,5 +186,5 @@
 
     {{-- department modals --}}
     <livewire:admin.components.create-department :$statuses :$locations />
-    {{-- <livewire:admin.components.edit-department :$statuses />  --}}
+    <livewire:admin.components.edit-department :$statuses :$locations />
 </div>
