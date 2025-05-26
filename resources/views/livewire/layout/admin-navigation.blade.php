@@ -20,7 +20,7 @@
                     <x-nav-link :href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')" wire:navigate>
                         {{ __('Jogosultságok') }}
                     </x-nav-link>
-                    <x-nav-link {{-- :href="route('admin-departments')" :active="request()->routeIs('admin-departments')" --}} wire:navigate>
+                    <x-nav-link :href="route('admin-departments')" :active="request()->routeIs('admin-departments')" wire:navigate>
                         {{ __('Osztályok') }}
                     </x-nav-link>
                     <x-nav-link :href="route('admin-locations')" :active="request()->routeIs('admin-locations')" wire:navigate>
@@ -31,9 +31,6 @@
                     </x-nav-link>
                     <x-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
                         {{ __('Felhasználók') }}
-                    </x-nav-link>
-                    <x-nav-link {{-- :href="route('admin-sub-authorizations')" :active="request()->routeIs('admin-sub-authorizations')" --}} wire:navigate>
-                        {{ __('Státuszok') }}
                     </x-nav-link>
                     <x-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
                         {{ __('Beállítások') }}
@@ -104,10 +101,7 @@
             <x-responsive-nav-link :href="route('admin-authorizations')" :active="request()->routeIs('admin-authorizations')" wire:navigate>
                 {{ __('Jogosultságok') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link {{-- :href="route('admin-sub-authorizations')" :active="request()->routeIs('admin-sub-authorizations')" --}} wire:navigate>
-                {{ __('Aljogosultságok') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link {{-- :href="route('admin-departments')" :active="request()->routeIs('admin-departments')" --}} wire:navigate>
+            <x-responsive-nav-link :href="route('admin-departments')" :active="request()->routeIs('admin-departments')" wire:navigate>
                 {{ __('Osztályok') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('admin-locations')" :active="request()->routeIs('admin-locations')" wire:navigate>

@@ -11,9 +11,11 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->text("departmentNumber");
-            $table->text("departmentNumber2");
+            $table->text("displayName");
+            $table->text("departmentNumber")->nullable();
+            $table->text("departmentNumber2")->nullable();
             $table->foreignId("location_id")->constrained();
+            $table->foreignId("status_id")->constrained();
         });
     }
 

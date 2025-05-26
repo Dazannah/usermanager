@@ -12,12 +12,14 @@ use Illuminate\Database\Eloquent\Model;
  * Class Department
  * 
  * @property int $id
+ * @property string $displayName
  * @property string|null $departmentNumber
  * @property string|null $departmentNumber2
- * @property string $displayName
  * @property int $location_id
+ * @property int $status_id
  * 
  * @property Location $location
+ * @property Status $status
  *
  * @package App\Models
  */
@@ -31,13 +33,18 @@ class Department extends Model {
 	];
 
 	protected $fillable = [
+		'displayName',
 		'departmentNumber',
 		'departmentNumber2',
-		'displayName',
-		'location_id'
+		'location_id',
+		'status_id'
 	];
 
 	public function location() {
 		return $this->belongsTo(Location::class, 'location_id');
+	}
+
+	public function status() {
+		return $this->belongsTo(Status::class, 'status_id');
 	}
 }
