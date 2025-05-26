@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Settings\MailSettings;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class MailSettingsComponent extends Component {
     protected MailSettings $mail_settings;
@@ -18,11 +19,13 @@ class MailSettingsComponent extends Component {
     public string|null $mail_password;
     public string|null $mail_test_address;
 
+    public bool $is_password_set = false;
+
     protected $rules = [
         'mail_host' => 'required',
         'mail_port' => 'required|integer|min:1|max:65535',
         'mail_username' => 'required|email',
-        'mail_password' => 'required',
+        //'mail_password' => 'required',
         'mail_test_address' => 'required|email',
     ];
 
@@ -47,7 +50,8 @@ class MailSettingsComponent extends Component {
         $this->mail_host = $this->mail_settings->host;
         $this->mail_port = $this->mail_settings->port;
         $this->mail_username = $this->mail_settings->username;
-        $this->mail_password = $this->mail_settings->password;
+
+        $this->is_password_set = !empty($this->mail_settings->password);
     }
 
     public function test_mail_connection_standalone() {
@@ -55,6 +59,16 @@ class MailSettingsComponent extends Component {
             $this->test_mail_connection();
         } catch (ValidationException $err) {
             throw $err;
+        } catch (TransportException $err) {
+            $err_message = $err->getMessage();
+
+            if ($err->getCode() === 535)
+                $this->addError('mail_test_result_error', "Hibás felhasználónév vagy jelszó. Részletek: $err_message");
+
+            if ($err->getCode() === 0)
+                $this->addError('mail_test_result_error', "Kapcsolat létesítése sikertelen. Részletek: $err_message");
+
+            $this->addError('mail_test_result_error', $err_message);
         } catch (Exception $err) {
             $this->addError('mail_test_result_error', $err->getMessage());
         }
@@ -69,7 +83,7 @@ class MailSettingsComponent extends Component {
             'mail.mailers.smtp.host' => $this->mail_host,
             'mail.mailers.smtp.port' => $this->mail_port,
             'mail.mailers.smtp.username' => $this->mail_username,
-            'mail.mailers.smtp.password' => $this->mail_password,
+            'mail.mailers.smtp.password' => empty($this->mail_password) ? $this->mail_settings->password : $this->mail_password,
             'mail.from.address' => $this->mail_username,
             'mail.from.name' => app_settings()->app_name,
         ]);
@@ -88,7 +102,7 @@ class MailSettingsComponent extends Component {
             $this->mail_settings->host = $this->mail_host;
             $this->mail_settings->port = $this->mail_port;
             $this->mail_settings->username = $this->mail_username;
-            $this->mail_settings->password = $this->mail_password;
+            $this->mail_settings->password = empty($this->mail_password) ? $this->mail_settings->password : $this->mail_password;
 
             $this->mail_settings->save();
 

@@ -9,6 +9,8 @@ use App\Settings\IspconfigSoapSettings;
 use Illuminate\Validation\ValidationException;
 use SoapFault;
 
+use function PHPUnit\Framework\isEmpty;
+
 class IspconfigSoapSettingsComponent extends Component {
     protected IspconfigSoapSettings $ispconfig_soap_settings;
 
@@ -18,11 +20,13 @@ class IspconfigSoapSettingsComponent extends Component {
     public string|null $username;
     public string|null $password;
 
+    public bool $is_password_set = false;
+
     public $rules = [
         'uri' => 'required_if:ispfonfig_active,==,true',
         'location' => 'required_if:ispfonfig_active,==,true',
         'username' => 'required_if:ispfonfig_active,==,true',
-        'password' => 'required_if:ispfonfig_active,==,true',
+        //'password' => 'required_if:ispfonfig_active,==,true',
     ];
     public $messages = [
         'uri.required_if' => 'ISPConfig szerver cím megadása kötelező.',
@@ -40,7 +44,8 @@ class IspconfigSoapSettingsComponent extends Component {
         $this->uri = $this->ispconfig_soap_settings->uri;
         $this->location = $this->ispconfig_soap_settings->location;
         $this->username = $this->ispconfig_soap_settings->username;
-        $this->password = $this->ispconfig_soap_settings->password;
+
+        $this->is_password_set = !empty($this->ispconfig_soap_settings->password);
     }
 
     public function test_ispconfig_connection_standalone() {
@@ -75,7 +80,7 @@ class IspconfigSoapSettingsComponent extends Component {
 
         ));
 
-        $soap_client->login($this->username, $this->password);
+        $soap_client->login($this->username, empty($this->password) ? $this->ispconfig_soap_settings->password : $this->password);
 
         session()->flash('ispconfig_test_result', "Sikeres bejelentkezés.");
     }
@@ -89,7 +94,9 @@ class IspconfigSoapSettingsComponent extends Component {
             $this->ispconfig_soap_settings->uri = $this->uri;
             $this->ispconfig_soap_settings->location = $this->location;
             $this->ispconfig_soap_settings->username = $this->username;
-            $this->ispconfig_soap_settings->password = $this->password;
+
+            if (!empty($this->password))
+                $this->ispconfig_soap_settings->password = $this->password;
 
             $this->ispconfig_soap_settings->save();
 

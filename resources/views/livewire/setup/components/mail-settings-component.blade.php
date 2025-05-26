@@ -25,8 +25,8 @@
         @enderror
 
         <x-input-label for="mail_password" :value="__('Jelszó')" />
-        <x-text-input placeholder="Jelszó" wire:model.live="mail_password" id="mail_password" name="mail_password"
-            type="password" class="mt-1 block w-full" />
+        <x-text-input placeholder="{{ $is_password_set ? 'Változatlan' : 'Jelszó' }}" wire:model.live="mail_password"
+            id="mail_password" name="mail_password" type="password" class="mt-1 block w-full" />
         @error('mail_password')
             <x-input-error :messages="$message" class="mt-2" />
         @enderror

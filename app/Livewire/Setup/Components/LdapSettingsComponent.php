@@ -20,6 +20,8 @@ class LdapSettingsComponent extends Component {
     public string|null $ldap_username;
     public string|null $ldap_password;
 
+    public bool $is_password_set = false;
+
     protected string $domain;
     protected string $user_principal_name;
 
@@ -33,7 +35,8 @@ class LdapSettingsComponent extends Component {
         $this->ldap_base_dn = $this->ldap_settings->base_dn;
         $this->ldap_port = $this->ldap_settings->port;
         $this->ldap_username = explode('@', $this->ldap_settings->username)[0];
-        $this->ldap_password = $this->ldap_settings->password;
+
+        $this->is_password_set = !empty($this->ldap_settings->password);
     }
 
     protected $rules = [
@@ -41,7 +44,7 @@ class LdapSettingsComponent extends Component {
         'ldap_base_dn' => 'required_if:ldap_active,==,true',
         'ldap_port' => 'required_if:ldap_active,==,true|integer|min:1|max:65535',
         'ldap_username' => 'required_if:ldap_active,==,true',
-        'ldap_password' => 'required_if:ldap_active,==,true'
+        //'ldap_password' => 'required_if:ldap_active,==,true'
     ];
 
     protected $messages = [
@@ -79,7 +82,7 @@ class LdapSettingsComponent extends Component {
             'hosts'            => [$this->ldap_host],
             'base_dn'          => $this->ldap_base_dn,
             'username'         => $this->user_principal_name,
-            'password'         => $this->ldap_password,
+            'password'         => empty($this->ldap_password) ? $this->ldap_settings->password : $this->ldap_password,
 
             // Optional Configuration Options
             'port'             => $this->ldap_port,
@@ -97,7 +100,7 @@ class LdapSettingsComponent extends Component {
             'ldap.connections.default.port' => $this->ldap_port,
             'ldap.connections.default.base_dn' => $this->ldap_base_dn,
             'ldap.connections.default.username' => $this->user_principal_name,
-            'ldap.connections.default.password' => $this->ldap_password
+            'ldap.connections.default.password' => empty($this->ldap_password) ? $this->ldap_settings->password : $this->ldap_password
         ]);
 
         session()->flash('ldap_test_result', "Sikeres LDAP kapcsolat.");
@@ -116,7 +119,7 @@ class LdapSettingsComponent extends Component {
             $this->ldap_settings->base_dn = $this->ldap_base_dn;
             $this->ldap_settings->port = $this->ldap_port;
             $this->ldap_settings->username = $this->user_principal_name;
-            $this->ldap_settings->password = $this->ldap_password;
+            $this->ldap_settings->password = empty($this->ldap_password) ? $this->ldap_settings->password : $this->ldap_password;
 
             $this->ldap_settings->save();
 
@@ -134,6 +137,10 @@ class LdapSettingsComponent extends Component {
         if ($err->getCode() === 2) {
             $err_message = $err->getMessage();
             $this->addError('ldap_test_result_error', "Nem sikerült kapcsolódni az LDAP szerverhez. Részletek: $err_message");
+        }
+
+        if ($err->getCode() === 49) {
+            $this->addError('ldap_test_result_error', "Hibás felhasználó név vagy jelszó.");
         }
 
         $this->addError('ldap_test_result_error', $err->getMessage());

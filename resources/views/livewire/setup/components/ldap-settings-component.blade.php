@@ -36,8 +36,9 @@
             @enderror
 
             <x-input-label for="ldap_password" :value="__('Jelszó')" />
-            <x-text-input placeholder="Jelszó" wire:model.live="ldap_password" id="ldap_password" name="ldap_password"
-                type="password" class="mt-1 block w-full" />
+            <x-text-input placeholder="{{ $is_password_set ? 'Változatlan' : 'Jelszó' }}"
+                wire:model.live="ldap_password" id="ldap_password" name="ldap_password" type="password"
+                class="mt-1 block w-full" />
             @error('ldap_password')
                 <x-input-error :messages="$message" class="mt-2" />
             @enderror

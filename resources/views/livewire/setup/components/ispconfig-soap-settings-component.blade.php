@@ -31,8 +31,8 @@
             @enderror
 
             <x-input-label for="password" :value="__('Jelszó')" />
-            <x-text-input placeholder="Jelszó" wire:model.live="password" id="password" name="password" type="password"
-                class="mt-1 block w-full" />
+            <x-text-input placeholder="{{ $is_password_set ? 'Változatlan' : 'Jelszó' }}" wire:model.live="password"
+                id="password" name="password" type="password" class="mt-1 block w-full" />
             @error('password')
                 <x-input-error :messages="$message" class="mt-2" />
             @enderror
