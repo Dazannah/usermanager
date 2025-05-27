@@ -17,12 +17,6 @@ if (!function_exists('mail_settings')) {
   }
 }
 
-if (!function_exists('ldap_settings')) {
-  function ldap_settings() {
-    return app(LdapSettings::class);
-  }
-}
-
 if (!function_exists('ispconfig_soap_settings')) {
   function ispconfig_soap_settings() {
     return app(IspconfigSoapSettings::class);

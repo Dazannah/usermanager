@@ -21,9 +21,6 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
         if (config('app.installed')) {
             $this->configure_mail();
-
-            if (ldap_settings()->active)
-                $this->configure_ldap();
         }
     }
 
@@ -39,18 +36,6 @@ class AppServiceProvider extends ServiceProvider {
             'mail.mailers.smtp.password' => $mail_settings->password,
             'mail.from.address' => $mail_settings->username,
             'mail.from.name' => $app_settings->app_name,
-        ]);
-    }
-
-    protected function configure_ldap() {
-        $ldap_settings = ldap_settings();
-
-        config([
-            'ldap.connections.default.hosts' => $ldap_settings->host,
-            'ldap.connections.default.port' => $ldap_settings->port,
-            'ldap.connections.default.base_dn' => $ldap_settings->base_dn,
-            'ldap.connections.default.username' => $ldap_settings->username,
-            'ldap.connections.default.password' => $ldap_settings->password
         ]);
     }
 }

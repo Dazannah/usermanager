@@ -16,6 +16,5 @@
 
     <livewire:setup.components.app-settings-component />
     <livewire:setup.components.mail-settings-component />
-    <livewire:setup.components.ldap-settings-component />
     <livewire:setup.components.ispconfig-soap-settings-component />
 </div>
