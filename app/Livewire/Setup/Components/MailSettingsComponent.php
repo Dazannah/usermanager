@@ -25,7 +25,7 @@ class MailSettingsComponent extends Component {
         'mail_host' => 'required',
         'mail_port' => 'required|integer|min:1|max:65535',
         'mail_username' => 'required|email',
-        //'mail_password' => 'required',
+        'mail_password' => 'required_if:is_password_set,==,false',
         'mail_test_address' => 'required|email',
     ];
 
@@ -37,7 +37,7 @@ class MailSettingsComponent extends Component {
         'mail_port.max' => 'Az SMTP Port maximum 65535 lehet.',
         'mail_username.required' => 'Email cím megadása kötelező.',
         'mail_username.email' => 'Nem megfelelő formátum.',
-        'mail_password.required' => 'Jelszó megadása kötelező.',
+        'mail_password.required_if' => 'Jelszó megadása kötelező.',
         'mail_test_address.required' => 'Teszt címzet megadása kötelező.',
         'mail_test_address.email' => 'Nem megfelelő formátum.',
     ];

@@ -26,7 +26,7 @@ class IspconfigSoapSettingsComponent extends Component {
         'uri' => 'required_if:ispfonfig_active,==,true',
         'location' => 'required_if:ispfonfig_active,==,true',
         'username' => 'required_if:ispfonfig_active,==,true',
-        //'password' => 'required_if:ispfonfig_active,==,true',
+        'password' => 'required_if:is_password_set,==,false',
     ];
     public $messages = [
         'uri.required_if' => 'ISPConfig szerver cím megadása kötelező.',
