@@ -22,7 +22,7 @@
                 @if ($logo?->isPreviewable())
                     <img src="{{ $logo->temporaryUrl() }}">
                 @else
-                    @if (config('app.logo_name') != null)
+                    @if (app_settings()->logo_name != null)
                         <x-application-logo-lg class="block h-9 w-auto text-gray-800 dark:text-gray-200" />
                     @endif
                 @endif

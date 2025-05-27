@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                @if (config('app.logo_name') != null)
+                @if (app_settings()->logo_name)
                     <div class="shrink-0 flex items-center">
                         <a href="{{ route('admin-dashboard') }}" wire:navigate>
                             <x-application-logo class="block h-9 w-auto text-gray-800 dark:text-gray-200" />

@@ -19,7 +19,7 @@
 
 <body class="font-sans text-gray-900 antialiased">
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-        @if (config('app.logo_name') != null)
+        @if (app_settings()->logo_name)
             <x-application-logo-lg class="block h-9 w-auto text-gray-800 dark:text-gray-200" />
         @endif
         <div
