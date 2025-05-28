@@ -91,7 +91,7 @@
                             </th>
 
                             <th scope="col" class="px-6 py-3 text-right">
-                                <x-success-button wire:click.prevent="filter_locations" class="me-3">
+                                <x-success-button wire:click.prevent="refresh_locations_mount" class="me-3">
                                     {{ __('Keresés') }}
                                 </x-success-button>
                                 <x-primary-button
@@ -127,6 +127,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $locations->links() }}
     </div>
 
     {{-- location modals --}}

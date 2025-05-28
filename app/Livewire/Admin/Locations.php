@@ -2,16 +2,15 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Status;
 use Livewire\Component;
 use App\Models\Location;
-use App\Models\Status;
-use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Url;
+use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Collection;
 
 class Locations extends Component {
-    /** @var Collection<int,Location> $locations */
-    public Collection $locations;
+    use WithPagination;
 
     /** @var Collection<int,Status> */
     public Collection $statuses;
@@ -32,17 +31,19 @@ class Locations extends Component {
 
     public function location_filter_reset() {
         $this->reset('search_location_displayName', 'search_location_status_id', 'search_location_note');
+        $this->resetPage();
         $this->dispatch('refresh_locations_mount');
     }
 
     public function mount() {
-        $this->filter_locations();
         $this->statuses = Status::all();
+
+        $this->filter_locations();
     }
 
     //search
     public function filter_locations() {
-        $this->locations = Location::when(
+        return Location::when(
             isset($this->search_location_displayName) && !empty($this->search_location_displayName),
             function ($query) {
                 return $query->where('displayName', 'REGEXP', $this->search_location_displayName);
@@ -57,10 +58,12 @@ class Locations extends Component {
             function ($query) {
                 return $query->where('note', 'REGEXP', $this->search_location_note);
             }
-        )->get();
+        )->paginate(15);
     }
 
     public function render() {
-        return view('livewire.admin.locations')->layout('layouts.admin');
+        return view('livewire.admin.locations', [
+            'locations' => $this->filter_locations()
+        ])->layout('layouts.admin');
     }
 }
