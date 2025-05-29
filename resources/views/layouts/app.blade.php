@@ -28,19 +28,18 @@
                 </div>
             </header>
         @endif
-        <div class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                @session('error')
+
+        @session('error')
+            <div class="py-4">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <x-input-error :messages="$value" class="mt-2" />
-                @endsession
+                </div>
             </div>
-        </div>
+        @endsession
 
         <!-- Page Content -->
-        <main class="py-4">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                {{ $slot }}
-            </div>
+        <main>
+            {{ $slot }}
         </main>
     </div>
 </body>
