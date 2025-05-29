@@ -6,13 +6,7 @@
             </h2>
         </x-slot>
         <header>
-            <div>
-                @if (session()->has('message'))
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                @endif
-            </div>
+            <x-session-message :session_variable="'message'" />
         </header>
         <form class="mt-6 space-y-6">
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">

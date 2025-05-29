@@ -46,11 +46,8 @@
         @error('mail_test_result_error')
             <x-input-error :messages="$message" class="mt-2" />
         @enderror
-        @if (session()->has('mail_test_result'))
-            <div class="alert alert-success">
-                {{ session('mail_test_result') }}
-            </div>
-        @endif
+
+        <x-session-message :session_variable="'mail_test_result'" />
 
         @error('save_mail_error')
             <x-input-error :messages="$message" class="mt-2" />

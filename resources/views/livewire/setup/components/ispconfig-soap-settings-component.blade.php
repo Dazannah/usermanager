@@ -50,11 +50,7 @@
                 <x-input-error :messages="$message" class="mt-2" />
             @enderror
 
-            @if (session()->has('ispconfig_test_result'))
-                <div class="alert alert-success">
-                    {{ session('ispconfig_test_result') }}
-                </div>
-            @endif
+            <x-session-message :session_variable="'ispconfig_test_result'" />
         </div>
 
         <div class="flex items-center gap-4">
