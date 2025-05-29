@@ -70,12 +70,12 @@ class Departments extends Component {
                 return $query->where('departmentNumber2', 'REGEXP', $this->search_department_departmentNumber2);
             }
         )->when(
-            isset($this->search_department_status_id),
+            isset($this->search_department_status_id) && !empty($this->search_department_status_id),
             function ($query) {
                 return $query->where('status_id', '=', $this->search_department_status_id);
             }
         )->when(
-            isset($this->search_department_location_id),
+            isset($this->search_department_location_id) && !empty($this->search_department_status_id),
             function ($query) {
                 return $query->where('location_id', '=', $this->search_department_location_id);
             }
