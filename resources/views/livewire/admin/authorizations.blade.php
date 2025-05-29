@@ -6,27 +6,11 @@
     show_edit_authorization_field: false,
     show_edit_sub_authorization_field: false
 }">
-
-    {{-- Sub menus for creating items --}}
-    <header class="bg-white dark:bg-gray-800 shadow py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Jogosultságok') }}
-            </h2>
-            <button @click="show_add_column_field = !show_add_column_field"
-                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-indigo-700 dark:hover:border-indigo-700 focus:outline-none focus:border-indigo-700 focus:text-gray-900 focus:dark:text-gray-100 transition duration-150 ease-in-out">
-                Oszlop hozzáadás
-            </button>
-            <button @click="show_add_authorization_field = !show_add_authorization_field"
-                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-indigo-700 dark:hover:border-indigo-700 focus:outline-none focus:border-indigo-700 focus:text-gray-900 focus:dark:text-gray-100 transition duration-150 ease-in-out">
-                Jogosultság hozzáadás
-            </button>
-            <button @click="show_add_sub_authorization_field = !show_add_sub_authorization_field"
-                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-indigo-700 dark:hover:border-indigo-700 focus:outline-none focus:border-indigo-700 focus:text-gray-900 focus:dark:text-gray-100 transition duration-150 ease-in-out">
-                Aljogosultság hozzáadás
-            </button>
-        </div>
-    </header>
+    <x-submenu :title="'Jogosultságok'">
+        <x-submenu-button :text="'Oszlop hozzáadás'" :properti_to_change="'show_add_column_field'" />
+        <x-submenu-button :text="'Jogosultság hozzáadás'" :properti_to_change="'show_add_authorization_field'" />
+        <x-submenu-button :text="'Aljogosultság hozzáadás'" :properti_to_change="'show_add_sub_authorization_field'" />
+    </x-submenu>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
         @error('error')

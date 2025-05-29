@@ -3,18 +3,10 @@
     show_edit_department_field: false,
 }">
 
-    {{-- Sub menus for creating items --}}
-    <header class="bg-[#15808a] dark:bg-[#15808a] shadow py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="font-semibold text-xl text-white dark:text-gray-200 leading-tight">
-                {{ __('Osztályok') }}
-            </h2>
-            <button @click="show_add_department_field = !show_add_department_field"
-                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-200 dark:text-gray-200 hover:border-[#e3a420] dark:hover:border-[#e3a420] focus:outline-none focus:border-[#e3a420] focus:dark:text-gray-100 transition duration-150 ease-in-out">
-                Osztály hozzáadás
-            </button>
-        </div>
-    </header>
+    <x-submenu :title="'Osztályok'">
+        <x-submenu-button :text="'Osztály hozzáadás'" :properti_to_change="'show_add_department_field'" />
+    </x-submenu>
+
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
         @error('error')
