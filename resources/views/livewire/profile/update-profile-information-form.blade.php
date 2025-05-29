@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
+new class extends Component {
     public string $name = '';
     public string|null $email = '';
 
@@ -69,28 +68,29 @@ new class extends Component
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Frissítsd a fiókod profiladatait és e-mail-címét.") }}
+            {{ __('Frissítsd a fiókod profiladatait és e-mail-címét.') }}
         </p>
     </header>
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
-        <div>
-            <x-input-label for="name" :value="__('Név')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
+        <div class="relative z-0 w-full mb-5 group">
+            <x-text-input :property_name="'name'" :type="'text'" />
+            <x-label :for="'name'" :text="'Név'" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('E-mail')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
+        <div class="relative z-0 w-full mb-5 group">
+            <x-text-input :property_name="'email'" :type="'email'" />
+            <x-label :for="'email'" :text="'E-mail'" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
-            @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
+            @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
                 <div>
                     <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
                         {{ __('Your email address is unverified.') }}
 
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                        <button wire:click.prevent="sendVerification"
+                            class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
