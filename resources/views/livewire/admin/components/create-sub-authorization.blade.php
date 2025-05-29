@@ -11,50 +11,22 @@ $watch('show', value => show_add_sub_authorization_field = value)">
                     <div class="mt-2">
                         <div class="grid grid-cols-3 gap-6">
                             <div class="relative z-0 w-full mb-5 group">
-                                <input wire:key="sub_auth_item_display_name" wire:model="sub_auth_item_display_name"
-                                    type="text" name="sub_auth_item_display_name" id="sub_auth_item_display_name"
-                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
-                                    placeholder=" " />
-                                <label for="sub_auth_item_display_name"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                    Elnevezés
-                                </label>
+                                <x-text-input :property_name="'sub_auth_item_display_name'" :type="'text'" />
+                                <x-label :for="'sub_auth_item_display_name'" :text="'Elnevezés'" />
                                 @error('sub_auth_item_display_name')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:key="sub_auth_item_authItem_Id" wire:model="sub_auth_item_authItem_Id"
-                                    type="select" name="sub_auth_item_authItem_Id" id="sub_auth_item_authItem_Id"
-                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
-                                    placeholder=" ">
-                                    <x-option>Válassz egy jogosultságot</x-option>
-                                    @foreach ($this->authorizations as $authorization)
-                                        <x-option
-                                            value="{{ $authorization->id }}">{{ $authorization->displayName }}</x-option>
-                                    @endforeach
-                                </select>
-                                <label for="sub_auth_item_authItem_Id"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                    Jogosultság
-                                </label>
+                                <x-select :property_name="'sub_auth_item_authItem_Id'" :select="true" :select_value="'Válassz egy jogosultságot'" :data="$this->authorizations" />
+                                <x-label :for="'sub_auth_item_authItem_Id'" :text="'Jogosultság'" />
                                 @error('sub_auth_item_authItem_Id')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
-                                <select wire:key="sub_auth_item_status_id" wire:model="sub_auth_item_status_id"
-                                    type="select" name="sub_auth_item_status_id" id="sub_auth_item_status_id"
-                                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-600 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
-                                    placeholder=" ">
-                                    @foreach ($this->statuses as $status)
-                                        <x-option value="{{ $status->id }}">{{ $status->displayName }}</x-option>
-                                    @endforeach
-                                </select>
-                                <label for="sub_auth_item_status_id"
-                                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                    Státusz
-                                </label>
+                                <x-select :property_name="'sub_auth_item_status_id'" :data="$this->statuses" />
+                                <x-label :for="'sub_auth_item_status_id'" :text="'Státusz'" />
                                 @error('sub_auth_item_status_id')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
