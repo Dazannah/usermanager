@@ -9,9 +9,8 @@
             </h2>
 
             <div class="max-w-xl">
-                <x-input-label for="app_name" :value="__('Alkalmazás neve')" />
-                <x-text-input placeholder="Alkalmazás neve" wire:model.live="app_name" id="app_name" name="app_name"
-                    type="text" class="mt-1 block w-full" />
+                <x-text-input :property_name="'app_name'" :type="'text'" />
+                <x-label :for="'app_name'" :text="'Alkalmazás neve'" />
                 @error('app_name')
                     <x-input-error :messages="$message" class="mt-2" />
                 @enderror
@@ -26,8 +25,7 @@
                         <x-application-logo-lg class="block h-9 w-auto text-gray-800 dark:text-gray-200" />
                     @endif
                 @endif
-                <x-text-input wire:model="logo" id="logo" name="logo" type="file"
-                    class="mt-1 block w-full" />
+                <x-text-input class="mt-1 block w-full" :property_name="'logo'" :type="'file'" />
                 <x-primary-button wire:click.prevent="delete_logo">{{ __('Logó törlése') }}</x-primary-button>
                 @error('logo')
                     <x-input-error :messages="$message" class="mt-2" />
