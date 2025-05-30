@@ -18,7 +18,7 @@
     {{ $attributes->merge(['class' => 'block py-2.5 px-0 w-full text-sm text-[#15808a] focus:text-[#e3a420] bg-transparent border-0 border-b-2 border-[#15808a] appearance-none dark:text-[#15808a] focus:dark:text-[#e3a420] dark:border-[#15808a] dark:focus:border-[#e3a420] focus:outline-none focus:ring-0 focus:border-[#e3a420] peer']) }}placeholder=" ">
 
     @if ($select)
-        <x-option>{{ $select_value }}</x-option>
+        <x-option value="">{{ $select_value }}</x-option>
     @endif
 
     @if ($counter)
