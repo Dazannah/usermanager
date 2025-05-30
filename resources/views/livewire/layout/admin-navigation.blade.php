@@ -32,7 +32,7 @@
                     <x-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
                         {{ __('Felhasználók') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
+                    <x-nav-link :href="route('admin-app-configuration')" :active="request()->is('admin/app-configuration/*')" wire:navigate>
                         {{ __('Beállítások') }}
                     </x-nav-link>
                 </div>
