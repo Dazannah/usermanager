@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Setup\Setup;
+use App\Livewire\Setup\Texts;
 use App\Http\Middleware\IsAdmin;
 use App\Livewire\Admin\Locations;
 use App\Livewire\Admin\Departments;
@@ -31,8 +32,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/departments', Departments::class)
             ->name('admin-departments');
 
-        Route::get('/app-configuration', Setup::class)
+        Route::get('/app-configuration', function () {
+            return redirect()->route('admin-app-configuration-general');
+        })
             ->name('admin-app-configuration');
+
+        Route::prefix('app-configuration')->group(function () {
+            Route::get('/general', Setup::class)
+                ->name('admin-app-configuration-general');
+
+            Route::get('/texts', Texts::class)
+                ->name('admin-app-configuration-texts');
+        });
     });
 });
 
