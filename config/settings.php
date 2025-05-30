@@ -2,8 +2,8 @@
 
 use App\Settings\AppSettings;
 use App\Settings\IspconfigSoapSettings;
-use App\Settings\LdapSettings;
 use App\Settings\MailSettings;
+use App\Settings\TextSettings;
 
 return [
 
@@ -14,8 +14,8 @@ return [
     'settings' => [
         AppSettings::class,
         MailSettings::class,
-        LdapSettings::class,
         IspconfigSoapSettings::class,
+        TextSettings::class
     ],
 
     /*
