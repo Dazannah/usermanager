@@ -33,7 +33,7 @@
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
                                     <x-text-input :property_name="'search_department_departmentNumber'" :type="'text'" />
-                                    <x-label :for="'search_department_departmentNumber'" :text="'departmentNumber'" />
+                                    <x-label :for="'search_department_departmentNumber'" :text="texts_settings()->departmentNumber" />
                                     @error('search_department_departmentNumber')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror
@@ -43,7 +43,7 @@
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
                                     <x-text-input :property_name="'search_department_departmentNumber2'" :type="'text'" />
-                                    <x-label :for="'search_department_departmentNumber2'" :text="'departmentNumber2'" />
+                                    <x-label :for="'search_department_departmentNumber2'" :text="texts_settings()->departmentNumber2" />
                                     @error('search_department_departmentNumber2')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror

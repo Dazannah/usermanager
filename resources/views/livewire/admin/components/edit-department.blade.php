@@ -25,7 +25,7 @@ window.addEventListener('edit_department_delete_success', () => {
 
                             <div class="relative z-0 w-full mb-5 group">
                                 <x-text-input :property_name="'edit_department_departmentNumber'" :type="'text'" />
-                                <x-label :for="'edit_department_departmentNumber'" :text="'departmentNumber'" />
+                                <x-label :for="'edit_department_departmentNumber'" :text="texts_settings()->departmentNumber" />
                                 @error('edit_department_departmentNumber')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
@@ -33,7 +33,7 @@ window.addEventListener('edit_department_delete_success', () => {
 
                             <div class="relative z-0 w-full mb-5 group">
                                 <x-text-input :property_name="'edit_department_departmentNumber2'" :type="'text'" />
-                                <x-label :for="'edit_department_departmentNumber2'" :text="'departmentNumber2'" />
+                                <x-label :for="'edit_department_departmentNumber2'" :text="texts_settings()->departmentNumber2" />
                                 @error('edit_department_departmentNumber2')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror

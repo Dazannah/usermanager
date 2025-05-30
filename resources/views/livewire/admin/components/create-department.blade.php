@@ -18,14 +18,14 @@ $watch('show', value => show_add_department_field = value)">
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <x-text-input :property_name="'create_department_departmentNumber'" :type="'text'" />
-                                <x-label :for="'create_department_departmentNumber'" :text="'departmentNumber'" />
+                                <x-label :for="'create_department_departmentNumber'" :text="texts_settings()->departmentNumber" />
                                 @error('create_department_departmentNumber')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>
                             <div class="relative z-0 w-full mb-5 group">
                                 <x-text-input :property_name="'create_department_departmentNumber2'" :type="'text'" />
-                                <x-label :for="'create_department_departmentNumber2'" :text="'departmentNumber2'" />
+                                <x-label :for="'create_department_departmentNumber2'" :text="texts_settings()->departmentNumber2" />
                                 @error('create_department_departmentNumber2')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
