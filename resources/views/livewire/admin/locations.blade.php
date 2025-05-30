@@ -19,64 +19,33 @@
                     <form action="filter_locations">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                <div class="flex items-center">
-                                    <div class="relative z-0 w-full mb-5 group">
-                                        <input wire:key="search_location_displayName"
-                                            wire:model="search_location_displayName" type="text"
-                                            name="search_location_displayName" id="search_location_displayName"
-                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-400 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
-                                            placeholder=" " />
-                                        <label for="search_location_displayName"
-                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                            Elnevezés
-                                        </label>
-                                        @error('search_location_displayName')
-                                            <x-input-error :messages="$message" class="mt-2" />
-                                        @enderror
-                                    </div>
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-text-input :property_name="'search_location_displayName'" :type="'text'" />
+                                    <x-label :for="'search_location_displayName'" :text="'Elnevezés'" />
+                                    @error('search_location_displayName')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
                                 </div>
                             </th>
 
                             <th scope="col" class="px-6 py-3">
-                                <div class="flex items-center">
-                                    <div class="relative z-0 w-full mb-5 group">
-                                        <select wire:key="search_location_status_id"
-                                            wire:model="search_location_status_id" type="select"
-                                            name="search_location_status_id" id="authorization_status_id"
-                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-400 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
-                                            placeholder=" ">
-                                            <x-option value="">Összes</x-option>
-                                            @foreach ($this->statuses as $status)
-                                                <x-option
-                                                    value="{{ $status->id }}">{{ $status->displayName }}</x-option>
-                                            @endforeach
-                                        </select>
-                                        <label for="search_location_status_id"
-                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                            Státusz
-                                        </label>
-                                        @error('search_location_status_id')
-                                            <x-input-error :messages="$message" class="mt-2" />
-                                        @enderror
-                                    </div>
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-select :property_name="'search_location_status_id'" :select="true" :select_value="'Összes'"
+                                        :data="$this->statuses" />
+                                    <x-label :for="'search_location_status_id'" :text="'Státusz'" />
+                                    @error('search_location_status_id')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
                                 </div>
                             </th>
 
                             <th scope="col" class="px-6 py-3">
-                                <div class="flex items-center">
-                                    <div class="relative z-0 w-full mb-5 group">
-                                        <input wire:key="search_location_note" wire:model="search_location_note"
-                                            type="text" name="search_location_note" id="search_location_note"
-                                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-indigo-400 focus:outline-none focus:ring-0 focus:border-indigo-400 peer"
-                                            placeholder=" " />
-                                        <label for="search_location_note"
-                                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-indigo-600 peer-focus:dark:text-indigo-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                            Megjegyzés
-                                        </label>
-                                        @error('search_location_note')
-                                            <x-input-error :messages="$message" class="mt-2" />
-                                        @enderror
-                                    </div>
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-text-input :property_name="'search_location_note'" :type="'text'" />
+                                    <x-label :for="'search_location_note'" :text="'Megjegyzés'" />
+                                    @error('search_location_note')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
                                 </div>
                             </th>
 
