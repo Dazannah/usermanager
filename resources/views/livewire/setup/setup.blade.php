@@ -1,7 +1,6 @@
 <div>
-    <x-submenu :title="'Beállítások'">
+    <livewire:admin.setup-sub-navigation />
 
-    </x-submenu>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
 
         @error('error')
