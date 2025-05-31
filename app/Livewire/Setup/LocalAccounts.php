@@ -8,13 +8,17 @@ use App\Models\Status;
 use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
+use App\Models\AccountAuthorizationLevel;
 use Illuminate\Database\Eloquent\Collection;
 
 class LocalAccounts extends Component {
     use WithPagination;
 
-    /** @var Collection<int,Status> */
+    /** @var Collection<int,Status> $statuses*/
     public Collection $statuses;
+
+    /** @var Collection<int,Status> $accountAuthorizationLevels*/
+    public Collection $accountAuthorizationLevels;
 
     //filter properties
     #[Url(as: 'name')]
@@ -23,8 +27,8 @@ class LocalAccounts extends Component {
     public string|null $search_user_username;
     #[Url(as: 'email')]
     public string|null $search_user_email;
-    #[Url(as: 'isadmin')]
-    public string|null $search_user_is_admin;
+    #[Url(as: 'authorizationlevel')]
+    public string|null $search_user_authorization_level_id;
     #[Url(as: 'statusid')]
     public int|null $search_user_status_id;
 
@@ -37,7 +41,7 @@ class LocalAccounts extends Component {
     }
 
     public function local_accounts_filter_reset() {
-        $this->reset('search_user_name', 'search_user_username', 'search_user_email', 'search_user_is_admin', 'search_user_status_id');
+        $this->reset('search_user_name', 'search_user_username', 'search_user_email', 'search_user_authorization_level_id', 'search_user_status_id');
         $this->resetPage();
         $this->dispatch('refresh_local_accounts_mount');
     }
@@ -45,23 +49,10 @@ class LocalAccounts extends Component {
     public function mount() {
         $this->statuses = Status::all();
 
-        $this->select_user_type = [
-            (object)[
-                'id' => 'true',
-                'displayName' => 'Rendszergazda',
-            ],
-            (object)
-            [
-                'id' => 'false',
-                'displayName' => 'Normál',
-            ]
-
-        ];
+        $this->accountAuthorizationLevels = AccountAuthorizationLevel::all();
     }
 
     public function filter_users() {
-        $search_user_is_admin = isset($this->search_user_is_admin) && $this->search_user_is_admin == "true" ? true : false;
-
         return User::where(
             'is_local',
             true
@@ -81,9 +72,9 @@ class LocalAccounts extends Component {
                 return $query->where('email', '=', $this->search_user_email);
             }
         )->when(
-            isset($this->search_user_is_admin) && !empty($this->search_user_is_admin),
-            function ($query) use ($search_user_is_admin) {
-                return $query->where('is_admin', '=', $search_user_is_admin);
+            isset($this->search_user_authorization_level_id) && !empty($this->search_user_authorization_level_id),
+            function ($query) {
+                return $query->where('auth_level_id', '=', $this->search_user_authorization_level_id);
             }
         )->when(
             isset($this->search_user_status_id) && !empty($this->search_user_status_id),

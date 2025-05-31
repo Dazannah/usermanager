@@ -40,9 +40,9 @@
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-select :property_name="'search_user_is_admin'" :select="true" :select_value="'Összes'"
-                                        :data="$this->select_user_type" />
-                                    <x-label :for="'search_user_is_admin'" :text="'Típus'" />
+                                    <x-select :property_name="'search_user_authorization_level_id'" :select="true" :select_value="'Összes'"
+                                        :data="$this->accountAuthorizationLevels" />
+                                    <x-label :for="'search_user_authorization_level_id'" :text="'Státusz'" />
                                 </div>
                             </th>
 
@@ -83,7 +83,7 @@
                             </th>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $local_account->is_admin ? 'Rendszergazda' : 'Normál' }}
+                                {{ $local_account->auth_level->displayName }}
                             </th>
                             <td
                                 class="px-6 py-4 {{ $local_account->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}">
