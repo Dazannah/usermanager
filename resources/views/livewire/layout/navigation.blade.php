@@ -93,7 +93,7 @@ new class extends Component {
                             {{ __('Profil') }}
                         </x-dropdown-link>
 
-                        @if (request()->user()->is_admin())
+                        @if (request()->user()->is_sys_admin())
                             <x-dropdown-link :href="route('admin-dashboard')" wire:navigate>
                                 {{ __('Rendszergazda felület') }}
                             </x-dropdown-link>
@@ -146,7 +146,7 @@ new class extends Component {
                     {{ __('Profil') }}
                 </x-responsive-nav-link>
 
-                @if (request()->user()->is_admin())
+                @if (request()->user()->is_sys_admin())
                     <x-responsive-nav-link :href="route('admin-dashboard')" wire:navigate>
                         {{ __('Rendszergazda felület') }}
                     </x-responsive-nav-link>
