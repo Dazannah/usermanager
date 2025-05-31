@@ -57,6 +57,9 @@
 
             <div class="flex items-center gap-4">
                 <x-primary-button wire:click.prevent="save_admin">{{ __('Mentés') }}</x-primary-button>
+                @error('save_error')
+                    <x-input-error :messages="$message" class="mt-2" />
+                @enderror
                 <x-action-message-success class="me-3" on="save_admin_success">
                     {{ __('Sikeres mentés') }}
                 </x-action-message-success>
