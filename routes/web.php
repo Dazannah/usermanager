@@ -6,6 +6,7 @@ use App\Http\Middleware\IsAdmin;
 use App\Livewire\Admin\Locations;
 use App\Livewire\Admin\Departments;
 use App\Livewire\Setup\InitialSetup;
+use App\Livewire\Setup\LocalAccounts;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\Authorizations;
@@ -43,6 +44,9 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/texts', Texts::class)
                 ->name('admin-app-configuration-texts');
+
+            Route::get('/local-accounts', LocalAccounts::class)
+                ->name('admin-app-configuration-local-accounts');
         });
     });
 });

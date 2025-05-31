@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Livewire\Setup;
+
+use stdClass;
+use App\Models\User;
+use App\Models\Status;
+use Livewire\Component;
+use Livewire\Attributes\Url;
+use Livewire\WithPagination;
+use Illuminate\Database\Eloquent\Collection;
+
+class LocalAccounts extends Component {
+    use WithPagination;
+
+    /** @var Collection<int,Status> */
+    public Collection $statuses;
+
+    //filter properties
+    #[Url(as: 'name')]
+    public string|null $search_user_name;
+    #[Url(as: 'username')]
+    public string|null $search_user_username;
+    #[Url(as: 'email')]
+    public string|null $search_user_email;
+    #[Url(as: 'isadmin')]
+    public string|null $search_user_is_admin;
+    #[Url(as: 'statusid')]
+    public int|null $search_user_status_id;
+
+    public $select_user_type;
+
+    public $listeners = ['refresh_local_accounts_mount', 'local_accounts_filter_reset'];
+
+    public function refresh_local_accounts_mount() {
+        $this->mount();
+    }
+
+    public function local_accounts_filter_reset() {
+        $this->reset('search_user_name', 'search_user_username', 'search_user_email', 'search_user_is_admin', 'search_user_status_id');
+        $this->resetPage();
+        $this->dispatch('refresh_local_accounts_mount');
+    }
+
+    public function mount() {
+        $this->statuses = Status::all();
+
+        $this->select_user_type = [
+            (object)[
+                'id' => 'true',
+                'displayName' => 'Rendszergazda',
+            ],
+            (object)
+            [
+                'id' => 'false',
+                'displayName' => 'Normál',
+            ]
+
+        ];
+    }
+
+    public function filter_users() {
+        $search_user_is_admin = isset($this->search_user_is_admin) && $this->search_user_is_admin == "true" ? true : false;
+
+        return User::where(
+            'is_local',
+            true
+        )->when(
+            isset($this->search_user_name) && !empty($this->search_user_name),
+            function ($query) {
+                return $query->where('name', 'REGEXP', $this->search_user_name);
+            }
+        )->when(
+            isset($this->search_user_username) && !empty($this->search_user_username),
+            function ($query) {
+                return $query->where('username', 'REGEXP', $this->search_user_username);
+            }
+        )->when(
+            isset($this->search_user_email) && !empty($this->search_user_email),
+            function ($query) {
+                return $query->where('email', '=', $this->search_user_email);
+            }
+        )->when(
+            isset($this->search_user_is_admin) && !empty($this->search_user_is_admin),
+            function ($query) use ($search_user_is_admin) {
+                return $query->where('is_admin', '=', $search_user_is_admin);
+            }
+        )->when(
+            isset($this->search_user_status_id) && !empty($this->search_user_status_id),
+            function ($query) {
+                return $query->where('status_id', '=', $this->search_user_status_id);
+            }
+        )->paginate(10);
+    }
+
+    public function render() {
+        return view('livewire.setup.local-accounts', [
+            'local_accounts' => $this->filter_users()
+        ])->layout('layouts.admin');
+    }
+}
