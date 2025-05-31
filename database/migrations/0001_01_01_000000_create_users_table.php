@@ -18,9 +18,9 @@ return new class extends Migration {
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->boolean('is_admin')->default(false);
+            $table->integer('auth_level_id')->nullable()->constrained();
+            $table->foreignId("status_id")->default(1)->constrained();
             $table->boolean('is_local')->default(false);
-            $table->foreignId("status_id")->constrained();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
