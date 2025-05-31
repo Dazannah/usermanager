@@ -21,7 +21,7 @@
         <div class="flex flex-wrap gap-2">
             {{-- start of tables --}}
             @foreach ($columns as $column)
-                <div class="max-w-1/2 relative overflow-x-auto break-words shadow-md rounded-lg">
+                <div class="relative overflow-x-auto break-words shadow-md rounded-lg">
                     <table
                         class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -74,9 +74,7 @@
                                                         class="w-full px-6 py-4 text-green-600 dark:text-green-500 text-right">
                                                         {{ $auth_item->status->displayName }}
                                                     </div>
-                                                    <div class="py-2 col-span-2 flex flex-wrap justify-center gap-1">
-
-
+                                                    <div class="py-2 col-span-2 flex flex-wrap justify-center gap-2">
                                                         @foreach ($auth_item->sub_auth_items as $sub_auth_item)
                                                             <button
                                                                 @click="show_edit_sub_authorization_field = !show_edit_sub_authorization_field; edit_sub_authorization_id = {{ $sub_auth_item->id }}"
