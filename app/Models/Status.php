@@ -43,4 +43,8 @@ class Status extends Model {
 	public function sub_auth_items() {
 		return $this->hasMany(SubAuthItem::class, 'status_id');
 	}
+
+	public function users() {
+		return $this->hasMany(User::class, 'status_id');
+	}
 }

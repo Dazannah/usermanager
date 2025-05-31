@@ -27,7 +27,9 @@ class User extends Authenticatable implements LdapAuthenticatable {
         'username',
         'email',
         'password',
-        'is_admin'
+        'is_admin',
+        'is_local',
+        'status_id'
     ];
 
     /**
@@ -50,6 +52,10 @@ class User extends Authenticatable implements LdapAuthenticatable {
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function status() {
+        return $this->belongsTo(Status::class, 'status_id');
     }
 
     public function is_admin(): bool {
