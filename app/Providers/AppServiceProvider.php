@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     public function register(): void {
         Livewire::addPersistentMiddleware([
-            \App\Http\Middleware\IsAdmin::class
+            \App\Http\Middleware\IsSysAdmin::class
         ]);
     }
 

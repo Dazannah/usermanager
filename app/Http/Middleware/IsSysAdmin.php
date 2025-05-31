@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAdmin {
+class IsSysAdmin {
     /**
      * Handle an incoming request.
      *
@@ -14,7 +14,7 @@ class IsAdmin {
      */
 
     public function handle(Request $request, Closure $next): Response {
-        if (auth()->user()->is_admin())
+        if (auth()->user()->is_sys_admin())
             return $next($request);
 
         return redirect("/dashboard")->withErrors(['error' => 'Ehez a menüponthoz nincs jogosultságod.']);
