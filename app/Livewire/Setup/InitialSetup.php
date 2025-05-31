@@ -4,7 +4,7 @@ namespace App\Livewire\Setup;
 
 use Exception;
 use App\Models\User;
-use App\Models\Status;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,21 +19,30 @@ class InitialSetup extends Component {
     protected $rules = [
         'admin_name' => 'max:255',
         'admin_username' => 'required|max:255',
-        'admin_email' => 'required|email|max:255',
+        'admin_email' => 'max:255',
         'password' => 'required|confirmed',
     ];
 
     protected $messages = [
         'admin_username.required' => 'Admin felhasználónév megadása kötelező.',
         'admin_username.max' => 'Admin felhasználónév túl hosszú.',
-        'admin_email.required' => 'Admin email cím megadása kötelező.',
-        'admin_email.email' => 'Email cím megadása kötelező.',
+        //'admin_email.required' => 'Admin email cím megadása kötelező.',
+        //'admin_email.email' => 'Email cím megadása kötelező.',
         'password.required' => 'Admin jelszó megadása kötelező.',
         'password.confirmed' => 'Megadott jelszavak nem egyeznek.',
     ];
 
     public function save_admin() {
         $this->validate($this->rules, $this->messages);
+        if (config('ldap.active')) {
+            $user = LdapUser::where('samaccountname', '=', $this->admin_username)->first();
+
+            if ($user?->exists) {
+                $this->addError('save_error', "Létezik ilyen felhasználónévvel LDAP felhasználó.");
+
+                return;
+            }
+        }
 
         //sikeres validáció után .env módosítása és mentése
         $env_content = $original_env_content = file_get_contents(base_path('.env'));
@@ -45,7 +54,7 @@ class InitialSetup extends Component {
                 'username' => $this->admin_username,
                 'email' => $this->admin_email,
                 'password' => Hash::make($this->password),
-                'is_admin' => true,
+                'auth_level_id' => 5,
                 'is_local' => true
             ]);
 
