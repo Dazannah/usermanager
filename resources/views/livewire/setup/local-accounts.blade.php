@@ -42,7 +42,7 @@
                                 <div class="relative z-0 w-full mb-5 group">
                                     <x-select :property_name="'search_user_authorization_level_id'" :select="true" :select_value="'Összes'"
                                         :data="$this->accountAuthorizationLevels" />
-                                    <x-label :for="'search_user_authorization_level_id'" :text="'Státusz'" />
+                                    <x-label :for="'search_user_authorization_level_id'" :text="'Jogosultság szint'" />
                                 </div>
                             </th>
 
@@ -102,4 +102,5 @@
         </div>
         {{ $local_accounts->links(data: ['scrollTo' => false]) }}
     </div>
+    <livewire:setup.components.create-local-account :$accountAuthorizationLevels />
 </div>
