@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->text("displayName");
             $table->text("note")->nullable();
+            $table->foreignId("status_id")->constrained();
         });
     }
 
