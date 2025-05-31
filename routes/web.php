@@ -2,7 +2,7 @@
 
 use App\Livewire\Setup\Setup;
 use App\Livewire\Setup\Texts;
-use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsSysAdmin;
 use App\Livewire\Admin\Locations;
 use App\Livewire\Admin\Departments;
 use App\Livewire\Setup\InitialSetup;
@@ -20,7 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::view('profile', 'profile')
         ->name('profile');
 
-    Route::middleware([IsAdmin::class])->prefix('admin')->group(function () {
+    Route::middleware([IsSysAdmin::class])->prefix('admin')->group(function () {
         Route::get('/', AdminDashboard::class)
             ->name('admin-dashboard');
 
