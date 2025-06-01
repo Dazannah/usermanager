@@ -3,6 +3,7 @@
     'property_name',
     'select' => false,
     'select_value' => 'Válassz',
+    'value_setter' => null,
     'data',
     'counter' => false,
     'counter_max',
@@ -27,10 +28,12 @@
         @endfor
     @else
         @foreach ($data as $element)
-            <x-option value="{{ $element->id }}">{{ $element->displayName }}</x-option>
+            @if (isset($value_setter))
+                <x-option value="{{ $element->{$value_setter} }}">{{ $element->displayName }}</x-option>
+            @else
+                <x-option value="{{ $element->id }}">{{ $element->displayName }}</x-option>
+            @endif
         @endforeach
     @endif
-
-
 
 </select>
