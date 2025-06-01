@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->integer('auth_level_id')->nullable()->constrained();
+            $table->integer('auth_level')->nullable();
             $table->foreignId("status_id")->default(1)->constrained();
             $table->boolean('is_local')->default(false);
         });
