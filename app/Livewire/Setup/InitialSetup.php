@@ -4,10 +4,11 @@ namespace App\Livewire\Setup;
 
 use Exception;
 use App\Models\User;
-use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AuthorizationLevelService;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
 class InitialSetup extends Component {
     public $admin_name;
@@ -54,7 +55,7 @@ class InitialSetup extends Component {
                 'username' => $this->admin_username,
                 'email' => $this->admin_email,
                 'password' => Hash::make($this->password),
-                'auth_level_id' => 5,
+                'auth_level' => AuthorizationLevelService::get_sys_admin_level(),
                 'is_local' => true
             ]);
 
