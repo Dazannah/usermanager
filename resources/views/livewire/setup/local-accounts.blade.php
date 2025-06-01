@@ -40,9 +40,9 @@
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-select :property_name="'search_user_authorization_level_id'" :select="true" :select_value="'Összes'"
-                                        :data="$this->accountAuthorizationLevels" />
-                                    <x-label :for="'search_user_authorization_level_id'" :text="'Jogosultság szint'" />
+                                    <x-select :property_name="'search_user_authorization_level'" :select="true" :select_value="'Összes'"
+                                        :value_setter="'name'" :data="$this->accountAuthorizationLevels" />
+                                    <x-label :for="'search_user_authorization_level'" :text="'Jogosultság szint'" />
                                 </div>
                             </th>
 
@@ -83,7 +83,12 @@
                             </th>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $local_account->auth_level->displayName }}
+                                @php
+                                    $account_level_names = $local_account->get_auth_level_names();
+                                @endphp
+                                @foreach ($account_level_names as $idx => $auth_level_name)
+                                    {{ $idx < count($account_level_names) - 1 ? $auth_level_name . ',' : $auth_level_name }}
+                                @endforeach
                             </th>
                             <td
                                 class="px-6 py-4 {{ $local_account->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}">
