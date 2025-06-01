@@ -9,6 +9,7 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use App\Models\AccountAuthorizationLevel;
+use App\Services\AuthorizationLevelService;
 use Illuminate\Database\Eloquent\Collection;
 
 class LocalAccounts extends Component {
@@ -28,7 +29,7 @@ class LocalAccounts extends Component {
     #[Url(as: 'email')]
     public string|null $search_user_email;
     #[Url(as: 'authorizationlevel')]
-    public string|null $search_user_authorization_level_id;
+    public string|null $search_user_authorization_level;
     #[Url(as: 'statusid')]
     public int|null $search_user_status_id;
 
@@ -41,7 +42,7 @@ class LocalAccounts extends Component {
     }
 
     public function local_accounts_filter_reset() {
-        $this->reset('search_user_name', 'search_user_username', 'search_user_email', 'search_user_authorization_level_id', 'search_user_status_id');
+        $this->reset('search_user_name', 'search_user_username', 'search_user_email', 'search_user_authorization_level', 'search_user_status_id');
         $this->resetPage();
         $this->dispatch('refresh_local_accounts_mount');
     }
@@ -72,9 +73,11 @@ class LocalAccounts extends Component {
                 return $query->where('email', '=', $this->search_user_email);
             }
         )->when(
-            isset($this->search_user_authorization_level_id) && !empty($this->search_user_authorization_level_id),
+            isset($this->search_user_authorization_level) && !empty($this->search_user_authorization_level),
             function ($query) {
-                return $query->where('auth_level_id', '=', $this->search_user_authorization_level_id);
+                $level = AuthorizationLevelService::AUTH_LEVELS[$this->search_user_authorization_level];
+
+                return $query->whereRaw('auth_level & ? = ?', [$level, $level]);
             }
         )->when(
             isset($this->search_user_status_id) && !empty($this->search_user_status_id),
