@@ -27,7 +27,7 @@ class User extends Authenticatable implements LdapAuthenticatable {
         'username',
         'email',
         'password',
-        'auth_level_id',
+        'auth_level',
         'is_local',
         'status_id'
     ];
@@ -58,8 +58,10 @@ class User extends Authenticatable implements LdapAuthenticatable {
         return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function auth_level() {
-        return $this->belongsTo(AccountAuthorizationLevel::class, 'auth_level_id');
+    public function get_auth_level_names() {
+        $auth_level_names = AuthorizationLevelService::get_auth_level_names($this);
+
+        return $auth_level_names;
     }
 
     public function is_sys_admin(): bool {
