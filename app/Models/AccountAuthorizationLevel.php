@@ -20,14 +20,14 @@ class AccountAuthorizationLevel extends Model {
     public $timestamps = false;
 
     protected $casts = [
-        'technicalName' => 'string',
+        'name' => 'string',
         'displayName' => 'string',
         'ldap_group_name' => 'string',
         'auth_level' => 'int'
     ];
 
     protected $fillable = [
-        'technicalName',
+        'name',
         'displayName',
         'ldap_group_name',
         'auth_level'
