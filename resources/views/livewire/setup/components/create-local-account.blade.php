@@ -33,9 +33,18 @@ $watch('show', value => show_add_local_account_field = value)">
                                 @enderror
                             </div>
 
-                            <div class="relative z-0 w-full mb-5 group">
-                                <x-select :property_name="'create_local_account_authorization_level'" :data="$this->accountAuthorizationLevels" />
-                                <x-label :for="'create_local_account_authorization_level'" :text="'Jogosultsági szint'" />
+                            <div class="relative grid grid-cols-3 gap-x-6 col-span-3 z-0 w-full mb-5 group">
+                                @foreach ($this->accountAuthorizationLevels as $accountAuthorizationLevelsaccountAuthorizationLevel)
+                                    <div>
+                                        <input id="{{ $accountAuthorizationLevelsaccountAuthorizationLevel->name }}"
+                                            type="checkbox"
+                                            class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-[#15808a] dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-[#15808a] dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
+
+                                        <label for="{{ $accountAuthorizationLevelsaccountAuthorizationLevel->name }}"
+                                            class="ms-2 text-sm font-medium text-[#15808a] dark:text-[#15808a]">{{ $accountAuthorizationLevelsaccountAuthorizationLevel->displayName }}</label>
+                                    </div>
+                                @endforeach
+
                                 @error('create_local_account_authorization_level')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
