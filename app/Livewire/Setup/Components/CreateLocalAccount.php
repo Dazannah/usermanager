@@ -4,16 +4,16 @@ namespace App\Livewire\Setup\Components;
 
 use Exception;
 use App\Models\User;
-use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 use Livewire\Component;
 use Illuminate\Support\Facades\Hash;
+use App\Services\AuthorizationLevelService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
 class CreateLocalAccount extends Component {
     /** @var Collection<int,Status> $accountAuthorizationLevels*/
     public Collection $accountAuthorizationLevels;
-
 
     // livewire view properties
     public string|null $create_local_account_name;
@@ -21,12 +21,11 @@ class CreateLocalAccount extends Component {
     public string|null $create_local_account_email;
     public string $create_local_account_password;
     public string $create_local_account_password_confirmation;
-    public int $create_local_account_authorization_level = 1;
+    public array $create_local_account_authorizations = [];
 
     public $rules = [
         'create_local_account_username' => 'required|unique:App\Models\User,username',
         'create_local_account_password' => 'required|confirmed:create_local_account_password_confirmation',
-        'create_local_account_authorization_level' => 'required|exists:App\Models\AccountAuthorizationLevel,id',
     ];
 
     public $messages = [
@@ -34,13 +33,16 @@ class CreateLocalAccount extends Component {
         'create_local_account_username.unique' => 'Felhasználónév már foglalt',
         'create_local_account_password.required' => 'Jelszó megadása kötelező',
         'create_local_account_password.confirmed' => 'A jelszavak nem egyeznek',
-        'create_local_account_authorization_level.required' => 'Jogosultsági szint megadása kötelező',
-        'create_local_account_authorization_level.exists' => 'Ez az azonosító nem létezik',
     ];
 
     public function save_local_account() {
         try {
             $this->validate($this->rules, $this->messages);
+
+            $local_account_auth_names = [];
+            foreach ($this->create_local_account_authorizations as $key => $_) {
+                array_push($local_account_auth_names, $key);
+            }
 
             if (config('ldap.active')) {
                 $user = LdapUser::where('samaccountname', '=', $this->create_local_account_username)->first();
@@ -55,11 +57,11 @@ class CreateLocalAccount extends Component {
                 'username' => $this->create_local_account_username,
                 'email' => $this->create_local_account_email ?? null,
                 'password' => Hash::make($this->create_local_account_password),
-                'auth_level_id' => $this->create_local_account_authorization_level,
+                'auth_level' => AuthorizationLevelService::get_auth_level_by_names($local_account_auth_names),
                 'is_local' => true
             ]);
 
-            $this->reset('create_local_account_name', 'create_local_account_username', 'create_local_account_email', 'create_local_account_password', 'create_local_account_password_confirmation', 'create_local_account_authorization_level');
+            $this->reset('create_local_account_name', 'create_local_account_username', 'create_local_account_email', 'create_local_account_password', 'create_local_account_password_confirmation', 'create_local_account_authorizations');
             $this->dispatch('refresh_local_accounts_mount');
             $this->dispatch('save_local_account_success');
         } catch (ValidationException $err) {
