@@ -33,6 +33,16 @@ class AuthorizationLevelService {
     return self::calculate_auth_bin($user_auth_level, $level);
   }
 
+  public static function get_auth_level_by_names(array $auth_level_names): int {
+    $auth_level = 0;
+
+    foreach ($auth_level_names as $auth_level_name) {
+      $auth_level |= self::AUTH_LEVELS[$auth_level_name];
+    }
+
+    return $auth_level;
+  }
+
   // create new requests, search users and tickets
   public static function is_base(User $user): bool {
     return self::hasLevel($user, self::AUTH_LEVELS['base']);
