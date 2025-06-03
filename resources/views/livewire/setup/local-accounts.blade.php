@@ -14,7 +14,7 @@
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <form action="filter_departments">
                         <tr>
                             <th scope="col" class="px-6 py-3">
@@ -84,7 +84,7 @@
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 @php
-                                    $account_level_names = $local_account->get_auth_level_names();
+                                    $account_level_names = $local_account->get_auth_level_displayNames();
                                 @endphp
                                 @foreach ($account_level_names as $idx => $auth_level_name)
                                     {{ $idx < count($account_level_names) - 1 ? $auth_level_name . ',' : $auth_level_name }}
@@ -96,7 +96,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <button
-                                    @click="show_edit_local_account_field = !show_edit_local_account_field; edit_department_id = {{ $local_account->id }}"
+                                    @click="show_edit_local_account_field = !show_edit_local_account_field; edit_local_account_id = {{ $local_account->id }}"
                                     class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                             </td>
                         </tr>
@@ -107,5 +107,7 @@
         </div>
         {{ $local_accounts->links(data: ['scrollTo' => false]) }}
     </div>
+
     <livewire:setup.components.create-local-account :$accountAuthorizationLevels />
+    <livewire:setup.components.edit-local-account :$accountAuthorizationLevels />
 </div>
