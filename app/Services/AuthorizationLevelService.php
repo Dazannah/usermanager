@@ -68,7 +68,7 @@ class AuthorizationLevelService {
     return self::hasLevel($user, self::AUTH_LEVELS['sysAdmin']);
   }
 
-  public static function get_auth_level_names($user) {
+  public static function get_auth_level_displayNames(User $user) {
     $accountAuthorizationLevels = AccountAuthorizationLevel::all();
 
     if (self::is_sys_admin($user))
@@ -94,7 +94,34 @@ class AuthorizationLevelService {
     return $user_auth_level_names;
   }
 
-  public static function get_user_auth_level($user) {
+  public static function get_auth_level_names(User $user) {
+    $accountAuthorizationLevels = AccountAuthorizationLevel::all();
+
+    if (self::is_sys_admin($user))
+      foreach ($accountAuthorizationLevels as $accountAuthorizationLevel) {
+        if ($accountAuthorizationLevel->name === 'sysAdmin') {
+          return [$accountAuthorizationLevel->name];
+        }
+      }
+
+    $user_auth_level_names = [];
+
+    $user_auth_level = self::get_user_auth_level($user);
+
+    foreach (self::AUTH_LEVELS as $key => $auth_level) {
+      if (($user_auth_level & $auth_level) == $auth_level) {
+        foreach ($accountAuthorizationLevels as $accountAuthorizationLevel) {
+          if ($accountAuthorizationLevel->name == $key)
+            array_push($user_auth_level_names, $accountAuthorizationLevel->name);
+        }
+      }
+    }
+
+    return $user_auth_level_names;
+  }
+
+
+  public static function get_user_auth_level(User $user) {
     $user_auth_level = 0;
 
     if ($user->is_local) {

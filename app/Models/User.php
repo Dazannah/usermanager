@@ -58,8 +58,8 @@ class User extends Authenticatable implements LdapAuthenticatable {
         return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function get_auth_level_names() {
-        $auth_level_names = AuthorizationLevelService::get_auth_level_names($this);
+    public function get_auth_level_displayNames() {
+        $auth_level_names = AuthorizationLevelService::get_auth_level_displayNames($this);
 
         return $auth_level_names;
     }
