@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Forms;
 
+use Livewire\Form;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Livewire\Attributes\Validate;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
+use App\Services\AuthorizationLevelService;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Validate;
-use Livewire\Form;
 
 class LoginForm extends Form {
     #[Validate('required|string')]
@@ -36,6 +38,20 @@ class LoginForm extends Form {
                 'password' => $this->password,
             ]
         ];
+
+        $user = User::where('username', '=', $this->email)->first();
+
+        if ($user->status->name == 'inactive')
+            throw ValidationException::withMessages([
+                'form.email' => "Felhasználó inaktiválva.",
+            ]);
+
+        $user_auth_level = AuthorizationLevelService::get_user_auth_level($user);
+
+        if ($user_auth_level  <= 0)
+            throw ValidationException::withMessages([
+                'form.email' => "Nem rendelkezik megfelelő jogosultsággal.",
+            ]);
 
         if (! Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());

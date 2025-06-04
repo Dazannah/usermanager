@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Setup;
+namespace App\Livewire\Admin;
 
 use stdClass;
 use App\Models\User;
@@ -88,7 +88,7 @@ class LocalAccounts extends Component {
     }
 
     public function render() {
-        return view('livewire.setup.local-accounts', [
+        return view('livewire.admin.local-accounts', [
             'local_accounts' => $this->filter_users()
         ])->layout('layouts.admin');
     }

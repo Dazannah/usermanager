@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Setup\Components;
+namespace App\Livewire\Admin\Components;
 
 use Exception;
 use App\Models\User;
@@ -120,6 +120,6 @@ class EditLocalAccount extends Component {
     }
 
     public function render() {
-        return view('livewire.setup.components.edit-local-account');
+        return view('livewire.admin.components.edit-local-account');
     }
 }

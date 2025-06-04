@@ -6,10 +6,11 @@ use App\Http\Middleware\IsSysAdmin;
 use App\Livewire\Admin\Locations;
 use App\Livewire\Admin\Departments;
 use App\Livewire\Setup\InitialSetup;
-use App\Livewire\Setup\LocalAccounts;
+use App\Livewire\Admin\LocalAccounts;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\Authorizations;
+use App\Livewire\Setup\AuthLevels;
 
 Route::get('initial-setup', InitialSetup::class);
 Route::get('/', fn() => redirect('/login'));
@@ -35,8 +36,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/app-configuration', function () {
             return redirect()->route('admin-app-configuration-general');
-        })
-            ->name('admin-app-configuration');
+        })->name('admin-app-configuration');
+
+        Route::get('/local-accounts', LocalAccounts::class)
+            ->name('admin-app-configuration-local-accounts');
 
         Route::prefix('app-configuration')->group(function () {
             Route::get('/general', Setup::class)
@@ -45,8 +48,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/texts', Texts::class)
                 ->name('admin-app-configuration-texts');
 
-            Route::get('/local-accounts', LocalAccounts::class)
-                ->name('admin-app-configuration-local-accounts');
+            Route::get('/auth-levels', AuthLevels::class)
+                ->name('admin-app-configuration-auth-levels');
         });
     });
 });

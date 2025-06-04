@@ -2,10 +2,12 @@
     show_add_local_account_field: false,
     show_edit_local_account_field: false,
 }">
-    <livewire:admin.setup-sub-navigation />
+
+    <x-submenu :title="'Helyi fiókok'">
+        <x-submenu-button :text="'Helyi fiók hozzáadás'" :properti_to_change="'show_add_local_account_field'" />
+    </x-submenu>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
-
         @error('error')
             <div class="py-4">
                 <x-input-error :messages="$message" class="mt" />
@@ -108,6 +110,6 @@
         {{ $local_accounts->links(data: ['scrollTo' => false]) }}
     </div>
 
-    <livewire:setup.components.create-local-account :$accountAuthorizationLevels />
-    <livewire:setup.components.edit-local-account :$accountAuthorizationLevels />
+    <livewire:admin.components.create-local-account :$accountAuthorizationLevels />
+    <livewire:admin.components.edit-local-account :$accountAuthorizationLevels />
 </div>
