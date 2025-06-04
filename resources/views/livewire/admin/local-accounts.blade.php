@@ -110,6 +110,5 @@
         {{ $local_accounts->links(data: ['scrollTo' => false]) }}
     </div>
 
-    <livewire:admin.components.create-local-account :$accountAuthorizationLevels />
-    <livewire:admin.components.edit-local-account :$accountAuthorizationLevels />
+    <livewire:admin.components.local-account-form-panel :$accountAuthorizationLevels :$statuses />
 </div>
