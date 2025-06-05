@@ -6,12 +6,13 @@
     'value_setter' => null,
     'data',
     'counter' => false,
-    'counter_max',
+    'counter_max' => null,
     'disabled' => false,
 ])
 
 @php
     $key = $wire_key ?? $property_name;
+    $counter_max = is_numeric($counter_max) ? (int) $counter_max : 0;
 @endphp
 
 <select @disabled($disabled) wire:key="{{ $key }}" wire:model="{{ $property_name }}" type="select"
