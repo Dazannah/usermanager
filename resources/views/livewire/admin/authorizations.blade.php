@@ -1,15 +1,15 @@
 <div x-data="{
     show_store_column_field: false,
     show_store_authorization_field: false,
-    show_add_sub_authorization_field: false,
+    show_store_sub_authorization_field: false,
     show_update_column_field: false,
     show_update_authorization_field: false,
-    show_edit_sub_authorization_field: false
+    show_update_sub_authorization_field: false
 }">
     <x-submenu :title="'Jogosultságok'">
         <x-submenu-button :text="'Oszlop hozzáadás'" :properti_to_change="'show_store_column_field'" />
         <x-submenu-button :text="'Jogosultság hozzáadás'" :properti_to_change="'show_store_authorization_field'" />
-        <x-submenu-button :text="'Aljogosultság hozzáadás'" :properti_to_change="'show_add_sub_authorization_field'" />
+        <x-submenu-button :text="'Aljogosultság hozzáadás'" :properti_to_change="'show_store_sub_authorization_field'" />
     </x-submenu>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-6">
@@ -77,7 +77,7 @@
                                                     <div class="py-2 col-span-2 flex flex-wrap justify-center gap-2">
                                                         @foreach ($auth_item->sub_auth_items as $sub_auth_item)
                                                             <button
-                                                                @click="show_edit_sub_authorization_field = !show_edit_sub_authorization_field; edit_sub_authorization_id = {{ $sub_auth_item->id }}"
+                                                                @click="show_update_sub_authorization_field = !show_update_sub_authorization_field; update_sub_authorization_id = {{ $sub_auth_item->id }}"
                                                                 class="font-medium {{ $sub_auth_item->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }}  underline hover:no-underline cursor-pointer">{{ $sub_auth_item->displayName }}</button>
                                                         @endforeach
                                                     </div>
@@ -113,8 +113,6 @@
     {{-- Authorization modals --}}
     <livewire:admin.components.authorization-form-panel :$statuses :$columns />
 
-    {{-- Sub authorization modals --}}
-    <livewire:admin.components.create-sub-authorization :$statuses :$authorizations />
-    <livewire:admin.components.edit-sub-authorization :$statuses :$authorizations />
-
+    {{-- Sub authorization --}}
+    <livewire:admin.components.sub-authorization-form-panel :$statuses :$authorizations />
 </div>
