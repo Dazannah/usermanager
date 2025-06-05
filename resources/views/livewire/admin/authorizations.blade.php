@@ -1,14 +1,14 @@
 <div x-data="{
-    show_add_column_field: false,
-    show_add_authorization_field: false,
+    show_store_column_field: false,
+    show_store_authorization_field: false,
     show_add_sub_authorization_field: false,
-    show_edit_column_field: false,
-    show_edit_authorization_field: false,
+    show_update_column_field: false,
+    show_update_authorization_field: false,
     show_edit_sub_authorization_field: false
 }">
     <x-submenu :title="'Jogosultságok'">
-        <x-submenu-button :text="'Oszlop hozzáadás'" :properti_to_change="'show_add_column_field'" />
-        <x-submenu-button :text="'Jogosultság hozzáadás'" :properti_to_change="'show_add_authorization_field'" />
+        <x-submenu-button :text="'Oszlop hozzáadás'" :properti_to_change="'show_store_column_field'" />
+        <x-submenu-button :text="'Jogosultság hozzáadás'" :properti_to_change="'show_store_authorization_field'" />
         <x-submenu-button :text="'Aljogosultság hozzáadás'" :properti_to_change="'show_add_sub_authorization_field'" />
     </x-submenu>
 
@@ -35,7 +35,7 @@
                                 </th>
                                 <th>
                                     <button
-                                        @click="show_edit_column_field = !show_edit_column_field; edit_column_id = {{ $column->id }}"
+                                        @click="show_update_column_field = !show_update_column_field; update_column_id = {{ $column->id }}"
                                         class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Oszlop
                                         szerkesztése</button>
                                 </th>
@@ -95,7 +95,7 @@
                                     @endif
                                     <td class="px-6 py-4">
                                         <button
-                                            @click="show_edit_authorization_field = !show_edit_authorization_field; edit_authorization_id = {{ $auth_item->id }}"
+                                            @click="show_update_authorization_field = !show_update_authorization_field; update_authorization_id = {{ $auth_item->id }}"
                                             class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                                     </td>
                                 </tr>
@@ -107,13 +107,11 @@
         </div>
     </div>
 
-    {{-- Column modals --}}
-    <livewire:admin.components.create-column :$statuses />
-    <livewire:admin.components.edit-column :$statuses />
+    {{-- Column modal --}}
+    <livewire:admin.components.column-form-panel :$statuses />
 
     {{-- Authorization modals --}}
-    <livewire:admin.components.create-authorization :$statuses :$columns />
-    <livewire:admin.components.edit-authorization :$statuses :$columns />
+    <livewire:admin.components.authorization-form-panel :$statuses :$columns />
 
     {{-- Sub authorization modals --}}
     <livewire:admin.components.create-sub-authorization :$statuses :$authorizations />
