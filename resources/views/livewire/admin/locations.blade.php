@@ -77,7 +77,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <button
-                                    @click="show_edit_location_field = !show_edit_location_field; show_edit_location_id = {{ $location->id }}"
+                                    @click="show_edit_location_field = !show_edit_location_field; update_location_id = {{ $location->id }}"
                                     class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                             </td>
                         </tr>
@@ -89,7 +89,6 @@
         {{ $locations->links() }}
     </div>
 
-    {{-- location modals --}}
-    <livewire:admin.components.create-location :$statuses />
-    <livewire:admin.components.edit-location :$statuses />
+    {{-- location modal --}}
+    <livewire:admin.components.location-form-panel :$statuses />
 </div>
