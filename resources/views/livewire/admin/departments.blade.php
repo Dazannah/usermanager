@@ -1,10 +1,10 @@
 <div x-data="{
-    show_add_department_field: false,
-    show_edit_department_field: false,
+    show_store_department_field: false,
+    show_update_department_field: false,
 }">
 
     <x-submenu :title="'Osztályok'">
-        <x-submenu-button :text="'Osztály hozzáadás'" :properti_to_change="'show_add_department_field'" />
+        <x-submenu-button :text="'Osztály hozzáadás'" :properti_to_change="'show_store_department_field'" />
     </x-submenu>
 
 
@@ -108,7 +108,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <button
-                                    @click="show_edit_department_field = !show_edit_department_field; edit_department_id = {{ $department->id }}"
+                                    @click="show_update_department_field = !show_update_department_field; update_department_id = {{ $department->id }}"
                                     class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                             </td>
                         </tr>
@@ -120,7 +120,6 @@
         {{ $departments->links(data: ['scrollTo' => false]) }}
     </div>
 
-    {{-- department modals --}}
-    <livewire:admin.components.create-department :$statuses :$locations />
-    <livewire:admin.components.edit-department :$statuses :$locations />
+    {{-- department modal --}}
+    <livewire:admin.components.department-form-panel :$statuses :$locations />
 </div>
