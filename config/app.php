@@ -11,6 +11,7 @@ return [
     */
 
     'installed' => env('APP_INSTALLED', false),
+    'is_local_account_enabled' => env('APP_IS_LOCAL_ACCOUNT_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------
