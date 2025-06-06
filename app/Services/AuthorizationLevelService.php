@@ -34,6 +34,9 @@ class AuthorizationLevelService {
   }
 
   public static function get_auth_level_by_names(array $auth_level_names): int {
+    if (in_array('sysAdmin', $auth_level_names))
+      return self::get_sys_admin_level();
+
     $auth_level = 0;
 
     foreach ($auth_level_names as $auth_level_name) {
