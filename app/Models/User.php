@@ -64,6 +64,36 @@ class User extends Authenticatable implements LdapAuthenticatable {
         return $auth_level_names;
     }
 
+    public function is_base(): bool {
+        try {
+            return AuthorizationLevelService::is_base($this);
+        } catch (Exception $err) {
+            session()->flash('error', $err->getMessage());
+
+            return false;
+        }
+    }
+
+    public function is_req_admin(): bool {
+        try {
+            return AuthorizationLevelService::is_req_admin($this);
+        } catch (Exception $err) {
+            session()->flash('error', $err->getMessage());
+
+            return false;
+        }
+    }
+
+    public function is_dl_handler(): bool {
+        try {
+            return AuthorizationLevelService::is_dl_handler($this);
+        } catch (Exception $err) {
+            session()->flash('error', $err->getMessage());
+
+            return false;
+        }
+    }
+
     public function is_sys_admin(): bool {
         try {
             return AuthorizationLevelService::is_sys_admin($this);
