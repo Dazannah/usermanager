@@ -32,9 +32,13 @@
                     <x-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
                         {{ __('Felhasználók') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin-app-configuration-local-accounts')" :active="request()->routeIs('admin-app-configuration-local-accounts')" wire:navigate>
-                        {{ __('Helyi fiókok') }}
-                    </x-nav-link>
+
+                    @if (config('app.is_local_account_enabled'))
+                        <x-nav-link :href="route('admin-app-configuration-local-accounts')" :active="request()->routeIs('admin-app-configuration-local-accounts')" wire:navigate>
+                            {{ __('Helyi fiókok') }}
+                        </x-nav-link>
+                    @endif
+
                     <x-nav-link :href="route('admin-app-configuration')" :active="request()->is('admin/app-configuration/*')" wire:navigate>
                         {{ __('Beállítások') }}
                     </x-nav-link>
@@ -116,9 +120,13 @@
             <x-responsive-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
                 {{ __('Felhasználók') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('admin-app-configuration-local-accounts')" :active="request()->routeIs('admin-app-configuration-local-accounts')" wire:navigate>
-                {{ __('Helyi fiókok') }}
-            </x-responsive-nav-link>
+
+            @if (config('app.is_local_account_enabled'))
+                <x-responsive-nav-link :href="route('admin-app-configuration-local-accounts')" :active="request()->routeIs('admin-app-configuration-local-accounts')" wire:navigate>
+                    {{ __('Helyi fiókok') }}
+                </x-responsive-nav-link>
+            @endif
+
             <x-responsive-nav-link :href="route('admin-app-configuration')" :active="request()->routeIs('admin-app-configuration')" wire:navigate>
                 {{ __('Beállítások') }}
             </x-responsive-nav-link>
