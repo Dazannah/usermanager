@@ -34,18 +34,23 @@ new class extends Component {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Összefoglaló') }}
                     </x-nav-link>
+                    @if (request()->user()->is_base() || request()->user()->is_req_admin())
+                        <x-nav-link {{-- :href="route('new-user')" :active="request()->routeIs('new-user')" --}} wire:navigate>
+                            {{ __('Új felhasználó') }}
+                        </x-nav-link>
+                    @endif
 
-                    <x-nav-link {{-- :href="route('new-user')" :active="request()->routeIs('new-user')" --}} wire:navigate>
-                        {{ __('Új felhasználó') }}
-                    </x-nav-link>
+                    @if (request()->user()->is_dl_handler())
+                        <x-nav-link {{-- :href="route('new-distribution-list')" :active="request()->routeIs('new-distribution-list')" --}} wire:navigate>
+                            {{ __('Új terjesztési lista') }}
+                        </x-nav-link>
+                    @endif
 
-                    <x-nav-link {{-- :href="route('new-distribution-list')" :active="request()->routeIs('new-distribution-list')" --}} wire:navigate>
-                        {{ __('Új terjesztési lista') }}
-                    </x-nav-link>
 
                     <x-nav-link {{-- :href="route('requests')" :active="request()->routeIs('requests')" --}} wire:navigate>
                         {{ __('Kérelmek') }}
                     </x-nav-link>
+
 
                     {{-- Almenübe rakni ezeket
                         <x-nav-link :href="route('allow-requests')" :active="request()->routeIs('allow-requests')" wire:navigate>
@@ -62,9 +67,11 @@ new class extends Component {
                         {{ __('Felhasználók') }}
                     </x-nav-link>
 
-                    <x-nav-link {{-- :href="route('distribution-lists')" :active="request()->routeIs('distribution-lists')" --}} wire:navigate>
-                        {{ __('Terjesztési listák') }}
-                    </x-nav-link>
+                    @if (request()->user()->is_dl_handler())
+                        <x-nav-link {{-- :href="route('distribution-lists')" :active="request()->routeIs('distribution-lists')" --}} wire:navigate>
+                            {{ __('Terjesztési listák') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
