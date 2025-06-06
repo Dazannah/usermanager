@@ -4,9 +4,9 @@ namespace App\Livewire\Admin\Components;
 
 use Exception;
 use Livewire\Component;
-use App\Models\SubAuthItem;
 use Illuminate\Database\QueryException;
 use App\Livewire\Forms\SubAuthorizationForm;
+use App\Models\AuthItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -19,7 +19,15 @@ class SubAuthorizationFormPanel extends Component {
 
     public SubAuthorizationForm $form;
 
-    protected $listeners = ['show_update_sub_authorization', 'show_create_sub_authorization'];
+    protected $listeners = ['update_sub_authorization_form_panel', 'show_update_sub_authorization', 'show_create_sub_authorization'];
+
+    public function mount() {
+        $this->authorizations = AuthItem::all();
+    }
+
+    public function update_sub_authorization_form_panel() {
+        $this->mount();
+    }
 
     public function show_update_sub_authorization($subAuthItem_id) {
         $this->form->set_subAuthItem($subAuthItem_id);

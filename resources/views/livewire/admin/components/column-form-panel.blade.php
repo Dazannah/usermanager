@@ -100,7 +100,7 @@ window.addEventListener('delete_column_success', () => {
                     {{ __('Sikeres törlés') }}
                 </x-action-message-success>
 
-                @error('save_column_error')
+                @error('column_error')
                     <div class="me-3">
                         <x-input-error :messages="$message" />
                     </div>

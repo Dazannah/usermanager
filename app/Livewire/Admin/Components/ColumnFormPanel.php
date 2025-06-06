@@ -57,14 +57,14 @@ class ColumnFormPanel extends Component {
             $err_message = $err->getMessage();
 
             if ($err->getCode() == 23000) {
-                $this->addError('save_edit_column_error', "Nem lehet törölni ezt az oszlopot, mert valószínűleg kapcsolódik más adatokhoz (pl. nem üres ).");
+                $this->addError('column_error', "Nem lehet törölni ezt az oszlopot, mert valószínűleg kapcsolódik más adatokhoz (pl. nem üres ).");
 
                 return;
             }
 
-            $this->addError('save_edit_column_error', "Ismeretlen hiba történt: $err_message");
+            $this->addError('column_error', "Ismeretlen hiba történt: $err_message");
         } catch (Exception $err) {
-            $this->addError('save_edit_column_error', $err->getMessage());
+            $this->addError('column_error', $err->getMessage());
         } finally {
             $this->dispatch('refresh_authorization_mount');
         }
@@ -79,7 +79,7 @@ class ColumnFormPanel extends Component {
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
-            $this->addError('save_edit_column_error', $err->getMessage());
+            $this->addError('column_error', $err->getMessage());
 
             $this->dispatch('refresh_authorization_mount');
         }

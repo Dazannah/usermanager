@@ -6,10 +6,9 @@ use Exception;
 use Livewire\Form;
 use App\Models\User;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Services\AuthorizationLevelService;
-use Illuminate\Validation\ValidationException;
 use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
 class LocalAccountForm extends Form {
@@ -116,6 +115,11 @@ class LocalAccountForm extends Form {
         $this->local_account->status_id = $this->status_id;
 
         $this->local_account->save();
+
+        if ($this->local_account->status_id == 2)
+            DB::table('sessions')
+                ->whereUserId($this->local_account->id)
+                ->delete();
     }
 
     public function delete() {

@@ -38,7 +38,7 @@ class LocalAccountFormPanel extends Component {
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
-            $this->addError('save_local_account_error', $err->getMessage());
+            $this->addError('local_account_error', $err->getMessage());
 
             $this->dispatch('refresh_local_accounts_mount');
         }
@@ -52,7 +52,7 @@ class LocalAccountFormPanel extends Component {
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
-            $this->addError('save_edit_local_account_error', $err->getMessage());
+            $this->addError('local_account_error', $err->getMessage());
         } finally {
             $this->dispatch('refresh_local_accounts_mount');
         }
@@ -67,14 +67,14 @@ class LocalAccountFormPanel extends Component {
             $err_message = $err->getMessage();
 
             if ($err->getCode() == 23000) {
-                $this->addError('delete_edit_local_account', "Nem lehet törölni ezt a helyi fiókot, mert valószínűleg kapcsolódik más adatokhoz.");
+                $this->addError('local_account_error', "Nem lehet törölni ezt a helyi fiókot, mert valószínűleg kapcsolódik más adatokhoz.");
 
                 return;
             }
 
-            $this->addError('delete_edit_local_account', "Ismeretlen hiba történt: $err_message");
+            $this->addError('local_account_error', "Ismeretlen hiba történt: $err_message");
         } catch (Exception $err) {
-            $this->addError('delete_edit_local_account', $err->getMessage());
+            $this->addError('local_account_error', $err->getMessage());
         } finally {
             $this->dispatch('refresh_local_accounts_mount');
         }

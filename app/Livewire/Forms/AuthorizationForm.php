@@ -5,7 +5,6 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\AuthItem;
-use Livewire\Attributes\Validate;
 
 class AuthorizationForm extends Form {
     // livewire view properties
@@ -72,6 +71,22 @@ class AuthorizationForm extends Form {
         $this->authItem->is_ldap = $this->is_ldap;
 
         $this->authItem->save();
+    }
+
+    public function delete() {
+        $delete_result = $this->authItem->delete();
+
+        if (!isset($delete_result))
+            throw new Exception('Törölni kívánt oszlop nem található.');
+
+        $authItems = AuthItem::where([['position', '>', $this->authItem->position], ['column_id', $this->authItem->column_id]])->get();
+
+        foreach ($authItems as $authItem) {
+            $authItem->position--;
+            $authItem->save();
+        }
+
+        $this->reset();
     }
 
     public function set_new_positions() {

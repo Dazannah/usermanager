@@ -6,7 +6,6 @@ use App\Livewire\Forms\AuthorizationForm;
 use Exception;
 use App\Models\Column;
 use Livewire\Component;
-use App\Models\AuthItem;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
@@ -20,10 +19,14 @@ class AuthorizationFormPanel extends Component {
 
     public AuthorizationForm $form;
 
-    protected $listeners = ['show_update_authorization', 'show_store_authorization'];
+    protected $listeners = ['update_authorization_form_panel', 'show_update_authorization', 'show_store_authorization'];
 
     public function mount() {
         $this->columns = Column::all_sorted_auth_items_by_position();
+    }
+
+    public function update_authorization_form_panel() {
+        $this->mount();
     }
 
     public function show_update_authorization($authItem_id) {
@@ -43,41 +46,29 @@ class AuthorizationFormPanel extends Component {
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
-            $this->addError('save_authorization_error', $err->getMessage());
+            $this->addError('authorization_error', $err->getMessage());
 
             $this->dispatch('refresh_authorization_mount');
         }
     }
 
-    public function delete_edit_authorization() {
+    public function delete_authorization() {
         try {
-            $delete_result = $this->edit_authItem->delete();
+            $this->form->delete();
 
-            if (!isset($delete_result))
-                throw new Exception('Törölni kívánt oszlop nem található.');
-
-            $authItems = AuthItem::where([['position', '>', $this->edit_authItem->position]])->get();
-
-            foreach ($authItems as $authItem) {
-                $authItem->position--;
-                $authItem->save();
-            }
-
-            $this->reset('edit_authorization_display_name', 'edit_authorization_column_id', 'edit_authorization_status_id');
-
-            $this->dispatch('edit_authorization_delete_success');
+            $this->dispatch('authorization_delete_success');
         } catch (QueryException $err) {
             $err_message = $err->getMessage();
 
             if ($err->getCode() == 23000) {
-                $this->addError('save_edit_authorization_error', "Nem lehet törölni ezt a jogosultságot, mert valószínűleg kapcsolódik más adatokhoz (pl. van aljogosultsága).");
+                $this->addError('authorization_error', "Nem lehet törölni ezt a jogosultságot, mert valószínűleg kapcsolódik más adatokhoz (pl. van aljogosultsága).");
 
                 return;
             }
 
-            $this->addError('save_edit_authorization_error', "Ismeretlen hiba történt: $err_message");
+            $this->addError('authorization_error', "Ismeretlen hiba történt: $err_message");
         } catch (Exception $err) {
-            $this->addError('save_edit_authorization_error', $err->getMessage());
+            $this->addError('authorization_error', $err->getMessage());
         } finally {
             $this->dispatch('refresh_authorization_mount');
         }
@@ -92,7 +83,7 @@ class AuthorizationFormPanel extends Component {
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
-            $this->addError('save_edit_authorization_error', $err->getMessage());
+            $this->addError('authorization_error', $err->getMessage());
 
             $this->dispatch('refresh_authorization_mount');
         }

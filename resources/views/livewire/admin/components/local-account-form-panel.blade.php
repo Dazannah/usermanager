@@ -140,7 +140,7 @@ window.addEventListener('edit_local_account_delete_success', () => {
                     {{ __('Sikeres törlés') }}
                 </x-action-message-success>
 
-                @error('save_edit_local_account_error')
+                @error('local_account_error')
                     <div class="me-3">
                         <x-input-error :messages="$message" />
                     </div>

@@ -5,7 +5,6 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\Column;
-use Livewire\Attributes\Validate;
 
 class ColumnForm extends Form {
     // livewire view properties
@@ -66,30 +65,26 @@ class ColumnForm extends Form {
     }
 
     public function change_columns_position() {
-        try {
-            $all_columns = Column::all();
+        $all_columns = Column::all();
 
-            $original_position = $this->column->position;
-            $new_position = $this->position;
+        $original_position = $this->column->position;
+        $new_position = $this->position;
 
-            foreach ($all_columns as $all_column) {
-                if ($all_column->id == $this->column->id)
-                    continue;
+        foreach ($all_columns as $all_column) {
+            if ($all_column->id == $this->column->id)
+                continue;
 
-                if ($new_position > $original_position && $all_column->position <= $new_position && $original_position <= $all_column->position) {
-                    $all_column->position--;
-                    $all_column->save();
-                }
+            if ($new_position > $original_position && $all_column->position <= $new_position && $original_position <= $all_column->position) {
+                $all_column->position--;
+                $all_column->save();
+            }
 
-                if ($new_position < $original_position && $all_column->position >= $new_position && $original_position >= $all_column->position) {
+            if ($new_position < $original_position && $all_column->position >= $new_position && $original_position >= $all_column->position) {
 
-                    $all_column->position++;
-                    $all_column->save();
-                }
-            };
-        } catch (Exception $err) {
-            $this->addError('save_edit_column_error', $err->getMessage());
-        }
+                $all_column->position++;
+                $all_column->save();
+            }
+        };
     }
 
     public function delete() {

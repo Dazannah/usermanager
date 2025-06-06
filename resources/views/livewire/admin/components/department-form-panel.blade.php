@@ -18,7 +18,7 @@ $watch('show', value => {
         show_store_department_field = value
     }
 });
-window.addEventListener('edit_department_delete_success', () => {
+window.addEventListener('department_delete_success', () => {
     show = false
 });">
     <x-modal :name="'DepartmentFormPanelModal'">

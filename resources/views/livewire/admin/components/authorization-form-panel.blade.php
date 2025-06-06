@@ -105,7 +105,7 @@ window.addEventListener('authorization_delete_success', () => {
                     {{ __('Sikeres törlés') }}
                 </x-action-message-success>
 
-                @error('edit_authorization_error')
+                @error('authorization_error')
                     <div class="me-3">
                         <x-input-error :messages="$message" />
                     </div>

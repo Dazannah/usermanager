@@ -34,8 +34,8 @@ class Authorizations extends Component {
 
     public function refresh_authorization_mount() {
         $this->mount();
-        $this->dispatch('update_create_authorization');
-        $this->dispatch('update_create_sub_authorization');
+        $this->dispatch('update_authorization_form_panel');
+        $this->dispatch('update_sub_authorization_form_panel');
     }
 
     public function save_order($item, $new_position) {

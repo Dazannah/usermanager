@@ -5,7 +5,6 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\SubAuthItem;
-use Livewire\Attributes\Validate;
 
 class SubAuthorizationForm extends Form {
     public SubAuthItem|null $subAuthItem;
@@ -70,13 +69,16 @@ class SubAuthorizationForm extends Form {
 
         if ($this->subAuthItem->position != $this->position)
             $this->change_sub_authItems_position();
+        else
+            $this->subAuthItem->position = $this->position;
 
         $this->subAuthItem->displayName = $this->displayName;
         $this->subAuthItem->authItem_id = $this->authItem_id;
         $this->subAuthItem->status_id = $this->status_id;
-        $this->subAuthItem->position = $this->position;
 
         $this->subAuthItem->save();
+
+        $this->set_subAuthItem($this->subAuthItem->id);
     }
 
     public function delete() {
