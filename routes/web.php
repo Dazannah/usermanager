@@ -15,7 +15,7 @@ use App\Livewire\Setup\AuthLevels;
 Route::get('initial-setup', InitialSetup::class);
 Route::get('/', fn() => redirect('/login'));
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'isLocalUserEnabled'])->group(function () {
     Route::view('dashboard', 'dashboard')
         ->name('dashboard');
     Route::view('profile', 'profile')
@@ -38,8 +38,9 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('admin-app-configuration-general');
         })->name('admin-app-configuration');
 
-        Route::get('/local-accounts', LocalAccounts::class)
-            ->name('admin-app-configuration-local-accounts');
+        if (config('app.is_local_account_enabled'))
+            Route::get('/local-accounts', LocalAccounts::class)
+                ->name('admin-app-configuration-local-accounts');
 
         Route::prefix('app-configuration')->group(function () {
             Route::get('/general', Setup::class)
