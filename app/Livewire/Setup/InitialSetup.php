@@ -46,7 +46,7 @@ class InitialSetup extends Component {
         }
 
         //sikeres validáció után .env módosítása és mentése
-        $env_content = $original_env_content = file_get_contents(base_path('.env'));
+        $original_env_content = file_get_contents(base_path('.env'));
 
         try {
             //alapértelmezett rendszergazda fiók létrehozása
@@ -61,16 +61,8 @@ class InitialSetup extends Component {
 
             Auth::login($user);
 
-            $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
-
-            config([
-                'app.installed' => true
-            ]);
-
-            file_put_contents(
-                base_path('.env'),
-                $env_content
-            );
+            //set env
+            $this->set_installed(true);
 
             $this->dispatch('save_admin_success');
 
@@ -86,7 +78,27 @@ class InitialSetup extends Component {
         }
     }
 
+    public function set_installed($is_installed) {
+        $env_content = file_get_contents(base_path('.env'));
+
+        $env_content = preg_replace('/APP_INSTALLED=.*/', "APP_INSTALLED=true", $env_content);
+
+        config([
+            'app.installed' => $is_installed
+        ]);
+
+        file_put_contents(
+            base_path('.env'),
+            $env_content
+        );
+    }
+
     public function render() {
+        if (!config('app.is_local_account_eneabled')) {
+            $this->set_installed(true);
+            $this->redirect('/');
+        }
+
         return view('livewire.setup.initial-setup')->layout('layouts.guest');
     }
 }
