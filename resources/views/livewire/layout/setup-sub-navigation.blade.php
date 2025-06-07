@@ -10,7 +10,7 @@
     <x-nav-link :href="route('admin-app-configuration-texts')" class="{{ $classes }}" :active="request()->routeIs('admin-app-configuration-texts')" wire:navigate>
         {{ __('Feliratok') }}
     </x-nav-link>
-    <x-nav-link :href="route('admin-app-configuration-auth-levels')" class="{{ $classes }}" :active="request()->routeIs('admin-app-configuration-auth-levels')" wire:navigate>
+    <x-nav-link :href="route('admin-app-configuration-authorization-levels')" class="{{ $classes }}" :active="request()->routeIs('admin-app-configuration-authorization-levels')" wire:navigate>
         {{ __('Jogosultsági szintek') }}
     </x-nav-link>
 
