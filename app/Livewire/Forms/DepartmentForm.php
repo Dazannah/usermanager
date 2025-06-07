@@ -12,8 +12,8 @@ class DepartmentForm extends Form {
 
     // livewire view properties
     public string|null $displayName;
-    public string|null $departmentNumber;
-    public string|null $departmentNumber2;
+    public string|null $departmentNumber = null;
+    public string|null $departmentNumber2 = null;
     public int $status_id = 1;
     public int|null $location_id;
 
