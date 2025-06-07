@@ -94,7 +94,7 @@ class InitialSetup extends Component {
     }
 
     public function render() {
-        if (!config('app.is_local_account_eneabled')) {
+        if (!config('app.is_local_account_enabled')) {
             $this->set_installed(true);
             $this->redirect('/');
         }
