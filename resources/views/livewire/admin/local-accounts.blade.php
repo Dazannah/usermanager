@@ -57,9 +57,6 @@
                             </th>
 
                             <th scope="col" class="px-6 py-3 text-right">
-                                <x-success-button wire:click.prevent="refresh_local_accounts_mount" class="me-3">
-                                    {{ __('Keresés') }}
-                                </x-success-button>
                                 <x-primary-button
                                     @click.prevent="$dispatch('local_accounts_filter_reset')">{{ __('Visszaállítás') }}
                                 </x-primary-button>
