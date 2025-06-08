@@ -22,7 +22,7 @@
         </ul>
     </li>
     <li>
-        <a href="#menu">Menu</a>
+        <a href="#menu">Menu map</a>
         <ul>
             <li><a href="#user-interface">User</a></li>
             <li><a href="#admin-interface">Admin</a></li>
@@ -174,7 +174,7 @@
 ## Menu details
 <div id="menu-details"></div>
 
-### User interface
+### User interface details
 
 #### Recap
 
@@ -248,7 +248,31 @@ The form includes the following fields:
         </ul>
 </ul>
 
+#### <strike>Distribution lists</strike>
 
+<ul>
+    <li>Search and view all ditribution lists</li>
+        <ul>
+            <li>Edit a distribution list</li>
+            <li>Delete a distribution list</li>
+        </ul>
+</ul>
+
+
+#### <strike>Personal menu</strike>
+
+<ul>
+    <li>Profile</li>
+        <ul>
+            <li>Set your full name</li>
+            <li>Set your notification e-mail</li>
+        </ul>
+    <li>System admin interface</li>
+        <ul>
+            <li>Navigate to the system admin page</li>
+        </ul>
+    <li>Log out</li>
+</ul>
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
 [Laravel-url]: https://laravel.com
