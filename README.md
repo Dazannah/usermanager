@@ -48,18 +48,64 @@
 
 </div>
 
+## Getting Started
+<div id="getting-started">
+    
+### Prerequisites
+<div id="prerequisites"></div>
 
-<br/><br/><br/>
-enable ldap in php
-sudo apt-get install php-ldap
-extension=ldap
+<li>Laravel 12 <a href="https://laravel.com/docs/12.x/installation">Installation</a></li>
+<li>Database <a href="https://laravel.com/docs/12.x/database#introduction">List</a></li>
+<li>Composer <a href="https://getcomposer.org/download/">Installation</a></li>
+<li>NPM <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">Installation</a></li>
+<li>PHP version ">= 8.2.0"</li>
 
-composer install
+### Installation
+<div id="installation"></div>
 
-npm install
-npm run build
+1. Clone the repository
+   ```sh
+   git clone https://github.com/Dazannah/usermanager.git
+   ```
 
-php artisan key:generate
+2. Enable LDAP in Php
+   ```sh
+    sudo apt-get install php-ldap
+   ```
+   Enable LDAP in php.ini
+   ```
+    extension=ldap
+   ```
+  
+3. Install dependencies
+   ```sh
+   composer install
+   npm install
+   npm run build
+   ```
+   
+4. Set up .env</br>
+   Copy .env.example to .env</br>
+
+   Left APP_INSTALLED on false and APP_IS_LOCAL_ACCOUNT_ENEABLED on true if you want to create a sysAdmin local account on start. You can also do it later.</br>
+   Fill out the DB section</br></br>
+   
+   If you want to use LDAP authenctication, fill out the LDAP section.<br>
+   You can test LDAP connection with:
+   ```
+   php artisan ldap:test
+   ```
+
+5. Generate application key</br>
+    ```
+    php artisan key:generate
+    ```
+    
+6. Run migration
+    ```
+    php artisan migrate
+    ```
+
 
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
