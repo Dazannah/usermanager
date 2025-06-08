@@ -176,6 +176,7 @@
 
 ### User interface details
 
+
 #### Recap
 
 System users can view and search their most recent requests here. The section is divided into three parts:
@@ -185,6 +186,7 @@ System users can view and search their most recent requests here. The section is
     <li>Latest Completed: Shows only recently completed requests.</li>
     <li>Latest In Progress: Lists requests that are currently being processed.</li>
 </ul>
+
 
 #### <strike>New user</strike>
 
@@ -202,6 +204,7 @@ The form includes the following fields:
     <li>(Optional, shown only if technical user is selected) Technical account note</li>
 </ul>
 
+
 #### <strike>New distribution list</strike>
 
 System users can create a new distribution list.</br>
@@ -211,68 +214,115 @@ The form includes the following fields:
     <li>Distribution list members – users to be included in the list</li>
 </ul>
 
+
 #### <strike>Requests</strike>
 
+Manage all created user-related requests, including their review, approval, modification, or cancellation.
 <ul>
     <li><strike>Pending approvals</strike></li>
-        <ul>
-            <li>Approve, decline, or return the request to the submitter for missing details</li>
-                <ul>
-                    <li>Include a note explaining what's missing</li>
-                </ul>
-            <li>(Optional) Fill in usernames (if required)</li>
-        </ul>
+    Approve, decline, or return the request to the submitter for missing details — include a note explaining what’s missing. Usernames can also be filled in if needed or required by the selected authorization level.
     <li><strike>Approved requests</strike></li> 
-        <ul>
-            <li>Fill in usernames (LDAP integration will auto-fill if enabled)</li>
-            <li>Return to submitter for missing details</li>
-                <ul>
-                    <li>Include a note explaining what's missing</li>
-                </ul>
-            <li>Save changes</li>
-            <li>Mark as completed — for new user requests, this will create the user based on the submitted data</li>
-        </ul>
+    Fill in usernames (auto-filled if LDAP integration is enabled). You can return the request to the submitter for missing details — include a note explaining what’s missing. Save changes or mark as completed — for new user requests, this action will create the user based on the submitted data.
     <li><strike>All requests</strike></li>
-        <ul>
-            <li>Search and view all submitted requests</li>
-        </ul>
+    Search and view all submitted requests.
 </ul>
+
 
 #### <strike>Users</strike>
 
-<ul>
-    <li>Search and view all users</li>
-        <ul>
-            <li>Submit an edit request - user details pre-filled</li>
-            <li>Submit a delete request</li>
-        </ul>
-</ul>
+Search and view all users, including their personal information, authorizations, and usernames.
+    <ul>
+        <li>Submit an edit request - user details pre-filled</li>
+        <li>Submit a delete request</li>
+    </ul>
+
 
 #### <strike>Distribution lists</strike>
 
-<ul>
-    <li>Search and view all ditribution lists</li>
-        <ul>
-            <li>Edit a distribution list</li>
-            <li>Delete a distribution list</li>
-        </ul>
-</ul>
+Search and view all ditribution lists
+    <ul>
+        <li>Edit a distribution list</li>
+        <li>Delete a distribution list</li>
+    </ul>
 
 
 #### Personal menu
 
 <ul>
     <li>Profile</li>
+    Set your full name and notification e-mail.
+    <li>System admin interface</li>
+    Navigate to the system admin page
+    <li>Log out</li>
+    Sign out of the application
+</ul>
+
+
+### Admin interface details
+
+#### <strike>Admin Recap</strike>
+<ul>
+    <li><strike></strike></li>
+</ul>
+
+
+#### Authorizations
+<ul>
+    <li>Add column</li>
+    <li>Add authorization</li>
+    <li>Add sub authorization</li>
+</ul>
+
+        
+#### Departments
+<ul>
+    <li>Add department</li>
+</ul>
+
+
+#### Locations
+<ul>
+    <li>Add location</li>
+</ul>
+
+        
+#### <strike>Requests</strike>
+<ul>
+    
+</ul>
+
+
+#### <strike>Users</strike>
+
+
+#### Local accounts
+<ul>
+    <li>Add local account</li>
+</ul>
+
+        
+#### Settings
+<ul>
+    <li>General</li>
+    <li>Texts</li>
+    <li>Authorization levels</li>
+</ul>
+
+        
+####Personal menu</li>
+<ul>
+    <li>Profile</li>
         <ul>
             <li>Set your full name</li>
             <li>Set your notification e-mail</li>
         </ul>
-    <li>System admin interface</li>
+    <li>System user interface</li>
         <ul>
-            <li>Navigate to the system admin page</li>
+            <li>Navigate to the system user page</li>
         </ul>
     <li>Log out</li>
 </ul>
+
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
 [Laravel-url]: https://laravel.com
