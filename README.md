@@ -238,6 +238,16 @@ The form includes the following fields:
         </ul>
 </ul>
 
+#### <strike>Users</strike>
+
+<ul>
+    <li>Search and view all users</li>
+        <ul>
+            <li>Submit an edit request - user details pre-filled</li>
+            <li>Submit a delete request</li>
+        </ul>
+</ul>
+
 
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
