@@ -136,7 +136,6 @@
 ### Admin interface
 <div id="user-interface"></div>
 <ul>
-    <li>Admin Recap</li>
     <li>Authorizations</li>
         <ul>
             <li>Add column</li>
@@ -260,69 +259,140 @@ Search and view all ditribution lists
 
 ### Admin interface details
 
-#### <strike>Admin Recap</strike>
-<ul>
-    <li><strike></strike></li>
-</ul>
-
-
 #### Authorizations
+
+View and manage the authorization and sub-authorization structure. Modify display names, activate/deactivate items, and control LDAP integration.
 <ul>
     <li>Add column</li>
+        Define a new column to group authorizations.</br>
+        Fields:
+        <ul>
+            <li>Name</li>
+            <li>Status (active/inactive)</li>
+        </ul>
     <li>Add authorization</li>
+        Create a new authorization entry.
+        Fields:
+        <ul>
+            <li>Name</li>
+            <li>Column (assign to a previously defined column)</li>
+            <li>Status (active/inactive)</li>
+            <li>LDAP integration (toggle on/off)</li>
+        </ul>
     <li>Add sub authorization</li>
+        Define a sub-authorization under an existing authorization.
+        <ul>
+            <li>Name</li>
+            <li>Parent authorization</li>
+            <li>Status (active/inactive)</li>
+        </ul>
 </ul>
 
         
 #### Departments
+
+View, filter, and manage departments.
 <ul>
     <li>Add department</li>
+    Create a new department.</br>
+    Fields:
+    <ul>
+        <li>Name</li>
+        <li>Department number (internal use)</li>
+        <li>Secondary department number (internal use)</li>
+        <li>Status (active/inactive)</li>
+        <li>Location</li>
+    </ul>
+    <li>Edit department</li>
+    Modify existing department details.
 </ul>
 
 
 #### Locations
+
+View, filter, and manage locations.
 <ul>
     <li>Add location</li>
+    Create a new department.</br>
+    Fields:
+    <ul>
+        <li>Name</li>
+        <li>Status (active/inactive)</li>
+        <li>Note</li>
+    </ul>
+    <li>Edit location</li>
+    Modify existing location details.
 </ul>
 
         
 #### <strike>Requests</strike>
-<ul>
-    
-</ul>
-
+View, filter, and modify any request directly outside the standard workflow.
 
 #### <strike>Users</strike>
+View, filter, and modify any user directly outside the standard workflow.
+
 
 
 #### Local accounts
+
+View, filter, and manage local account.
 <ul>
     <li>Add local account</li>
+    Create a new local account</br>
+    Fields:
+    <ul>
+        <li>Full name</li>
+        <li>Username</li>
+        <li>Email</li>
+        <li>Authorization levels</li>
+        <li>Password</li>
+        <li>Repeat password</li>
+        <li>Status (active/inactive)</li>
+    </ul>
 </ul>
 
         
 #### Settings
+
+All global application settings are managed under this menu.
 <ul>
     <li>General</li>
+    <ul>
+        <li>General settings</li>
+        <ul>
+            <li>Application name</li>
+            <li>Logo</li>
+        </ul>
+    </ul>
     <li>Texts</li>
+    <ul>
+        <li>Input field labels:</li>
+        <ul>
+            <li>Department number</li>
+            <li>Secondary department number</li>
+        </ul>
+    </ul>
     <li>Authorization levels</li>
+    View, filter, and manage authorization levels.
+    Fields:
+    <ul>
+        <li>Name</li>
+        <li>LDAP group name</li>
+        <li>Technical identifier</li>
+    </ul>
 </ul>
 
-        
-####Personal menu</li>
+
+#### Personal menu
+
 <ul>
     <li>Profile</li>
-        <ul>
-            <li>Set your full name</li>
-            <li>Set your notification e-mail</li>
-        </ul>
-    <li>System user interface</li>
-        <ul>
-            <li>Navigate to the system user page</li>
-        </ul>
+    Manage your user settings. Set your full name and notification e-mail.
+    <li>System admin interface</li>
+    Navigate to the system user page
     <li>Log out</li>
+    Sign out of the application
 </ul>
-
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
 [Laravel-url]: https://laravel.com
