@@ -28,6 +28,7 @@
             <li><a href="#admin-interface">Admin</a></li>
         </ul>
     </li>
+    <li><a href="#menu-details">Menu details</a></li>
 </ol>
 
 ## About The Project
@@ -115,8 +116,8 @@
 <div id="user-interface"></div>
 <ul>
     <li>Recap</li>
-    <li><strike>Request new user</strike></li>
-    <li><strike>Create new distribution list</strike></li>
+    <li><strike>New user</strike></li>
+    <li><strike>New distribution list</strike></li>
     <li><strike>Requests</strike></li>
     <li><strike>Users</strike></li>
     <li><strike>Distribution lists</strike></li>
@@ -165,6 +166,46 @@
             <li>Log out</li>
         </ul>
 </ul>
+
+## Menu details
+<div id="menu-details"></div>
+
+### User interface
+
+#### Recap
+
+System users can view and search their most recent requests here. The section is divided into three parts:
+<ul>
+    <li>Latest (all statuses): Displays the newest requests, regardless of status, with the most recent ones shown first.</li>
+    <li>Latest Completed: Shows only recently completed requests.</li>
+    <li>Latest In Progress: Lists requests that are currently being processed.</li>
+</ul>
+
+#### <strike>New user</strike>
+
+System users can submit requests to create a new user account.</br>
+The form includes the following fields:
+<ul>
+    <li>Enter the user's full name</li>
+    <li>(Optional) Mark as a technical user</li>
+    <li>(Optional) Enter registration number for internal use (can be disabled in settings)</li>
+    <li>Select one or more departments</li>
+    <li>(To clarify: should department leaders be auto-filled? What if multiple departments are selected?) Department leader</li>
+    <li>(To clarify: should job titles managed in system admin page?)Enter job title</li>
+    <li>Select authorization(s) and sub-authorization(s)</li>
+    <li>(Optional) Add notes or comments</li>
+    <li>(Optional, shown only if technical user is selected) Technical account note</li>
+</ul>
+
+#### <strike>New distribution list</strike>
+
+System users can create a new distribution list.</br>
+The form includes the following fields:
+<ul>
+    <li>Distribution list address – the email address of the list</li>
+    <li>Distribution list members – users to be included in the list</li>
+</ul>
+
 
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
