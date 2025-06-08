@@ -259,7 +259,7 @@ The form includes the following fields:
 </ul>
 
 
-#### <strike>Personal menu</strike>
+#### Personal menu
 
 <ul>
     <li>Profile</li>
