@@ -109,6 +109,8 @@
 ## Menu
 <div id="menu"></div>
 
+#### The menu content depends on the authorization level, the above is with every privilige.
+
 ### User interface
 <div id="user-interface"></div>
 <ul>
