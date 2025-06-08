@@ -145,7 +145,7 @@
             <li>Add location</li>
         </ul>
     <li><strike>Requests</strike></li>
-    <li>Users</li>
+    <li><strike>Users</strike></li>
     <li>Local accounts</li>
         <ul>
             <li>Add local account</li>
