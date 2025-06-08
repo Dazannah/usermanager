@@ -2,7 +2,7 @@
     <h1>User manager</h1>
     ⚠️ This project is a work in progress. Many features are still under development and not yet fully implemented.
     <p>
-        <a href="https://usermanager.davidfabian.hu/">Demo</a>
+        <a href="https://usermanager.davidfabian.hu/">Live Demo</a>
     </p>
 </div>
 
@@ -87,10 +87,10 @@
 4. Set up .env</br>
    Copy .env.example to .env</br>
 
-   Left APP_INSTALLED on false and APP_IS_LOCAL_ACCOUNT_ENEABLED on true if you want to create a sysAdmin local account on start. You can also do it later.</br>
+   Left APP_INSTALLED set to false and APP_IS_LOCAL_ACCOUNT_ENABLED on true if you want to create a sysAdmin local account on start. You can also do it later.</br>
    Fill out the DB section</br></br>
    
-   If you want to use LDAP authenctication, fill out the LDAP section.<br>
+   If you want to use LDAP authentication, fill out the LDAP section.<br>
    You can test LDAP connection with:
    ```
    php artisan ldap:test
@@ -122,7 +122,7 @@
     <li><strike>Distribution lists</strike></li>
     <li>Personal menu</li>
         <ul>
-            <li>Proflie</li>
+            <li>Profile</li>
             <li>System admin interface</li>
             <li>Log out</li>
         </ul>
@@ -156,11 +156,11 @@
         <ul>
             <li>General</li>
             <li>Texts</li>
-            <li>Authrization levels</li>
+            <li>Authorization levels</li>
         </ul>
     <li>Personal menu</li>
         <ul>
-            <li>Profil</li>
+            <li>Profile</li>
             <li>System user interface</li>
             <li>Log out</li>
         </ul>
