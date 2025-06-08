@@ -22,7 +22,7 @@
         </ul>
     </li>
     <li>
-        <a href="#implemented-features">Implemented features</a>
+        <a href="#menu">Menu</a>
         <ul>
             <li><a href="#user-interface">User</a></li>
             <li><a href="#admin-interface">Admin</a></li>
@@ -106,6 +106,63 @@
     php artisan migrate
     ```
 
+## Menu
+<div id="menu"></div>
+
+### User interface
+<div id="user-interface"></div>
+<ul>
+    <li>Recap</li>
+    <li><strike>Request new user</strike></li>
+    <li><strike>Create new distribution list</strike></li>
+    <li><strike>Requests</strike></li>
+    <li><strike>Users</strike></li>
+    <li><strike>Distribution lists</strike></li>
+    <li>Personal menu</li>
+        <ul>
+            <li>Proflie</li>
+            <li>System admin interface</li>
+            <li>Log out</li>
+        </ul>
+</ul>
+
+### Admin interface
+<div id="user-interface"></div>
+<ul>
+    <li>Admin Recap</li>
+    <li>Authorizations</li>
+        <ul>
+            <li>Add column</li>
+            <li>Add authorization</li>
+            <li>Add sub authorization</li>
+        </ul>
+    <li>Departments</li>
+        <ul>
+            <li>Add department</li>
+        </ul>
+    <li>Locations</li>
+        <ul>
+            <li>Add location</li>
+        </ul>
+    <li><strike>Requests</strike></li>
+    <li>Users</li>
+    <li>Local accounts</li>
+        <ul>
+            <li>Add local account</li>
+        </ul>
+    <li>Settings</li>
+        <ul>
+            <li>General</li>
+            <li>Texts</li>
+            <li>Authrization levels</li>
+        </ul>
+    <li>Personal menu</li>
+        <ul>
+            <li>Profil</li>
+            <li>System user interface</li>
+            <li>Log out</li>
+        </ul>
+</ul>
 
 
 [Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
