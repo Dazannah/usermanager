@@ -39,7 +39,7 @@ class DepartmentFormPanel extends Component {
         } catch (ValidationException $err) {
             throw $err;
         } catch (Exception $err) {
-            $this->addError('save_edit_department_error', $err->getMessage());
+            $this->addError('department_delete_error', $err->getMessage());
         }
     }
 
@@ -52,14 +52,14 @@ class DepartmentFormPanel extends Component {
             $err_message = $err->getMessage();
 
             if ($err->getCode() == 23000) {
-                $this->addError('save_edit_department_error', "Nem lehet törölni ezt az osztályt, mert valószínűleg kapcsolódik más adatokhoz (pl. felhasználóhoz van rendelve ).");
+                $this->addError('department_delete_error', "Nem lehet törölni ezt az osztályt, mert valószínűleg kapcsolódik más adatokhoz (pl. felhasználóhoz van rendelve ).");
 
                 return;
             }
 
-            $this->addError('save_edit_department_error', "Ismeretlen hiba történt: $err_message");
+            $this->addError('department_delete_error', "Ismeretlen hiba történt: $err_message");
         } catch (Exception $err) {
-            $this->addError('save_edit_department_error', $err->getMessage());
+            $this->addError('department_delete_error', $err->getMessage());
         } finally {
             $this->dispatch('refresh_departments_mount');
         }

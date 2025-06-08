@@ -39,6 +39,14 @@ window.addEventListener('department_delete_success', () => {
                             </div>
 
                             <div class="relative z-0 w-full mb-5 group">
+                                <x-text-input :property_name="'form.manager'" :type="'text'" />
+                                <x-label :for="'form.manager'" :text="'Osztály vezető'" />
+                                @error('form.manager')
+                                    <x-input-error :messages="$message" class="mt-2" />
+                                @enderror
+                            </div>
+
+                            <div class="relative z-0 w-full mb-5 group">
                                 <x-text-input :property_name="'form.departmentNumber'" :type="'text'" />
                                 <x-label :for="'form.departmentNumber'" :text="texts_settings()->departmentNumber" />
                                 @error('form.departmentNumber')
@@ -121,7 +129,7 @@ window.addEventListener('department_delete_success', () => {
                     {{ __('Sikeres törlés') }}
                 </x-action-message-success>
 
-                @error('department_delete_success')
+                @error('department_delete_error')
                     <div class="me-3">
                         <x-input-error :messages="$message" />
                     </div>
