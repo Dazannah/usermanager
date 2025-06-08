@@ -1,3 +1,55 @@
+<div align="center">
+    <h1>User manager</h1>
+    ⚠️ This project is a work in progress. Many features are still under development and not yet fully implemented.
+    <p>
+        <a href="https://usermanager.davidfabian.hu/">Demo</a>
+    </p>
+</div>
+
+### Table of content
+<ol>
+    <li>
+        <a href="#about-the-project">About the project</a>
+        <ul>
+            <li><a href="#built-with">Built with</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#getting-started">Getting Started</a>
+        <ul>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#installation">Installation</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#implemented-features">Implemented features</a>
+        <ul>
+            <li><a href="#user-interface">User</a></li>
+            <li><a href="#admin-interface">Admin</a></li>
+        </ul>
+    </li>
+</ol>
+
+## About The Project
+<div id="about-the-project">
+    This project is a Laravel-Blade based User Manager system tailored to meet the needs of a local hospital's internal user registration and management workflows.<br/><br/>
+    The application offers an Admin Interface for configuring authorizations and sub-authorizations, managing departments and locations, directly edit user-related requests (create/edit/delete), and directly managing users and local accounts. Admins can also configure authentication levels and general settings such as application name, logo, technical email address     for notifications, and ISPConfig SOAP API credentials. Additionally, they can rename field labels (e.g., departmentNumber) and define display names and required LDAP groups for each authorization level.<br/><br/>
+    The System User Interface allows authorized users to submit requests to create, edit, or delete user accounts. If ISPConfig integration is enabled, system users with the appropriate authorization can directly manage email distribution lists. Users can also search for existing users, requests, and (if configured) distribution lists.
+</div>
+
+### Built with
+
+<div id="built-with">
+    
+[![Laravel][Laravel-logo]][Laravel-url]</br>
+[![Livewire][Livewire-logo]][Livewire-url]</br>
+[![Tailwind][Tailwindcss-logo]][Tailwindcss-url]</br>
+[![MySQL][MySQL-logo]][MySQL-url]
+
+</div>
+
+
+<br/><br/><br/>
 enable ldap in php
 sudo apt-get install php-ldap
 extension=ldap
@@ -9,3 +61,12 @@ npm run build
 
 php artisan key:generate
 
+
+[Laravel-logo]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
+[Laravel-url]: https://laravel.com
+[Livewire-logo]: https://img.shields.io/badge/livewire-%234e56a6.svg?style=for-the-badge&logo=livewire&logoColor=white
+[Livewire-url]: https://livewire.laravel.com/
+[Tailwindcss-logo]: https://img.shields.io/badge/Tailwind_CSS-grey?style=for-the-badge&logo=tailwind-css&logoColor=38B2AC
+[Tailwindcss-url]: https://tailwindcss.com/
+[MySQL-logo]: https://shields.io/badge/MySQL-lightgrey?logo=mysql&style=plastic&logoColor=white&labelColor=blue
+[MySQL-url]: https://www.mysql.com/
