@@ -119,6 +119,10 @@
     <li><strike>New user</strike></li>
     <li><strike>New distribution list</strike></li>
     <li><strike>Requests</strike></li>
+        <ul>
+            <li><strike>Pending approvals</strike></li>
+            <li><strike>Approved requests</strike></li>
+        </ul>
     <li><strike>Users</strike></li>
     <li><strike>Distribution lists</strike></li>
     <li>Personal menu</li>
@@ -176,6 +180,7 @@
 
 System users can view and search their most recent requests here. The section is divided into three parts:
 <ul>
+    <li>Requests for </li>
     <li>Latest (all statuses): Displays the newest requests, regardless of status, with the most recent ones shown first.</li>
     <li>Latest Completed: Shows only recently completed requests.</li>
     <li>Latest In Progress: Lists requests that are currently being processed.</li>
@@ -204,6 +209,33 @@ The form includes the following fields:
 <ul>
     <li>Distribution list address – the email address of the list</li>
     <li>Distribution list members – users to be included in the list</li>
+</ul>
+
+#### <strike>Requests</strike>
+
+<ul>
+    <li><strike>Pending approvals</strike></li>
+        <ul>
+            <li>Approve, decline, or return the request to the submitter for missing details</li>
+                <ul>
+                    <li>Include a note explaining what's missing</li>
+                </ul>
+            <li>(Optional) Fill in usernames (if required)</li>
+        </ul>
+    <li><strike>Approved requests</strike></li> 
+        <ul>
+            <li>Fill in usernames (LDAP integration will auto-fill if enabled)</li>
+            <li>Return to submitter for missing details</li>
+                <ul>
+                    <li>Include a note explaining what's missing</li>
+                </ul>
+            <li>Save changes</li>
+            <li>Mark as completed — for new user requests, this will create the user based on the submitted data</li>
+        </ul>
+    <li><strike>All requests</strike></li>
+        <ul>
+            <li>Search and view all submitted requests</li>
+        </ul>
 </ul>
 
 
