@@ -41,17 +41,19 @@ class LoginForm extends Form {
 
         $user = User::where('username', '=', $this->email)->first();
 
-        if ($user->status->name == 'inactive')
-            throw ValidationException::withMessages([
-                'form.email' => "Felhasználó inaktiválva.",
-            ]);
+        if (isset($user)) {
+            if ($user->status->name == 'inactive')
+                throw ValidationException::withMessages([
+                    'form.email' => "Felhasználó inaktiválva.",
+                ]);
 
-        $user_auth_level = AuthorizationLevelService::get_user_auth_level($user);
+            $user_auth_level = AuthorizationLevelService::get_user_auth_level($user);
 
-        if ($user_auth_level  <= 0)
-            throw ValidationException::withMessages([
-                'form.email' => "Nem rendelkezik megfelelő jogosultsággal.",
-            ]);
+            if ($user_auth_level  <= 0)
+                throw ValidationException::withMessages([
+                    'form.email' => "Nem rendelkezik megfelelő jogosultsággal.",
+                ]);
+        }
 
         if (! Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());
