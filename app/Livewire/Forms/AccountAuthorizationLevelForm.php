@@ -13,14 +13,16 @@ class AccountAuthorizationLevelForm extends Form {
     public string|null $ldap_group_name;
     public string|null $name;
 
-    public $rules = [
-        'displayName' => 'required',
-        'ldap_group_name' => 'required'
-    ];
+    public function rules() {
+        return  [
+            'displayName' => 'required',
+            'ldap_group_name' => config('ldap.active') ? 'required' : ''
+        ];
+    }
 
     public $messages = [
         'displayName.required' => 'Mejelenítési név megadása kötelező.',
-        'ldap_group_name' => 'LDAP csoport név megadása kötelező.'
+        'ldap_group_name.required' => 'LDAP csoport név megadása kötelező.'
     ];
 
     public function set_account_authorization_level($update_account_authorization_id) {
@@ -32,7 +34,7 @@ class AccountAuthorizationLevelForm extends Form {
     }
 
     public function update() {
-        $this->validate();
+        $this->validate($this->rules());
 
         $this->accountAuthorizationLevel->displayName =  $this->displayName;
         $this->accountAuthorizationLevel->ldap_group_name = $this->ldap_group_name;
