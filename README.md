@@ -161,6 +161,7 @@
             <li>General</li>
             <li>Texts</li>
             <li>Authorization levels</li>
+            <li>Logged-in users</li>
         </ul>
     <li>Personal menu</li>
         <ul>
@@ -380,6 +381,8 @@ All global application settings are managed under this menu.
         <li>LDAP group name</li>
         <li>Technical identifier</li>
     </ul>
+    <li>Logged-in users</li>
+    View, filter, and delete user sessions.
 </ul>
 
 
