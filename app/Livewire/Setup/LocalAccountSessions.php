@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Setup;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
@@ -23,8 +24,14 @@ class LocalAccountSessions extends Component {
         $this->resetPage();
     }
 
-    public function delete_session($session_id) {
+    public function delete_session($session_id, $username) {
         DB::table(config('session.table'))->where('id', $session_id)->delete();
+
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            $user->setRememberToken(null);
+            $user->save();
+        }
     }
 
     public function filter_sessions() {

@@ -54,7 +54,8 @@
                             </td>
                             <td class="px-6 py-4 text-right">
 
-                                <button @click.prevent="$dispatch('delete_session', ['{{ $session->id }}'])"
+                                <button
+                                    @click.prevent="$dispatch('delete_session', ['{{ $session->id }}', '{{ $session->username }}'])"
                                     class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Kijelentkeztetés</button>
                             </td>
                         </tr>
