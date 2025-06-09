@@ -24,15 +24,17 @@
                                 </div>
                             </th>
 
-                            <th scope="col" class="px-6 py-3">
-                                <div class="relative z-0 w-full mb-5 group">
-                                    <x-text-input :property_name="'ldap_group_name'" :type="'text'" />
-                                    <x-label :for="'ldap_group_name'" :text="'LDAP csoport név'" />
-                                    @error('ldap_group_name')
-                                        <x-input-error :messages="$message" class="mt-2" />
-                                    @enderror
-                                </div>
-                            </th>
+                            @if (config('ldap.active'))
+                                <th scope="col" class="px-6 py-3">
+                                    <div class="relative z-0 w-full mb-5 group">
+                                        <x-text-input :property_name="'ldap_group_name'" :type="'text'" />
+                                        <x-label :for="'ldap_group_name'" :text="'LDAP csoport név'" />
+                                        @error('ldap_group_name')
+                                            <x-input-error :messages="$message" class="mt-2" />
+                                        @enderror
+                                    </div>
+                                </th>
+                            @endif
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
@@ -59,9 +61,13 @@
                             <td class="px-6 py-4">
                                 {{ $accountAuthorizationLevel->displayName }}
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $accountAuthorizationLevel->ldap_group_name }}
-                            </td>
+
+                            @if (config('ldap.active'))
+                                <td class="px-6 py-4">
+                                    {{ $accountAuthorizationLevel->ldap_group_name }}
+                                </td>
+                            @endif
+
                             <td class="px-6 py-4">
                                 {{ $accountAuthorizationLevel->name }}
                             </td>

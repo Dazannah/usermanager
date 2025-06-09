@@ -12,6 +12,7 @@ class DepartmentForm extends Form {
 
     // livewire view properties
     public string|null $displayName;
+    public string|null $manager = null;
     public string|null $departmentNumber = null;
     public string|null $departmentNumber2 = null;
     public int $status_id = 1;
@@ -36,6 +37,7 @@ class DepartmentForm extends Form {
         $this->department = Department::where('id', $department_id)->first();
 
         $this->displayName = $this->department->displayName;
+        $this->manager = $this->department->manager;
         $this->departmentNumber = $this->department->departmentNumber;
         $this->departmentNumber2 = $this->department->departmentNumber2;
         $this->status_id = $this->department->status_id;
@@ -50,6 +52,7 @@ class DepartmentForm extends Form {
         $this->validate();
 
         $this->department->displayName = $this->displayName;
+        $this->department->manager = $this->manager;
         $this->department->departmentNumber = $this->departmentNumber;
         $this->department->departmentNumber2 = $this->departmentNumber2;
         $this->department->status_id = $this->status_id;
@@ -72,6 +75,7 @@ class DepartmentForm extends Form {
 
         $department = new Department([
             'displayName' => $this->displayName,
+            'manager' => $this->manager,
             'departmentNumber' => $this->departmentNumber,
             'departmentNumber2' => $this->departmentNumber2,
             'location_id' => $this->location_id,

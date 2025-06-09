@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property string $displayName
+ * @property string $manager
  * @property string|null $departmentNumber
  * @property string|null $departmentNumber2
  * @property int $location_id
@@ -34,6 +35,7 @@ class Department extends Model {
 
 	protected $fillable = [
 		'displayName',
+		'manager',
 		'departmentNumber',
 		'departmentNumber2',
 		'location_id',

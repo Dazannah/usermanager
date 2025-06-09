@@ -13,6 +13,9 @@
     <x-nav-link :href="route('admin-app-configuration-authorization-levels')" class="{{ $classes }}" :active="request()->routeIs('admin-app-configuration-authorization-levels')" wire:navigate>
         {{ __('Jogosultsági szintek') }}
     </x-nav-link>
+    <x-nav-link :href="route('admin-app-configuration-local-account-sessions')" class="{{ $classes }}" :active="request()->routeIs('admin-app-configuration-local-account-sessions')" wire:navigate>
+        {{ __('Bejelentkezett felhasználók') }}
+    </x-nav-link>
 
     {{-- @if (request()->routeIs('admin-app-configuration-local-accounts'))
         <br><x-submenu-button :text="'Helyi fiók hozzáadás'" :properti_to_change="'show_add_local_account_field'" />

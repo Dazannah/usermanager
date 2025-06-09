@@ -26,13 +26,15 @@ $watch('show', value => {
                                 @enderror
                             </div>
 
-                            <div class="relative z-0 w-full mb-5 group">
-                                <x-text-input :property_name="'form.ldap_group_name'" :type="'text'" />
-                                <x-label :for="'form.ldap_group_name'" :text="'LDAP csoport név'" />
-                                @error('form.ldap_group_name')
-                                    <x-input-error :messages="$message" class="mt-2" />
-                                @enderror
-                            </div>
+                            @if (config('ldap.active'))
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-text-input :property_name="'form.ldap_group_name'" :type="'text'" />
+                                    <x-label :for="'form.ldap_group_name'" :text="'LDAP csoport név'" />
+                                    @error('form.ldap_group_name')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
+                                </div>
+                            @endif
 
                             <div class="relative z-0 w-full mb-5 group">
                                 <x-text-input :property_name="'form.name'" :type="'text'" disabled />

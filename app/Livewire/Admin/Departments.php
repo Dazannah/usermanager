@@ -22,6 +22,8 @@ class Departments extends Component {
     //filter properties
     #[Url(as: 'displayName')]
     public string $search_department_displayName;
+    #[Url(as: 'manager')]
+    public string $manager;
     #[Url(as: 'departmentNumber')]
     public string $search_department_departmentNumber;
     #[Url(as: 'departmentNumber2')]
@@ -47,7 +49,7 @@ class Departments extends Component {
     }
 
     public function department_filter_reset() {
-        $this->reset('search_department_displayName', 'search_department_departmentNumber', 'search_department_departmentNumber2', 'search_department_status_id', 'search_department_location_id');
+        $this->reset('search_department_displayName', 'manager', 'search_department_departmentNumber', 'search_department_departmentNumber2', 'search_department_status_id', 'search_department_location_id');
         $this->resetPage();
         $this->dispatch('refresh_departments_mount');
     }
@@ -58,6 +60,11 @@ class Departments extends Component {
             isset($this->search_department_displayName) && !empty($this->search_department_displayName),
             function ($query) {
                 return $query->where('displayName', 'REGEXP', $this->search_department_displayName);
+            }
+        )->when(
+            isset($this->manager) && !empty($this->manager),
+            function ($query) {
+                return $query->where('manager', 'REGEXP', $this->manager);
             }
         )->when(
             isset($this->search_department_departmentNumber) && !empty($this->search_department_departmentNumber),

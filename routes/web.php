@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\Authorizations;
 use App\Livewire\Setup\AccountAuthorizationLevels;
+use App\Livewire\Setup\LocalAccountSessions;
 
 Route::get('initial-setup', InitialSetup::class);
 Route::get('/', fn() => redirect('/login'));
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'isLocalUserEnabled'])->group(function () {
 
             Route::get('/authorization-levels', AccountAuthorizationLevels::class)
                 ->name('admin-app-configuration-authorization-levels');
+
+            Route::get('/local-account-sessions', LocalAccountSessions::class)
+                ->name('admin-app-configuration-local-account-sessions');
         });
     });
 });

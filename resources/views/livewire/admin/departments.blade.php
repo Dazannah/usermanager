@@ -32,6 +32,16 @@
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
+                                    <x-text-input :property_name="'manager'" :type="'text'" />
+                                    <x-label :for="'manager'" :text="'Osztály vezető'" />
+                                    @error('manager')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">
+                                <div class="relative z-0 w-full mb-5 group">
                                     <x-text-input :property_name="'search_department_departmentNumber'" :type="'text'" />
                                     <x-label :for="'search_department_departmentNumber'" :text="texts_settings()->departmentNumber" />
                                     @error('search_department_departmentNumber')
@@ -87,6 +97,10 @@
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $department->displayName }}
+                            </th>
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $department->manager }}
                             </th>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
