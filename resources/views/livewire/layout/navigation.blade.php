@@ -35,7 +35,7 @@ new class extends Component {
                         {{ __('Összefoglaló') }}
                     </x-nav-link>
                     @if (request()->user()->is_base() || request()->user()->is_req_admin())
-                        <x-nav-link {{-- :href="route('new-user')" :active="request()->routeIs('new-user')" --}} wire:navigate>
+                        <x-nav-link :href="route('create-new-user-request')" :active="request()->routeIs('create-new-user-request')" wire:navigate>
                             {{ __('Új felhasználó') }}
                         </x-nav-link>
                     @endif
