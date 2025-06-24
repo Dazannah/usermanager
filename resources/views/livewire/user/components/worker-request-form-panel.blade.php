@@ -52,11 +52,11 @@
                         @enderror
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid gap-2">
                     @foreach ($this->columns as $column)
                         @if ($column?->status?->name == 'active')
-                            <div class="grid grid-cols-1 gap-2">
-                                <h1 class="ms-2 text-sm font-medium text-[#15808a] dark:text-[#15808a]">
+                            <div class="grid gap-2">
+                                <h1 class="ms-2 font-medium text-[#15808a] dark:text-[#15808a]">
                                     {{ $column->displayName }}</h1>
                                 <div id="column_{{ $column->id }}">
                                     @foreach ($column->auth_items as $auth_item)

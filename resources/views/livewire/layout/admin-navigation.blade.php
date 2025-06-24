@@ -30,7 +30,7 @@
                         {{ __('Kérelmek') }}
                     </x-nav-link>
                     <x-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
-                        {{ __('Felhasználók') }}
+                        {{ __('Dolgozók') }}
                     </x-nav-link>
 
                     @if (config('app.is_local_account_enabled'))

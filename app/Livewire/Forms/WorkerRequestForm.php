@@ -6,7 +6,7 @@ use Livewire\Form;
 use App\Models\RequestProcess;
 use Livewire\Attributes\Validate;
 
-class UserRequestForm extends Form {
+class WorkerRequestForm extends Form {
     public string|null $name;
     public RequestProcess|null $process;
     public bool|null $is_technical;

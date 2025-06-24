@@ -7,7 +7,7 @@ use Livewire\Component;
 use App\Models\Department;
 use Illuminate\Database\Eloquent\Collection;
 
-class CreateNewUserRequest extends Component {
+class CreateNewWorkerRequest extends Component {
 
     /** @var Collection<int,Department> */
     public Collection $departments;
@@ -20,6 +20,6 @@ class CreateNewUserRequest extends Component {
     }
 
     public function render() {
-        return view('livewire.user.create-new-user-request');
+        return view('livewire.user.create-new-worker-request');
     }
 }

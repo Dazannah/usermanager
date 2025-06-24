@@ -12,7 +12,7 @@ use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\Authorizations;
 use App\Livewire\Setup\AccountAuthorizationLevels;
 use App\Livewire\Setup\LocalAccountSessions;
-use App\Livewire\User\CreateNewUserRequest;
+use App\Livewire\User\CreateNewWorkerRequest;
 
 Route::get('initial-setup', InitialSetup::class);
 Route::get('/', fn() => redirect('/login'));
@@ -21,8 +21,8 @@ Route::middleware(['auth', 'isLocalUserEnabled'])->group(function () {
     Route::view('dashboard', 'dashboard')
         ->name('dashboard');
 
-    Route::get('/create-new-user-request', CreateNewUserRequest::class)
-        ->name('create-new-user-request');
+    Route::get('/create-new-worker-request', CreateNewWorkerRequest::class)
+        ->name('create-new-worker-request');
 
     Route::view('profile', 'profile')
         ->name('profile');

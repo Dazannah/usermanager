@@ -34,9 +34,9 @@ new class extends Component {
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Összefoglaló') }}
                     </x-nav-link>
-                    @if (request()->user()->is_base() || request()->user()->is_req_admin())
-                        <x-nav-link :href="route('create-new-user-request')" :active="request()->routeIs('create-new-user-request')" wire:navigate>
-                            {{ __('Új felhasználó') }}
+                    @if (request()->user()->is_base())
+                        <x-nav-link :href="route('create-new-worker-request')" :active="request()->routeIs('create-new-worker-request')" wire:navigate>
+                            {{ __('Új dolgozó') }}
                         </x-nav-link>
                     @endif
 
@@ -64,7 +64,7 @@ new class extends Component {
                         </x-nav-link> --}}
 
                     <x-nav-link {{-- :href="route('users')" :active="request()->routeIs('users')" --}} wire:navigate>
-                        {{ __('Felhasználók') }}
+                        {{ __('Dolgozók') }}
                     </x-nav-link>
 
                     @if (request()->user()->is_dl_handler())
