@@ -8,8 +8,7 @@ trait WorkerLike {
     'is_technical',
     'registration_number',
     'post',
-    'department_leader',
-    'status_id'
+    'department_leader'
   ];
 
   public function getWorkerLikeAttributes(): array {

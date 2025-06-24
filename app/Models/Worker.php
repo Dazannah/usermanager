@@ -30,7 +30,9 @@ class Worker extends Model {
     protected $primaryKey = 'id';
     public $timestamps = true;
 
-    protected $fillable = [];
+    protected $fillable = [
+        'status_id'
+    ];
 
     public function __construct(array $attributes = []) {
         $this->fillable = array_merge($this->getWorkerLikeAttributes(), $this->fillable);
