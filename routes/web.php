@@ -10,6 +10,7 @@ use App\Livewire\Admin\LocalAccounts;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\Authorizations;
+use App\Livewire\Admin\Requests;
 use App\Livewire\Setup\AccountAuthorizationLevels;
 use App\Livewire\Setup\LocalAccountSessions;
 use App\Livewire\User\CreateNewWorkerRequest;
@@ -34,11 +35,14 @@ Route::middleware(['auth', 'isLocalUserEnabled'])->group(function () {
         Route::get('/authorizations', Authorizations::class)
             ->name('admin-authorizations');
 
+        Route::get('/departments', Departments::class)
+            ->name('admin-departments');
+
         Route::get('/locations', Locations::class)
             ->name('admin-locations');
 
-        Route::get('/departments', Departments::class)
-            ->name('admin-departments');
+        Route::get('/requests', Requests::class)
+            ->name('admin-requests');
 
         Route::get('/app-configuration', function () {
             return redirect()->route('admin-app-configuration-general');

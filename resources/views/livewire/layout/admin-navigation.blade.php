@@ -26,7 +26,7 @@
                     <x-nav-link :href="route('admin-locations')" :active="request()->routeIs('admin-locations')" wire:navigate>
                         {{ __('Helyszínek') }}
                     </x-nav-link>
-                    <x-nav-link {{-- :href="route('admin-requests')" :active="request()->routeIs('admin-requests')" --}} wire:navigate>
+                    <x-nav-link :href="route('admin-requests')" :active="request()->routeIs('admin-requests')" wire:navigate>
                         {{ __('Kérelmek') }}
                     </x-nav-link>
                     <x-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
@@ -114,7 +114,7 @@
             <x-responsive-nav-link :href="route('admin-locations')" :active="request()->routeIs('admin-locations')" wire:navigate>
                 {{ __('Helyszínek') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link {{-- :href="route('admin-requests')" :active="request()->routeIs('admin-requests')" --}} wire:navigate>
+            <x-responsive-nav-link :href="route('admin-requests')" :active="request()->routeIs('admin-requests')" wire:navigate>
                 {{ __('Kérelmek') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link {{-- :href="route('admin-users')" :active="request()->routeIs('admin-users')" --}} wire:navigate>
