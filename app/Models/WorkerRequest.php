@@ -67,4 +67,8 @@ class WorkerRequest extends Model {
     public function sub_auth_items(): BelongsToMany {
         return $this->BelongsToMany(SubAuthItem::class);
     }
+
+    public function departments(): BelongsToMany {
+        return $this->BelongsToMany(Department::class);
+    }
 }
