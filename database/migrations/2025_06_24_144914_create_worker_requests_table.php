@@ -11,6 +11,11 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('worker_requests', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->boolean('is_technical')->default(false);
+            $table->string('registration_number')->nullable();
+            $table->string('post');
+            $table->string('department_leader')->nullable();
 
             $table->string('note')->nullable();
             $table->string('technical_note')->nullable();
