@@ -29,8 +29,8 @@ return new class extends Migration {
             $table->foreignId("reviewer_id")->nullable()->constrained("users");
             $table->timestamp("reviewed")->nullable();
 
-            $table->foreignId("creator_id")->nullable()->constrained("users");
-            $table->timestamp("created")->nullable();
+            $table->foreignId("closer_id")->nullable()->constrained("users");
+            $table->timestamp("closed")->nullable();
         });
     }
 
