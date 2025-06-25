@@ -2,20 +2,30 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Department;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\WorkerRequest;
+use App\Models\WorkerRequestProcess;
 use App\Models\WorkerRequestStatus;
 use Illuminate\Database\Eloquent\Collection;
 
 class Requests extends Component {
     use WithPagination;
 
-    /** @var Collection<int,Status> */
+    /** @var Collection<int,WorkerRequestStatus> */
     public Collection $statuses;
+
+    /** @var Collection<int,WorkerRequestProcess> */
+    public Collection $process;
+
+    /** @var Collection<int,Department> */
+    public Collection $departments;
 
     public function mount() {
         $this->statuses = WorkerRequestStatus::all();
+        $this->process = WorkerRequestProcess::all();
+        $this->departments = Department::all();
     }
 
     //search
