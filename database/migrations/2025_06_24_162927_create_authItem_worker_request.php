@@ -10,6 +10,7 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::create('authItem_worker_request', function (Blueprint $table) {
+            $table->id();
             $table->foreignId("authItem_id")->constrained();
             $table->foreignId("worker_request_id")->constrained();
         });
