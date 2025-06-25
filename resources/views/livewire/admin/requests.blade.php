@@ -17,9 +17,18 @@
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-text-input :property_name="'search_location_displayName'" :type="'text'" />
-                                    <x-label :for="'search_location_displayName'" :text="'Elnevezés'" />
-                                    @error('search_location_displayName')
+                                    <x-text-input :property_name="'name'" :type="'text'" />
+                                    <x-label :for="'name'" :text="'Név'" />
+                                    @error('name')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-checkbox :property_name="'is_technical'" :text="'Technikai'" />
+                                    @error('is_technical')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror
                                 </div>
@@ -27,10 +36,32 @@
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-select :property_name="'search_location_status_id'" :select="true" :select_value="'Összes'"
+                                    <x-select :property_name="'department_id'" :select="true" :select_value="'Összes'"
+                                        :data="$this->departments" />
+                                    <x-label :for="'department_id'" :text="'Osztály'" />
+                                    @error('department_id')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-select :property_name="'worker_request_process_id'" :select="true" :select_value="'Összes'"
+                                        :data="$this->process" />
+                                    <x-label :for="'worker_request_process_id'" :text="'Művelet'" />
+                                    @error('worker_request_process_id')
+                                        <x-input-error :messages="$message" class="mt-2" />
+                                    @enderror
+                                </div>
+                            </th>
+
+                            <th scope="col" class="px-6 py-3">
+                                <div class="relative z-0 w-full mb-5 group">
+                                    <x-select :property_name="'worker_request_status_id'" :select="true" :select_value="'Összes'"
                                         :data="$this->statuses" />
-                                    <x-label :for="'search_location_status_id'" :text="'Státusz'" />
-                                    @error('search_location_status_id')
+                                    <x-label :for="'worker_request_status_id'" :text="'Státusz'" />
+                                    @error('worker_request_status_id')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror
                                 </div>
@@ -38,9 +69,9 @@
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-text-input :property_name="'search_location_note'" :type="'text'" />
-                                    <x-label :for="'search_location_note'" :text="'Megjegyzés'" />
-                                    @error('search_location_note')
+                                    <x-text-input :property_name="'requester'" :type="'text'" />
+                                    <x-label :for="'requester'" :text="'Igénylő'" />
+                                    @error('requester')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror
                                 </div>
@@ -48,7 +79,7 @@
 
                             <th scope="col" class="px-6 py-3 text-right">
                                 <x-primary-button
-                                    @click.prevent="$dispatch('location_filter_reset')">{{ __('Visszaállítás') }}
+                                    @click.prevent="$dispatch('requests_filter_reset')">{{ __('Visszaállítás') }}
                                 </x-primary-button>
                             </th>
                         </tr>
@@ -61,11 +92,27 @@
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $request->name }}
                             </th>
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                @if ($request->is_technical)
+                                    &#10003
+                                @endif
+                            </th>
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                @foreach ($request->departments as $department)
+                                    {{ $department->displayName }} </br>
+                                @endforeach
+                            </th>
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $request->process->displayName }}
+                            </th>
                             <td class="px-6 py-4">
                                 {{ $request->status->displayName }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $request->note }}
+                                {{ $request->requester->name }}
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <button
