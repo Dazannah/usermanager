@@ -29,9 +29,12 @@ class WorkerRequest extends Model {
         'worker_request_process_id',
         'requester_id',
         'reviewer_id',
-        'creator_id',
+        'closer_id',
         'note',
-        'technical_note'
+        'technical_note',
+        'requested',
+        'reviewed',
+        'closed'
     ];
 
     public function __construct(array $attributes = []) {
