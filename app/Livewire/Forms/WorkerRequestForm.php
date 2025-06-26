@@ -17,4 +17,6 @@ class WorkerRequestForm extends Form {
     public string $post;
     public array $authorizations = [];
     public array $sub_authorizations = [];
+    public string|null $note;
+    public string|null $technical_note;
 }

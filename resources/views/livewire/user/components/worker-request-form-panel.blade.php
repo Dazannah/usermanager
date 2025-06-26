@@ -1,6 +1,6 @@
 <form wire:submit.prevent="save_authorization">
     <div class="p-4 sm:flex sm:items-start">
-        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+        <div x-data="{ show_technical_note: false }" class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
             <h3 class="text-base font-semibold text-gray-500 dark:text-gray-400" id="modal-title">
             </h3>
             <div class="mt-2">
@@ -14,7 +14,7 @@
                     </div>
 
                     <div class="relative z-0 w-full mb-5 group">
-                        <x-checkbox :property_name="'form.is_technical'" :text="'Technikai fiók'" />
+                        <x-checkbox :on_click="'show_technical_note = !show_technical_note'" :property_name="'form.is_technical'" :text="'Technikai fiók'" />
                         @error('form.is_technical')
                             <x-input-error :messages="$message" class="mt-2" />
                         @enderror
@@ -94,6 +94,24 @@
                             </div>
                         @endif
                     @endforeach
+                </div>
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="relative z-0 w-full mb-5 group">
+                        <x-textarea-input :property_name="'form.note'" />
+                        <x-label :for="'form.note'" :text="'Megjegyzés'" />
+                        @error('form.note')
+                            <x-input-error :messages="$message" class="mt-2" />
+                        @enderror
+                    </div>
+
+
+                    <div x-show="show_technical_note" class="relative z-0 w-full mb-5 group">
+                        <x-textarea-input :property_name="'form.technical_note'" />
+                        <x-label :for="'form.technical_note'" :text="'Technikai fiók megjegyzés'" />
+                        @error('form.technical_note')
+                            <x-input-error :messages="$message" class="mt-2" />
+                        @enderror
+                    </div>
                 </div>
             </div>
         </div>
