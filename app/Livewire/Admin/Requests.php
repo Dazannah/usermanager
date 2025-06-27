@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Column;
 use Livewire\Component;
 use App\Models\Department;
 use Livewire\Attributes\Url;
@@ -22,6 +23,9 @@ class Requests extends Component {
 
     /** @var Collection<int,Department> */
     public Collection $departments;
+
+    /** @var Collection<int,Department> */
+    public Collection $columns;
 
     //filter properties
     #[Url]
@@ -46,6 +50,7 @@ class Requests extends Component {
         $this->statuses = WorkerRequestStatus::all();
         $this->process = WorkerRequestProcess::all();
         $this->departments = Department::all();
+        $this->columns = Column::all_sorted_auth_items_by_position();
     }
 
     public function requests_filter_reset() {

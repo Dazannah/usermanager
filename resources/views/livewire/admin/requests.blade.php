@@ -128,5 +128,5 @@
     </div>
 
     {{-- location modal --}}
-    {{-- <livewire:admin.components.request-form-panel /> --}}
+    <livewire:admin.components.worker-request-form-panel-modal :$departments :$columns />
 </div>
