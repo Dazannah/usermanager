@@ -16,7 +16,7 @@ class CreateNewWorkerRequest extends Component {
 
     public function mount() {
         $this->departments = Department::all();
-        $this->columns = Column::all_sorted_auth_items_by_position();
+        $this->columns = Column::all();
     }
 
     public function render() {

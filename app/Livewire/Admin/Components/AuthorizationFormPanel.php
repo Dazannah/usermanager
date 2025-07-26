@@ -22,7 +22,7 @@ class AuthorizationFormPanel extends Component {
     protected $listeners = ['update_authorization_form_panel', 'show_update_authorization', 'show_store_authorization'];
 
     public function mount() {
-        $this->columns = Column::all_sorted_auth_items_by_position();
+        $this->columns = Column::all();
     }
 
     public function update_authorization_form_panel() {

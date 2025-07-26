@@ -50,7 +50,7 @@ class Requests extends Component {
         $this->statuses = WorkerRequestStatus::all();
         $this->process = WorkerRequestProcess::all();
         $this->departments = Department::all();
-        $this->columns = Column::all_sorted_auth_items_by_position();
+        $this->columns = Column::all();
     }
 
     public function requests_filter_reset() {

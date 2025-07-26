@@ -27,7 +27,7 @@ class Authorizations extends Component {
 
     public function mount() {
         $this->statuses = Status::all();
-        $this->columns = Column::all_sorted_auth_items_by_position();
+        $this->columns = Column::all();
         $this->authorizations = AuthItem::all();
         $this->sub_authorization = SubAuthItem::all();
     }
@@ -66,7 +66,7 @@ class Authorizations extends Component {
             $position_auth_item->position = $new_position;
             $position_auth_item->save();
 
-            $this->columns = Column::all_sorted_auth_items_by_position();
+            $this->columns = Column::all();
         } catch (Exception $err) {
             $this->addError('error', $err->getMessage());
 
