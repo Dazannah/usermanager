@@ -105,7 +105,11 @@
                                 @endforeach
                             </th>
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                class="px-6 py-4 font-medium {{ $request->process->name == 'new'
+                                    ? 'text-green-600 dark:text-green-500'
+                                    : ($request->process->name == 'modify'
+                                        ? 'text-orange-600 dark:text-orange-500'
+                                        : 'text-red-600 dark:text-red-500') }} whitespace-nowrap">
                                 {{ $request->process->displayName }}
                             </th>
                             <td class="px-6 py-4">
