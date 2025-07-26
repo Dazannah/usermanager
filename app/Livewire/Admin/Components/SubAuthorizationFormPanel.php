@@ -56,7 +56,7 @@ class SubAuthorizationFormPanel extends Component {
         try {
             $this->form->update();
 
-            $this->dispatch('save_edit_sub_authorization_success');
+            $this->dispatch('save_sub_authorization_success');
         } catch (Exception $err) {
             $this->addError('save_edit_sub_authorization_error', $err->getMessage());
         } finally {
