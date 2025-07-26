@@ -63,6 +63,15 @@ class SubAuthorizationForm extends Form {
 
     public function update() {
         $this->validate();
+        $this->validate(
+            ['position' => "required|numeric|min:1|max:$this->subAuthItems_number"],
+            [
+                'position.required' => 'A pozíció megadása kötelező.',
+                'position.numeric' => 'A pozíciónak számnak kell lennie.',
+                'position.min' => "A pozíció nem lehet kisebb, mint 1",
+                'position.max' => "A pozíció nem lehet nagyobb, mint ($this->subAuthItems_number)."
+            ]
+        );
 
         if ($this->subAuthItem->authItem_id != $this->authItem_id)
             $this->set_position_in_new_authItem();
@@ -73,6 +82,7 @@ class SubAuthorizationForm extends Form {
         $this->subAuthItem->displayName = $this->displayName;
         $this->subAuthItem->authItem_id = $this->authItem_id;
         $this->subAuthItem->status_id = $this->status_id;
+        $this->subAuthItem->position = $this->position;
 
         $this->subAuthItem->save();
 
