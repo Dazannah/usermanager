@@ -60,12 +60,12 @@ class LocalAccounts extends Component {
         )->when(
             isset($this->search_user_name) && !empty($this->search_user_name),
             function ($query) {
-                return $query->where('name', 'REGEXP', $this->search_user_name);
+                return $query->where('name', 'LIKE', "%$this->search_user_name%");
             }
         )->when(
             isset($this->search_user_username) && !empty($this->search_user_username),
             function ($query) {
-                return $query->where('username', 'REGEXP', $this->search_user_username);
+                return $query->where('username', 'LIKE', "%$this->search_user_username%");
             }
         )->when(
             isset($this->search_user_email) && !empty($this->search_user_email),

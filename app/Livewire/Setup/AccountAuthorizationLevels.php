@@ -37,17 +37,17 @@ class AccountAuthorizationLevels extends Component {
         return AccountAuthorizationLevel::when(
             isset($this->name) && !empty($this->name),
             function ($query) {
-                return $query->where('name', 'REGEXP', $this->name);
+                return $query->where('name', 'LIKE', "%$this->name%");
             }
         )->when(
             isset($this->displayName) && !empty($this->displayName),
             function ($query) {
-                return $query->where('displayName', 'REGEXP', $this->displayName);
+                return $query->where('displayName', 'LIKE', "%$this->displayName%");
             }
         )->when(
             isset($this->ldap_group_name) && !empty($this->ldap_group_name),
             function ($query) {
-                return $query->where('ldap_group_name', 'REGEXP', $this->ldap_group_name);
+                return $query->where('ldap_group_name', 'LIKE', "%$this->ldap_group_name%");
             }
         )->paginate(10);
     }

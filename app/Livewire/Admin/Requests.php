@@ -64,7 +64,7 @@ class Requests extends Component {
         return WorkerRequest::when(
             isset($this->name) && !empty($this->name),
             function ($query) {
-                return $query->where('name', 'REGEXP', $this->name);
+                return $query->where('name', 'LIKE', "%$this->name%");
             }
         )->when(
             isset($this->is_technical) && $this->is_technical,
@@ -96,7 +96,7 @@ class Requests extends Component {
             isset($this->requester) && !empty($this->requester),
             function ($query) {
                 return $query->whereHas('requester', function ($q) {
-                    $q->where('username', 'REGEXP', $this->requester);
+                    $q->where('username', 'LIKE', "%$this->requester%");
                 });
             }
         )->paginate(15);

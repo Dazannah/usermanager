@@ -59,22 +59,22 @@ class Departments extends Component {
         return Department::when(
             isset($this->search_department_displayName) && !empty($this->search_department_displayName),
             function ($query) {
-                return $query->where('displayName', 'REGEXP', $this->search_department_displayName);
+                return $query->where('displayName', 'LIKE', "%$this->search_department_displayName%");
             }
         )->when(
             isset($this->manager) && !empty($this->manager),
             function ($query) {
-                return $query->where('manager', 'REGEXP', $this->manager);
+                return $query->where('manager', 'LIKE', "%$this->manager%");
             }
         )->when(
             isset($this->search_department_departmentNumber) && !empty($this->search_department_departmentNumber),
             function ($query) {
-                return $query->where('departmentNumber', 'REGEXP', $this->search_department_departmentNumber);
+                return $query->where('departmentNumber', 'LIKE', "%$this->search_department_departmentNumber%");
             }
         )->when(
             isset($this->search_department_departmentNumber2) && !empty($this->search_department_departmentNumber2),
             function ($query) {
-                return $query->where('departmentNumber2', 'REGEXP', $this->search_department_departmentNumber2);
+                return $query->where('departmentNumber2', 'LIKE', "%$this->search_department_departmentNumber2%");
             }
         )->when(
             isset($this->search_department_status_id) && !empty($this->search_department_status_id),

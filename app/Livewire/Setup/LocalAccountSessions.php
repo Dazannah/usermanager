@@ -41,12 +41,12 @@ class LocalAccountSessions extends Component {
             ->when(
                 isset($this->name) && !empty($this->name),
                 function ($query) {
-                    return $query->where('users.name', 'REGEXP', $this->name);
+                    return $query->where('users.name', 'LIKE', "%$this->name%");
                 }
             )->when(
                 isset($this->username) && !empty($this->username),
                 function ($query) {
-                    return $query->where('users.username', 'REGEXP', $this->username);
+                    return $query->where('users.username', 'LIKE', "%$this->username%");
                 }
             )
             ->join('users', config('session.table') . '.user_id', '=', 'users.id')
