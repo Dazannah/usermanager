@@ -29,17 +29,13 @@
                         <x-input-error :messages="$message" class="mt-2" />
                     @enderror
                 </div>
-
-                <div class="flex items-center gap-4">
-
-                    <x-action-message wire:loading class="me-3" on="save_mail">
-                        {{ __('Betöltés') }}
-                    </x-action-message>
-
-                </div>
             </div>
             <div class="flex items-center gap-4">
-                <x-primary-button wire:click.prevent="save_texts">{{ __('Mentés') }}</x-primary-button>
+                <x-action-message wire:loading class="me-3" on="save_mail">
+                    <x-loading />
+                </x-action-message>
+                <x-primary-button wire:loading.remove
+                    wire:click.prevent="save_texts">{{ __('Mentés') }}</x-primary-button>
                 <x-action-message-success class="me-3" on="save_texts_success">
                     {{ __('Sikeres mentés') }}
                 </x-action-message-success>
