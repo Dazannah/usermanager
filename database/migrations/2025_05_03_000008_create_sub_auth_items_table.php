@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->text("displayName");
             $table->foreignId("authItem_id")->constrained();
             $table->foreignId("status_id")->constrained();
-            $table->integer("position");
+            $table->integer("position")->index();
         });
     }
 

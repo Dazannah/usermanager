@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->text("displayName");
             $table->foreignId("status_id")->constrained();
-            $table->integer("position");
+            $table->integer("position")->index();
         });
     }
 

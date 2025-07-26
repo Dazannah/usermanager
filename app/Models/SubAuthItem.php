@@ -7,6 +7,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Scopes\OrderByPositionScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 
 /**
  * Class SubAuthItem
@@ -22,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
+
+// global scope added to retrive data always ordered
+#[ScopedBy(OrderByPositionScope::class)]
 class SubAuthItem extends Model {
 	protected $table = 'sub_auth_items';
 	protected $primaryKey = 'id';

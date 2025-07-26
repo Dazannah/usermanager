@@ -6,6 +6,8 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\OrderByPositionScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
+
+// global scope added to retrive data always ordered
+#[ScopedBy(OrderByPositionScope::class)]
 class Column extends Model {
 	protected $table = 'columns';
 	protected $primaryKey = 'id';
@@ -46,19 +51,7 @@ class Column extends Model {
 		return $this->hasMany(AuthItem::class, 'column_id');
 	}
 
-	public static function all_sorted_auth_items_by_position() {
-		$columns = Column::all();
-
-		$columns = $columns->sortBy('position');
-
-		foreach ($columns as $column) {
-			$column->auth_items = $column->auth_items->sortBy('position');
-
-			foreach ($column->auth_items as $auth_item) {
-				$auth_item->sub_auth_items = $auth_item->sub_auth_items->sortBy('position');
-			}
-		}
-
-		return $columns;
+	public static function all($columns = ['*']) {
+		return Column::orderBy('position')->get();
 	}
 }
