@@ -72,7 +72,7 @@
 
                                                 @if (count($auth_item?->sub_auth_items) > 0)
                                                     {{-- megnézni, a sub auth itemeket, valamelyik helyet cserél közvetlen renderelés után vélhetően a pozíció körül van valami baj, és a pozíció cserével is van valami baj --}}
-                                                    <div x-show="show"
+                                                    <div x-show="show" x-cloak
                                                         class="grid grid-cols-2 gap-1 p-2 dark:bg-gray-900 sm:rounded-lg">
                                                         @foreach ($auth_item->sub_auth_items as $sub_auth_item)
                                                             @if ($sub_auth_item?->status?->name == 'active')
