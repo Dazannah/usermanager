@@ -15,6 +15,8 @@ class AppSettingsComponent extends Component {
 
     public string $app_name;
     public $logo;
+    public string $primary_color;
+    public string $secondary_color;
 
     public $logo_rules = [
         'logo' => 'image',
@@ -33,6 +35,24 @@ class AppSettingsComponent extends Component {
         'app_name.required' => 'Alkalmazás neve megadása kötelező.'
     ];
 
+    public $color_rules = [
+        'primary_color' => [
+            'required',
+            'regex:/^([a-f0-9]{6}|[a-f0-9]{3})$/i'
+        ],
+        'secondary_color' => [
+            'required',
+            'regex:/^([a-f0-9]{6}|[a-f0-9]{3})$/i'
+        ]
+    ];
+
+    public $color_messages = [
+        'primary_color.required' => 'Elsődleges szín megadása kötelező.',
+        'primary_color.regex' => 'Elsődleges színt hexadecimális formátumban kell megadni.',
+        'secondary_color.required' => 'Másodlagos szín megadása kötelező.',
+        'secondary_color.regex' => 'Másodlagos színt hexadecimális formátumban kell megadni.'
+    ];
+
     public $listeners = ['save_general'];
 
     public function __construct() {
@@ -41,6 +61,8 @@ class AppSettingsComponent extends Component {
 
     public function mount() {
         $this->app_name = $this->app_settings->app_name;
+        $this->primary_color = $this->app_settings->primary_color;
+        $this->secondary_color = $this->app_settings->secondary_color;
     }
 
     public function save_general() {
@@ -58,10 +80,15 @@ class AppSettingsComponent extends Component {
             $this->validate($this->app_name_rules, $this->app_name_messages);
 
             $this->app_settings->app_name = $this->app_name;
+
+            $this->validate($this->color_rules, $this->color_messages);
+            $this->app_settings->primary_color = $this->primary_color;
+            $this->app_settings->secondary_color = $this->secondary_color;
+
             $this->app_settings->save();
 
 
-            $this->dispatch('app-name-updated', $this->app_settings->app_name);
+            $this->dispatch('app-updated');
 
             $this->dispatch('save_general_success');
         } catch (Exception $err) {

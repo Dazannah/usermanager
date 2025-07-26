@@ -1,14 +1,13 @@
-    <div class="mb-6 space-y-6" x-init="window.addEventListener('app-name-updated', event => {
-        if (event.detail[0])
-            document.title = event.detail[0];
+    <div class="mb-6 space-y-6 basis-1/2" x-init="window.addEventListener('app-updated', event => {
+        location.reload()
     });">
 
-        <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+        <div class="max-w-xl p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
             <h2 class="py-4 text-lg font-medium text-gray-900 dark:text-gray-100">
                 {{ __('Általános beállítások') }}
             </h2>
 
-            <div class="max-w-xl">
+            <div class="relative z-0 w-full mb-5 group">
                 <x-text-input :property_name="'app_name'" :type="'text'" />
                 <x-label :for="'app_name'" :text="'Alkalmazás neve'" />
                 @error('app_name')
@@ -16,7 +15,7 @@
                 @enderror
             </div>
 
-            <div class="max-w-xl py-2">
+            <div class="relative z-0 w-full mb-5 group">
                 <x-input-label for="app_name" :value="__('Logó')" />
                 @if ($logo?->isPreviewable())
                     <img src="{{ $logo->temporaryUrl() }}">
@@ -31,6 +30,26 @@
                     <x-input-error :messages="$message" class="mt-2" />
                 @enderror
             </div>
+            <h2 class="py-4 text-gray-900 dark:text-gray-100">
+                {{ __('Színek megadása') }}
+            </h2>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <x-text-input :property_name="'primary_color'" :type="'text'" />
+                <x-label :for="'primary_color'" :text="'Elsődleges szín'" />
+                @error('primary_color')
+                    <x-input-error :messages="$message" class="mt-2" />
+                @enderror
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <x-text-input :property_name="'secondary_color'" :type="'text'" />
+                <x-label :for="'secondary_color'" :text="'Másodlagos szín'" />
+                @error('secondary_color')
+                    <x-input-error :messages="$message" class="mt-2" />
+                @enderror
+            </div>
+
             @error('save_general_error')
                 <x-input-error :messages="$message" class="mt-2" />
             @enderror

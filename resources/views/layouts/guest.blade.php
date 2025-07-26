@@ -15,6 +15,13 @@
     <!-- Scripts -->
     @livewireScriptConfig
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        :root {
+            --primary_color: #{{ app_settings()->primary_color }};
+            --secondary_color: #{{ app_settings()->secondary_color }};
+        }
+    </style>
 </head>
 
 <body class="font-sans text-gray-900 antialiased">

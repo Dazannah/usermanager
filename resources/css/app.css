@@ -5,3 +5,8 @@
 [x-cloak] {
     display: none !important;
 }
+
+:root {
+    --primary_color: #15808a;
+    --secondary_color: #e3a420;
+}

@@ -1,6 +1,6 @@
 @php
     $classes =
-        'text-white dark:text-white hover:text-white dark:hover:text-white hover:border-[#e3a420] hover:dark:border-[#e3a420]';
+        'text-white dark:text-white hover:text-white dark:hover:text-white hover:border-secondary_color hover:dark:border-secondary_color';
 @endphp
 
 <x-submenu :title="'Beállítások'">

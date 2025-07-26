@@ -56,7 +56,7 @@
                     @foreach ($this->columns as $column)
                         @if ($column?->status?->name == 'active')
                             <div key="column-key-{{ $column->id }}" class="grid gap-2">
-                                <h1 class="ms-2 font-medium text-[#15808a] dark:text-[#15808a]">
+                                <h1 class="ms-2 font-medium text-primary_color dark:text-primary_color">
                                     {{ $column->displayName }}</h1>
                                 <div id="column_{{ $column->id }}">
                                     @foreach ($column->auth_items as $auth_item)

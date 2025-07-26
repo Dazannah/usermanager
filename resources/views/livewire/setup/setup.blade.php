@@ -9,8 +9,10 @@
             </div>
         @enderror
 
-        <livewire:setup.components.app-settings-component />
-        <livewire:setup.components.mail-settings-component />
-        <livewire:setup.components.ispconfig-soap-settings-component />
+        <div class="flex flex-row items-center gap-4">
+            <livewire:setup.components.app-settings-component />
+            <livewire:setup.components.mail-settings-component />
+            <livewire:setup.components.ispconfig-soap-settings-component />
+        </div>
     </div>
 </div>

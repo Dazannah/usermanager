@@ -17,7 +17,7 @@
 
 <select @disabled($disabled) wire:key="{{ $key }}" wire:model.live="{{ $property_name }}" type="select"
     name="{{ $property_name }}" id="{{ $property_name }}"
-    {{ $attributes->merge(['class' => 'block p-2.5 w-full text-sm text-[#15808a] focus:text-[#e3a420] bg-transparent border-0 border-b-2 border-[#15808a] appearance-none dark:text-[#15808a] focus:dark:text-[#e3a420] dark:border-[#15808a] dark:focus:border-[#e3a420] focus:outline-none focus:ring-0 focus:border-[#e3a420] peer']) }}placeholder=" ">
+    {{ $attributes->merge(['class' => 'block p-2.5 w-full text-sm text-primary_color focus:text-secondary_color bg-transparent border-0 border-b-2 border-primary_color appearance-none dark:text-primary_color focus:dark:text-secondary_color dark:border-primary_color dark:focus:border-secondary_color focus:outline-none focus:ring-0 focus:border-secondary_color peer']) }}placeholder=" ">
 
     @if ($select)
         <x-option value="">{{ $select_value }}</x-option>
