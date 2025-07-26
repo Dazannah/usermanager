@@ -84,12 +84,12 @@ window.addEventListener('delete_column_success', () => {
                     {{ __('Bezárás') }}
                 </x-danger-button>
 
-                <x-success-button @click.prevent="$wire[method_name]" class="me-3">
+                <x-success-button wire:loading.remove @click.prevent="$wire[method_name]" class="me-3">
                     {{ __('Mentés') }}
                 </x-success-button>
 
                 <x-action-message wire:loading class="me-3" on="save_column">
-                    {{ __('Betöltés') }}
+                    <x-loading />
                 </x-action-message>
 
                 <x-action-message-success class="me-3" on="save_column_success">

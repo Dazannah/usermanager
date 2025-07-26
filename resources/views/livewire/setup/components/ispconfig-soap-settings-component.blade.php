@@ -54,11 +54,11 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button
+            <x-primary-button wire:loading.remove
                 wire:click.prevent="test_ispconfig_connection_standalone">{{ __('ISPConfig kapcsolat tesztelése') }}</x-primary-button>
 
             <x-action-message wire:loading class="me-3" on="test_ispconfig_connection_standalone">
-                {{ __('Betöltés') }}
+                <x-loading />
             </x-action-message>
         </div>
     </div>

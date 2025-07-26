@@ -124,12 +124,12 @@ window.addEventListener('edit_local_account_delete_success', () => {
                     @click.prevent="show_edit_local_account_field = false; show_add_local_account_field = false">{{ __('Bezárás') }}
                 </x-danger-button>
 
-                <x-success-button @click.prevent="$wire[method_name]()" class="me-3">
+                <x-success-button wire:loading.remove @click.prevent="$wire[method_name]()" class="me-3">
                     {{ __('Mentés') }}
                 </x-success-button>
 
                 <x-action-message wire:loading class="me-3" on="save_local_account">
-                    {{ __('Mentés') }}
+                    <x-loading />
                 </x-action-message>
 
                 <x-action-message-success class="me-3" on="save_local_account_success">

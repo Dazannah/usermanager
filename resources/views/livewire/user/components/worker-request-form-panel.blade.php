@@ -55,13 +55,13 @@
                 <div class="grid gap-2">
                     @foreach ($this->columns as $column)
                         @if ($column?->status?->name == 'active')
-                            <div class="grid gap-2">
+                            <div key="column-key-{{ $column->id }}" class="grid gap-2">
                                 <h1 class="ms-2 font-medium text-[#15808a] dark:text-[#15808a]">
                                     {{ $column->displayName }}</h1>
                                 <div id="column_{{ $column->id }}">
                                     @foreach ($column->auth_items as $auth_item)
                                         @if ($auth_item?->status?->name == 'active')
-                                            <div x-data="{ show: false }">
+                                            <div key="auth_item-key-{{ $auth_item->id }}" x-data="{ show: false }">
                                                 <div class="relative z-0 w-full mb-5 group">
                                                     <x-checkbox :on_click="'show = !show'" :property_name="'form.authorizations.' . $auth_item->id"
                                                         :text="$auth_item->displayName" />
@@ -71,11 +71,13 @@
                                                 </div>
 
                                                 @if (count($auth_item?->sub_auth_items) > 0)
+                                                    {{-- megnézni, a sub auth itemeket, valamelyik helyet cserél közvetlen renderelés után vélhetően a pozíció körül van valami baj, és a pozíció cserével is van valami baj --}}
                                                     <div x-show="show"
                                                         class="grid grid-cols-2 gap-1 p-2 dark:bg-gray-900 sm:rounded-lg">
                                                         @foreach ($auth_item->sub_auth_items as $sub_auth_item)
                                                             @if ($sub_auth_item?->status?->name == 'active')
-                                                                <div class="relative z-0 w-full mb-5 group">
+                                                                <div key="sub_auth_item-key-{{ $sub_auth_item->id }}"
+                                                                    class="relative z-0 w-full mb-5 group">
                                                                     <x-checkbox :property_name="'form.sub_authorizations.' .
                                                                         $sub_auth_item->id" :text="$sub_auth_item->displayName" />
                                                                     @error('form.sub_authorizations.' .
@@ -117,12 +119,12 @@
         </div>
     </div>
     <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
-        <x-success-button @click.prevent="$wire[method_name]" class="me-3">
+        <x-success-button wire:loading.remove @click.prevent="$wire[method_name]" class="me-3">
             {{ __('Mentés') }}
         </x-success-button>
 
         <x-action-message wire:loading class="me-3" on="save_authorization">
-            {{ __('Betöltés') }}
+            <x-loading />
         </x-action-message>
 
         <x-action-message-success class="me-3" on="authorization_save_success">

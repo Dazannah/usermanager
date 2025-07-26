@@ -35,15 +35,16 @@
                 <x-input-error :messages="$message" class="mt-2" />
             @enderror
             <div class="flex items-center gap-4">
-                <x-primary-button wire:click.prevent="save_general">{{ __('Mentés') }}</x-primary-button>
+                <x-primary-button wire:loading.remove
+                    wire:click.prevent="save_general">{{ __('Mentés') }}</x-primary-button>
+
+                <x-action-message wire:loading class="me-3" on="save_general">
+                    <x-loading />
+                </x-action-message>
 
                 <x-action-message-success class="me-3" on="save_general_success">
                     {{ __('Sikeres mentés') }}
                 </x-action-message-success>
-
-                <x-action-message wire:loading class="me-3" on="save_general">
-                    {{ __('Betöltés') }}
-                </x-action-message>
             </div>
         </div>
     </div>
