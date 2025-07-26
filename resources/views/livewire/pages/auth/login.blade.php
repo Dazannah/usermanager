@@ -27,7 +27,7 @@ new #[Layout('layouts.guest')] class extends Component {
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form wire:submit="login">
+    <form x-data="{ loading: false }" @submit.prevent="loading = true; $wire.login().then(() => loading = false)">
         <!-- Email Address -->
         <div class="relative z-0 w-full mb-5 group">
             <x-text-input :property_name="'form.email'" :type="'text'" required autofocus autocomplete="username" />
@@ -48,14 +48,16 @@ new #[Layout('layouts.guest')] class extends Component {
             <x-checkbox :property_name="'form.remember'" :text="'Bejelentkezve maradok'" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
+        <div class="block mt-4">
+            <x-loading x-show="loading" />
+        </div>
+        <div class="flex items-center justify-end mt-4" x-show="!loading">
+            {{-- @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                     href="{{ route('password.request') }}" wire:navigate>
                     {{ __('Elfelejtett jelszó?') }}
                 </a>
-            @endif
-
+            @endif --}}
             <x-primary-button class="ms-3">
                 {{ __('Bejelentkezés') }}
             </x-primary-button>
