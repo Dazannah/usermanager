@@ -62,12 +62,22 @@ $watch('show', value => {
                     </form>
                 </thead>
                 <tbody>
-
+                    <tr>
+                        <th colspan="4">
+                            <div class="grid place-items-center">
+                                <x-action-message wire:loading class="m-3" on="filter_department_managers">
+                                    <x-loading />
+                                </x-action-message>
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+                <tbody wire:loading.class="hidden">
                     @foreach ($department_managers as $department_manager)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $department_manager->worker->displayName }}
+                                {{ $department_manager->worker->name }}
                             </th>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -84,11 +94,11 @@ $watch('show', value => {
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
+            <div class="p-2">
+                {{ $department_managers->withQueryString()->links() }}
+            </div>
         </div>
-        {{-- {{ $department_managers->links(data: ['scrollTo' => false]) }} --}}
-
     </x-modal>
 </div>
