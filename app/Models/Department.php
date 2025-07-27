@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property string $displayName
- * @property string $manager
+ * @property int $department_manager_id
  * @property string|null $departmentNumber
  * @property string|null $departmentNumber2
  * @property int $location_id
@@ -35,7 +35,7 @@ class Department extends Model {
 
 	protected $fillable = [
 		'displayName',
-		'manager',
+		'department_manager_id',
 		'departmentNumber',
 		'departmentNumber2',
 		'location_id',
@@ -48,5 +48,9 @@ class Department extends Model {
 
 	public function status() {
 		return $this->belongsTo(Status::class, 'status_id');
+	}
+
+	public function manager() {
+		return $this->belongsTo(DepartmentManager::class, 'department_manager_id');
 	}
 }

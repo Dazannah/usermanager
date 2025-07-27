@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::table('departments', function (Blueprint $table) {
-            $table->text("manager")->nullable();
+            $table->foreignId("department_manager_id")->nullable()->constrained();
         });
     }
 
@@ -19,7 +19,7 @@ return new class extends Migration {
      */
     public function down(): void {
         Schema::table('departments', function (Blueprint $table) {
-            $table->dropColumn(['manager']);
+            $table->dropColumn(['department_manager_id']);
         });
     }
 };
