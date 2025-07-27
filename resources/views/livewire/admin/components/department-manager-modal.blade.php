@@ -1,4 +1,4 @@
-<div x-data="{ show: true, show_create_department_manager: false }" x-init="$watch('show_manage_department_manager', value => {
+<div x-data="{ show: false, show_create_department_manager: false }" x-init="$watch('show_manage_department_manager', value => {
     show = value
 });
 

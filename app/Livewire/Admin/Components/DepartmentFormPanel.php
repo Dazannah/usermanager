@@ -14,6 +14,9 @@ class DepartmentFormPanel extends Component {
     /** @var Collection<int,Status> $statuses */
     public Collection $statuses;
 
+    /** @var Collection<int,DepartmenManager> $statuses*/
+    public Collection $department_managers;
+
     /** @var Collection<int,Location> $locations */
     public Collection $locations;
 

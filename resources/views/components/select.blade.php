@@ -4,6 +4,7 @@
     'select' => false,
     'select_value' => 'Válassz',
     'value_setter' => null,
+    'display_setter' => null,
     'data',
     'counter' => false,
     'counter_max' => null,
@@ -31,10 +32,11 @@
         @foreach ($data as $element)
             @if (isset($value_setter))
                 <x-option value="{{ $element->{$value_setter} }}">{{ $element->displayName }}</x-option>
+            @elseif(isset($display_setter))
+                <x-option value="{{ $element->id }}">{{ data_get($element, $display_setter) }}</x-option>
             @else
                 <x-option value="{{ $element->id }}">{{ $element->displayName }}</x-option>
             @endif
         @endforeach
     @endif
-
 </select>

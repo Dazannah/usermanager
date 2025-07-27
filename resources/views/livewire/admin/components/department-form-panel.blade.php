@@ -39,9 +39,9 @@ window.addEventListener('department_delete_success', () => {
                             </div>
 
                             <div class="relative z-0 w-full mb-5 group">
-                                <x-text-input :property_name="'form.manager'" :type="'text'" />
-                                <x-label :for="'form.manager'" :text="'Osztály vezető'" />
-                                @error('form.manager')
+                                <x-select :property_name="'form.department_manager_id'" :data="$this->department_managers" :select="true" :display_setter="'worker.name'" />
+                                <x-label :for="'form.department_manager_id'" :text="'Osztály vezető'" />
+                                @error('form.department_manager_id')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>

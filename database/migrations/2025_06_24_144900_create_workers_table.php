@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->boolean('is_technical')->default(false);
             $table->string('registration_number')->nullable();
             $table->string('post');
-            $table->string('department_leader')->nullable();
+            $table->foreignId("department_id")->constrained();
             $table->foreignId("status_id")->constrained();
         });
     }

@@ -102,7 +102,7 @@
                             </th>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $department->manager }}
+                                {{ $department->manager?->worker?->name }}
                             </th>
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -134,6 +134,6 @@
     </div>
 
     {{-- department modal --}}
-    <livewire:admin.components.department-form-panel :$statuses :$locations />
+    <livewire:admin.components.department-form-panel :$statuses :$department_managers :$locations />
     <livewire:admin.components.department-manager-modal :$statuses />
 </div>

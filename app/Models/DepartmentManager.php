@@ -31,7 +31,7 @@ class DepartmentManager extends Model {
         'worker_id'
     ];
 
-    public function process() {
+    public function worker() {
         return $this->belongsTo(Worker::class, 'worker_id');
     }
 

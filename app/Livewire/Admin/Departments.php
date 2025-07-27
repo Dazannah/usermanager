@@ -6,6 +6,7 @@ use App\Models\Status;
 use Livewire\Component;
 use App\Models\Location;
 use App\Models\Department;
+use App\Models\DepartmentManager;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,6 +16,9 @@ class Departments extends Component {
 
     /** @var Collection<int,Status> $statuses*/
     public Collection $statuses;
+
+    /** @var Collection<int,DepartmenManager> $statuses*/
+    public Collection $department_managers;
 
     /** @var Collection<int,Location> $statuses*/
     public Collection $locations;
@@ -41,6 +45,7 @@ class Departments extends Component {
 
     public function mount() {
         $this->statuses = Status::all();
+        $this->department_managers = DepartmentManager::all();
         $this->locations = Location::all();
     }
 
@@ -62,9 +67,14 @@ class Departments extends Component {
                 return $query->where('displayName', 'LIKE', "%$this->search_department_displayName%");
             }
         )->when(
+            //need to be tested
             isset($this->search_department_manager) && !empty($this->search_department_manager),
             function ($query) {
-                return $query->where('manager', 'LIKE', "%$this->search_department_manager%");
+                return $query->whereHas('manager', function ($inside_query) {
+                    return $inside_query->whereHas('worker', function ($most_inside_query) {
+                        $most_inside_query->where('name', 'LIKE', "%$this->search_department_manager%");
+                    });
+                });
             }
         )->when(
             isset($this->search_department_departmentNumber) && !empty($this->search_department_departmentNumber),
