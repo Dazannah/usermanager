@@ -1,10 +1,12 @@
 <div x-data="{
     show_store_department_field: false,
     show_update_department_field: false,
+    show_manage_department_manager: false
 }">
 
     <x-submenu :title="'Osztályok'">
         <x-submenu-button :text="'Osztály hozzáadás'" :properti_to_change="'show_store_department_field'" />
+        <x-submenu-button :text="'Osztályvezető kezelése'" :properti_to_change="'show_manage_department_manager'" />
     </x-submenu>
 
 
@@ -32,9 +34,9 @@
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-text-input :property_name="'manager'" :type="'text'" />
-                                    <x-label :for="'manager'" :text="'Osztály vezető'" />
-                                    @error('manager')
+                                    <x-text-input :property_name="'search_department_manager'" :type="'text'" />
+                                    <x-label :for="'search_department_manager'" :text="'Osztály vezető'" />
+                                    @error('search_department_manager')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror
                                 </div>
@@ -133,4 +135,5 @@
 
     {{-- department modal --}}
     <livewire:admin.components.department-form-panel :$statuses :$locations />
+    <livewire:admin.components.department-manager-modal :$statuses />
 </div>
