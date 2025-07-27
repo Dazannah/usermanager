@@ -67,7 +67,6 @@ class Departments extends Component {
                 return $query->where('displayName', 'LIKE', "%$this->search_department_displayName%");
             }
         )->when(
-            //need to be tested
             isset($this->search_department_manager) && !empty($this->search_department_manager),
             function ($query) {
                 return $query->whereHas('manager', function ($inside_query) {
