@@ -6,7 +6,7 @@
 
     <x-submenu :title="'Osztályok'">
         <x-submenu-button :text="'Osztály hozzáadás'" :properti_to_change="'show_store_department_field'" />
-        <x-submenu-button :text="'Osztályvezető kezelése'" :properti_to_change="'show_manage_department_manager'" />
+        <x-submenu-button :text="'Osztályvezetők'" :properti_to_change="'show_manage_department_manager'" />
     </x-submenu>
 
 
