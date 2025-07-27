@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-4">
-                <x-action-message wire:loading class="me-3" on="save_mail">
+                <x-action-message wire:loading class="me-3" on="save_texts">
                     <x-loading />
                 </x-action-message>
                 <x-primary-button wire:loading.remove
