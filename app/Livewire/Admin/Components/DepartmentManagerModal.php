@@ -6,9 +6,13 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\DepartmentManager;
 use Livewire\WithoutUrlPagination;
+use Illuminate\Database\Eloquent\Collection;
 
 class DepartmentManagerModal extends Component {
     use WithPagination, WithoutUrlPagination;
+
+    /** @var Collection<int,Status> $statuses */
+    public Collection $statuses;
 
     public string $search_department_manager_displayName;
     public string $search_department_manager_registration_number;
