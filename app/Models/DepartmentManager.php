@@ -28,7 +28,8 @@ class DepartmentManager extends Model {
      */
     protected $fillable = [
         'note',
-        'worker_id'
+        'worker_id',
+        'status_id'
     ];
 
     public function worker() {
@@ -37,5 +38,9 @@ class DepartmentManager extends Model {
 
     public function departments(): BelongsToMany {
         return $this->BelongsToMany(Department::class);
+    }
+
+    public function status() {
+        return $this->belongsTo(Status::class, 'status_id');
     }
 }
