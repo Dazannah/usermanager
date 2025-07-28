@@ -1,4 +1,8 @@
-<div x-data="{ show: false, show_create_department_manager: false }" x-init="$watch('show_manage_department_manager', value => {
+<div x-data="{
+    show: false,
+    show_create_department_manager_field: false,
+    show_update_department_manager_field: false,
+}" x-init="$watch('show_manage_department_manager', value => {
     show = value
 });
 
@@ -7,9 +11,11 @@ $watch('show', value => {
         show_manage_department_manager = value
     }
 });">
+
+
     <x-modal :name="'DepartmentManagerModal'">
         <x-submenu :title="'Osztályvezetők'">
-            <x-submenu-button :text="'Osztályvezető hozzáadás'" :properti_to_change="'show_create_department_manager'" />
+            <x-submenu-button :text="'Osztályvezető hozzáadás'" :properti_to_change="'show_create_department_manager_field'" />
         </x-submenu>
 
         @error('error')
@@ -101,4 +107,6 @@ $watch('show', value => {
             </div>
         </div>
     </x-modal>
+
+    <livewire:admin.components.department-manager-form-panel :$statuses />
 </div>
