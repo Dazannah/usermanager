@@ -12,7 +12,6 @@ return new class extends Migration {
         Schema::create('department_managers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->text('note')->nullable();
             $table->foreignId("worker_id")->constrained();
         });
     }
