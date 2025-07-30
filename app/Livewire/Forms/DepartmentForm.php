@@ -4,9 +4,12 @@ namespace App\Livewire\Forms;
 
 use Exception;
 use Livewire\Form;
+use App\Models\Worker;
 use App\Models\Department;
+use App\Models\DepartmentManager;
 use Livewire\Attributes\Validate;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Validation\ValidationException;
 
 class DepartmentForm extends Form {
     public Department|null $department;
@@ -52,6 +55,8 @@ class DepartmentForm extends Form {
     public function update() {
         $this->validate();
 
+        $this->validateWorker();
+
         $this->department->displayName = $this->displayName;
         $this->department->department_manager_id = empty($this->department_manager_id) ? null : $this->department_manager_id;
         $this->department->departmentNumber = $this->departmentNumber;
@@ -74,6 +79,8 @@ class DepartmentForm extends Form {
     public function store() {
         $this->validate();
 
+        $this->validateWorker();
+
         $department = new Department([
             'displayName' => $this->displayName,
             'department_manager_id' => empty($this->department_manager_id) ? null : $this->department_manager_id,
@@ -86,5 +93,23 @@ class DepartmentForm extends Form {
         $department->save();
 
         $this->reset();
+    }
+
+    public function validateWorker() {
+        $error_message = null;
+
+        $department_manager = DepartmentManager::where('id', '=', $this->department_manager_id)->first();
+        $worker = Worker::where('id', '=', $department_manager?->worker_id)->first();
+
+        if ($worker?->status->name == 'inactive')
+            $error_message = 'Dolgozó inaktív.';
+
+        if ($department_manager?->status->name == 'inactive')
+            $error_message = 'Osztályvezető inaktív.';
+
+        if (!is_null($error_message))
+            throw ValidationException::withMessages([
+                'form.department_manager_id' => [$error_message]
+            ]);
     }
 }
