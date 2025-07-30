@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\WorkerLike;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -50,5 +51,13 @@ class Worker extends Model {
 
     public function departments(): BelongsToMany {
         return $this->BelongsToMany(Department::class);
+    }
+
+    public function status(): BelongsTo {
+        return $this->BelongsTo(Status::class);
+    }
+
+    public function department_manager() {
+        return $this->hasOne(DepartmentManager::class, 'worker_id');
     }
 }
