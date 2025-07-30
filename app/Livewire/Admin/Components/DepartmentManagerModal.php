@@ -16,7 +16,7 @@ class DepartmentManagerModal extends Component {
 
     public string $search_department_manager_displayName;
     public string $search_department_manager_registration_number;
-    public string $search_department_manager_note;
+    public string $search_department_manager_status_id;
 
     public function getPageName() {
         return 'manager_page';
@@ -32,7 +32,7 @@ class DepartmentManagerModal extends Component {
     }
 
     public function department_manager_filter_reset() {
-        $this->reset('search_department_manager_displayName', 'search_department_manager_registration_number', 'search_department_manager_note');
+        $this->reset('search_department_manager_displayName', 'search_department_manager_registration_number', 'search_department_manager_status_id');
         $this->resetPage();
         $this->dispatch('refresh_department_managers_mount');
     }
@@ -53,11 +53,11 @@ class DepartmentManagerModal extends Component {
                 });
             }
         )->when(
-            isset($this->search_department_manager_note) && !empty($this->search_department_manager_note),
+            isset($this->search_department_manager_status_id) && !empty($this->search_department_manager_status_id),
             function ($query) {
-                return $query->where('note', 'LIKE', "%$this->search_department_manager_note%");
+                return $query->where('status_id', '=', $this->search_department_manager_status_id);
             }
-        )->paginate(10);
+        )->paginate(8);
     }
 
     public function render() {
