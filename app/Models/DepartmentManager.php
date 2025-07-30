@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * Class DepartmentManager
  * 
  * @property int $id
- * @property string $note
- * 
- * @property Collection|Department[] $auth_items
  *
  * @package App\Models
  */
@@ -27,7 +24,6 @@ class DepartmentManager extends Model {
      * @var list<string>
      */
     protected $fillable = [
-        'note',
         'worker_id',
         'status_id'
     ];
