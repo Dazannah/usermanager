@@ -14,7 +14,7 @@ $watch('show_store_department_field', value => {
 });
 $watch('show', value => {
     if (!value) {
-        show_edit_department_field = value
+        show_update_department_field = value
         show_store_department_field = value
     }
 });
