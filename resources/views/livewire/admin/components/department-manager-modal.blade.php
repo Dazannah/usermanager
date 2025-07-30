@@ -24,7 +24,7 @@ $watch('show', value => {
             </div>
         @enderror
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative overflow-x-auto sm:rounded-lg">
             <table class="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <form action="filter_department_manager">
@@ -51,9 +51,9 @@ $watch('show', value => {
 
                             <th scope="col" class="px-6 py-3">
                                 <div class="relative z-0 w-full mb-5 group">
-                                    <x-text-input :property_name="'search_department_manager_note'" :type="'text'" />
-                                    <x-label :for="'search_department_manager_note'" :text="'Megjegyzés'" />
-                                    @error('search_department_manager_note')
+                                    <x-select :property_name="'search_department_manager_status_id'" :data="$this->statuses" :select="true" />
+                                    <x-label :for="'search_department_manager_status_id'" :text="'Státusz'" />
+                                    @error('search_department_manager_status_id')
                                         <x-input-error :messages="$message" class="mt-2" />
                                     @enderror
                                 </div>
@@ -90,12 +90,12 @@ $watch('show', value => {
                                 {{ $department_manager->worker->registration_number }}
                             </th>
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $department_manager->note }}
+                                class="px-6 py-4  {{ $department_manager->status->name == 'active' ? 'text-green-600 dark:text-green-500' : 'text-red-600 dark:text-red-500' }} font-medium whitespace-nowrap">
+                                {{ $department_manager->status->displayName }}
                             </th>
                             <td class="px-6 py-4 text-right">
                                 <button
-                                    @click="show_update_department_manager = !show_update_department_manager; update_department_manager_id = {{ $department_manager->id }}"
+                                    @click="show_update_department_manager_field = !show_update_department_manager_field; update_department_manager_id = {{ $department_manager->id }}"
                                     class="font-medium text-orange-600 dark:text-orange-500 underline hover:no-underline">Szerkesztés</button>
                             </td>
                         </tr>
@@ -105,6 +105,11 @@ $watch('show', value => {
             <div class="p-2">
                 {{ $department_managers->withQueryString()->links() }}
             </div>
+        </div>
+        <div class="bg-gray-100 dark:bg-gray-600 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 items-center">
+            <x-danger-button @click.prevent="show = false">
+                {{ __('Bezárás') }}
+            </x-danger-button>
         </div>
     </x-modal>
 
