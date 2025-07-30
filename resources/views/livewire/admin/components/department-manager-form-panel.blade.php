@@ -3,14 +3,14 @@
     method_name = 'update_department_manager'
     modal_title = 'Osztályvezető szerkesztése'
 
-    if (value) $dispatch('update_department_manager_id', [update_department_id])
+    if (value) $dispatch('update_department_manager_id', [update_department_manager_id])
 });
 $watch('show_create_department_manager_field', value => {
     show = value
     method_name = 'create_department_manager'
     modal_title = 'Osztályvezető hozzáadása'
 
-    if (value) $dispatch('show_store_department')
+    if (value) $dispatch('show_store_department_manager')
 });
 $watch('show', value => {
     if (!value) {
@@ -61,33 +61,37 @@ window.addEventListener('department_manager_delete_success', () => {
                                 @enderror
                             </div>
 
-                            <div class="relative z-0 w-full mb-5 group">
-                                <x-text-input :property_name="'form.note'" :type="'text'" />
-                                <x-label :for="'form.note'" :text="'Megjegyzés'" />
-                                @error('form.note')
+                            <div x-show="show_update_department_manager_field" x-data="{ showConfirmDelete: false }"
+                                class="relative z-0 w-full mb-5 group">
+                                <x-danger-button @click.prevent="showConfirmDelete = true">
+                                    {{ __('Törlés') }}
+                                </x-danger-button>
+                                <div x-show="showConfirmDelete">
+                                    <x-modal :name="'Osztályvezető törlése'">
+                                        <div class="m-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                            <h3 class="text-base font-semibold text-gray-500 dark:text-gray-400"
+                                                id="modal-title">
+                                                Biztosan törlöd?
+                                            </h3>
+                                            <x-success-button
+                                                @click.prevent="showConfirmDelete = false">Mégse</x-success-button>
+                                            <x-danger-button
+                                                @click.prevent="$wire.delete_department_manager(); showConfirmDelete = false">Igen,
+                                                törlöm</x-danger-button>
+                                        </div>
+                                    </x-modal>
+                                </div>
+                                @error('delete_department_manager')
                                     <x-input-error :messages="$message" class="mt-2" />
                                 @enderror
                             </div>
 
                             <div x-data="{ worker_search: false }" class="col-span-4 relative z-0 w-full mb-5 group">
-                                <x-primary-button x-on:click="worker_search = !worker_search" id="dropdownSearchButton"
-                                    data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom"
-                                    class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-                                    type="button">Dolgozó kiválasztása
-                                    <svg x-show="!worker_search" class="w-2.5 h-2.5 ms-3" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m1 1 4 4 4-4" />
-                                    </svg>
-                                    <svg x-show="worker_search" class="w-2.5 h-2.5 ms-3" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M9 5 5 1 1 5" />
-                                    </svg>
-                                </x-primary-button>
-
-                                <div x-show="worker_search" class="col-span-4 pt-2">
+                                <div x-show="show_create_department_manager_field" class="col-span-4 pt-2">
                                     <div class="col-span-4 overflow-x-auto sm:rounded-lg">
+                                        <h3 class="text-base font-semibold text-gray-500 dark:text-gray-400"
+                                            id="modal-title" x-text="'Dolgozó keresés'">
+                                        </h3>
                                         <table
                                             class="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                             <thead
@@ -146,32 +150,6 @@ window.addEventListener('department_manager_delete_success', () => {
                                     {{ $workers->links(data: ['scrollTo' => false]) }}
                                 </div>
                             </div>
-
-
-                            <div x-show="show_update_department_manager_field" x-data="{ showConfirmDelete: false }"
-                                class="relative z-0 w-full mb-5 group">
-                                <x-danger-button @click.prevent="showConfirmDelete = true">
-                                    {{ __('Törlés') }}
-                                </x-danger-button>
-                                <div x-show="showConfirmDelete">
-                                    <x-modal :name="'Helyszín törlése'">
-                                        <div class="m-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                            <h3 class="text-base font-semibold text-gray-500 dark:text-gray-400"
-                                                id="modal-title">
-                                                Biztosan törlöd?
-                                            </h3>
-                                            <x-success-button
-                                                @click.prevent="showConfirmDelete = false">Mégse</x-success-button>
-                                            <x-danger-button
-                                                @click.prevent="$wire.delete_department_manager(); showConfirmDelete = false">Igen,
-                                                törlöm</x-danger-button>
-                                        </div>
-                                    </x-modal>
-                                </div>
-                                @error('delete_department_manager')
-                                    <x-input-error :messages="$message" class="mt-2" />
-                                @enderror
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -190,7 +168,7 @@ window.addEventListener('department_manager_delete_success', () => {
                     <x-loading />
                 </x-action-message>
 
-                <x-action-message-success class="me-3" on="update_department_manager_success">
+                <x-action-message-success class="me-3" on="department_manager_save_success">
                     {{ __('Sikeres mentés') }}
                 </x-action-message-success>
 
