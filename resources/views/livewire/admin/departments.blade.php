@@ -134,6 +134,6 @@
     </div>
 
     {{-- department modal --}}
-    <livewire:admin.components.department-form-panel :$statuses :$department_managers :$locations />
+    <livewire:admin.components.department-form-panel :$statuses :$department_managers :$locations :key="'dept-panel-' . count($department_managers)" />
     <livewire:admin.components.department-manager-modal :$statuses />
 </div>
