@@ -7,8 +7,7 @@ use Livewire\Form;
 use App\Models\Worker;
 use App\Models\Department;
 use App\Models\DepartmentManager;
-use Livewire\Attributes\Validate;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Location;
 use Illuminate\Validation\ValidationException;
 
 class DepartmentForm extends Form {
@@ -56,6 +55,7 @@ class DepartmentForm extends Form {
         $this->validate();
 
         $this->validateWorker();
+        $this->validateLocation();
 
         $this->department->displayName = $this->displayName;
         $this->department->department_manager_id = empty($this->department_manager_id) ? null : $this->department_manager_id;
@@ -80,6 +80,7 @@ class DepartmentForm extends Form {
         $this->validate();
 
         $this->validateWorker();
+        $this->validateLocation();
 
         $department = new Department([
             'displayName' => $this->displayName,
@@ -110,6 +111,14 @@ class DepartmentForm extends Form {
         if (!is_null($error_message))
             throw ValidationException::withMessages([
                 'form.department_manager_id' => [$error_message]
+            ]);
+    }
+
+    public function validateLocation() {
+        $location = Location::where('id', '=', $this->location_id)->first();
+        if ($location->status->name == 'inactive')
+            throw ValidationException::withMessages([
+                'form.location_id' => ["Helyszín inaktív"]
             ]);
     }
 }
