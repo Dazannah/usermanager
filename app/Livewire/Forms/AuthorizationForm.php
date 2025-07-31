@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\AuthItem;
+use Illuminate\Support\Facades\DB;
 
 class AuthorizationForm extends Form {
     // livewire view properties
@@ -61,16 +62,27 @@ class AuthorizationForm extends Form {
     public function update() {
         $this->validate();
 
-        //if column id change
-        if ($this->authItem->column->id !== $this->column_id)
-            $this->set_new_positions();
+        DB::transaction(function () {
+            $original_position = $this->authItem->position;
+            $new_position = $this->position;
 
-        $this->authItem->displayName = $this->displayName;
-        $this->authItem->column_id = $this->column_id;
-        $this->authItem->status_id = $this->status_id;
-        $this->authItem->is_ldap = $this->is_ldap;
+            if ($new_position > $original_position) {
+                AuthItem::where('position', '>', $original_position)
+                    ->where('position', '<=', $new_position)
+                    ->decrement('position');
+            } elseif ($new_position < $original_position) {
+                AuthItem::where('position', '>=', $new_position)
+                    ->where('position', '<', $original_position)
+                    ->increment('position');
+            }
 
-        $this->authItem->save();
+            $this->authItem->displayName = $this->displayName;
+            $this->authItem->column_id = $this->column_id;
+            $this->authItem->status_id = $this->status_id;
+            $this->authItem->is_ldap = $this->is_ldap;
+
+            $this->authItem->save();
+        });
     }
 
     public function delete() {
@@ -89,29 +101,6 @@ class AuthorizationForm extends Form {
         $this->reset();
     }
 
-    public function set_new_positions() {
-        try {
-            if ($this->authItem->column_id != $this->column_id) {
-                $new_column_last_item = AuthItem::where('column_id', $this->column_id)->orderBy('position', 'desc')->first();
-                $this->authItem->position = $new_column_last_item?->position + 1 ?? 1;
-            }
-
-            $original_column_items = AuthItem::where('column_id', $this->authItem->column->id)->get();
-
-            foreach ($original_column_items as $original_column_item) {
-                if ($original_column_item->id === $this->authItem->id) {
-                    continue;
-                }
-
-                if ($original_column_item->position > $this->column_id) {
-                    $original_column_item->position--;
-                    $original_column_item->save();
-                }
-            }
-        } catch (Exception $err) {
-            $this->addError('save_edit_authorization_error', $err->getMessage());
-        }
-    }
     public function render() {
         return view('livewire.admin.components.authorization-form-panel');
     }
