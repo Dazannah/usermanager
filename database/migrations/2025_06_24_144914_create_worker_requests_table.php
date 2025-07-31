@@ -24,13 +24,13 @@ return new class extends Migration {
             $table->foreignId("worker_request_process_id")->constrained();
 
             $table->foreignId("requester_id")->constrained("users");
-            $table->timestamp("requested");
+            $table->timestamp("requested_at");
 
             $table->foreignId("reviewer_id")->nullable()->constrained("users");
-            $table->timestamp("reviewed")->nullable();
+            $table->timestamp("reviewed_at")->nullable();
 
             $table->foreignId("closer_id")->nullable()->constrained("users");
-            $table->timestamp("closed")->nullable();
+            $table->timestamp("closed_at")->nullable();
         });
     }
 
