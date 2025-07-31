@@ -5,6 +5,8 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\Location;
+use App\Models\Department;
+use Illuminate\Validation\ValidationException;
 
 class LocationForm extends Form {
     public Location|null $location;
@@ -30,14 +32,22 @@ class LocationForm extends Form {
         $this->location_note = $this->location->note;
     }
 
-    public function delete_current_data(): void {
-        $this->reset();
-    }
-
     public function update() {
         $this->validate();
 
         $this->location->displayName = $this->displayName;
+
+        if ($this->location->status_id != $this->status_id) {
+            if ($this->status_id == 2) {
+                $departments = Department::where('location_id', "=", $this->location->id)->where('status_id', '=', 1)->get();
+
+                if (count($departments) > 0)
+                    throw ValidationException::withMessages([
+                        'form.status_id' => ["A helyszín 1 vagy több aktív osztályhoz van rendelve."]
+                    ]);
+            }
+        }
+
         $this->location->status_id = $this->status_id;
         $this->location->note = $this->location_note;
 
