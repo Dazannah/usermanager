@@ -46,7 +46,7 @@ class Departments extends Component {
     public function mount() {
         $this->statuses = Status::all();
         $this->department_managers = DepartmentManager::where("status_id", "=", "1")->get();
-        $this->locations = Location::all();
+        $this->locations = Location::where("status_id", "=", "1")->get();
     }
 
     public function refresh_departments_mount() {
