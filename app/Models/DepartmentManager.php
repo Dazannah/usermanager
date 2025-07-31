@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedInt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -17,6 +18,11 @@ class DepartmentManager extends Model {
     protected $table = 'department_managers';
     protected $primaryKey = 'id';
     public $timestamps = true;
+
+    protected $casts = [
+        'worker_id' => SanitizedInt::class,
+        'status_id' => SanitizedInt::class
+    ];
 
     /**
      * The attributes that are mass assignable.

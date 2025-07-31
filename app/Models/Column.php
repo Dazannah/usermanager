@@ -6,6 +6,8 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedInt;
+use App\Casts\SanitizedString;
 use App\Models\Scopes\OrderByPositionScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Collection;
@@ -33,8 +35,9 @@ class Column extends Model {
 	public $timestamps = false;
 
 	protected $casts = [
-		'status_id' => 'int',
-		'position' => 'int'
+		'displayName' => SanitizedString::class,
+		'status_id' => SanitizedInt::class,
+		'position' => SanitizedInt::class
 	];
 
 	protected $fillable = [

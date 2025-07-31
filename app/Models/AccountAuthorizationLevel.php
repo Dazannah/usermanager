@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedInt;
+use App\Casts\SanitizedString;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -20,10 +22,10 @@ class AccountAuthorizationLevel extends Model {
     public $timestamps = false;
 
     protected $casts = [
-        'name' => 'string',
-        'displayName' => 'string',
-        'ldap_group_name' => 'string',
-        'auth_level' => 'int'
+        'name' => SanitizedString::class,
+        'displayName' => SanitizedString::class,
+        'ldap_group_name' => SanitizedString::class,
+        'auth_level' => SanitizedInt::class
     ];
 
     protected $fillable = [

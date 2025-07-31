@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedInt;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\OrderByPositionScope;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -33,9 +34,9 @@ class SubAuthItem extends Model {
 	public $timestamps = false;
 
 	protected $casts = [
-		'authItem_id' => 'int',
-		'status_id' => 'int',
-		'position' => 'int'
+		'authItem_id' => SanitizedInt::class,
+		'status_id' => SanitizedInt::class,
+		'position' => SanitizedInt::class
 	];
 
 	protected $fillable = [

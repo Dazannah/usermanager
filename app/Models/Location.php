@@ -6,8 +6,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Casts\SanitizedInt;
+use App\Casts\SanitizedString;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Location
@@ -31,6 +33,12 @@ class Location extends Model {
 		'displayName',
 		'note',
 		'status_id'
+	];
+
+	protected $casts = [
+		'displayName' => SanitizedString::class,
+		'note' => SanitizedString::class,
+		'status_id' => SanitizedInt::class
 	];
 
 	public function departments() {

@@ -6,6 +6,8 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedBool;
+use App\Casts\SanitizedInt;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Scopes\OrderByPositionScope;
 use Illuminate\Database\Eloquent\Collection;
@@ -36,10 +38,10 @@ class AuthItem extends Model {
 	public $timestamps = false;
 
 	protected $casts = [
-		'column_id' => 'int',
-		'status_id' => 'int',
-		'position' => 'int',
-		'is_ldap' => 'bool'
+		'column_id' => SanitizedInt::class,
+		'status_id' => SanitizedInt::class,
+		'position' => SanitizedInt::class,
+		'is_ldap' => SanitizedBool::class
 	];
 
 	protected $fillable = [

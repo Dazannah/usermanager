@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedString;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +27,11 @@ class Status extends Model {
 	protected $table = 'statuses';
 	protected $primaryKey = 'id';
 	public $timestamps = false;
+
+	protected $casts = [
+		'name' => SanitizedString::class,
+		'displayName' => SanitizedString::class
+	];
 
 	protected $fillable = [
 		'name',

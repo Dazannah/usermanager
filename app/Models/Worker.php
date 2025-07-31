@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedInt;
 use App\Traits\WorkerLike;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,12 +32,17 @@ class Worker extends Model {
     protected $primaryKey = 'id';
     public $timestamps = true;
 
+    protected $casts = [
+        'status_id' => SanitizedInt::class
+    ];
+
     protected $fillable = [
         'status_id'
     ];
 
     public function __construct(array $attributes = []) {
         $this->fillable = array_merge($this->getWorkerLikeAttributes(), $this->fillable);
+        $this->casts = array_merge($this->getWorkerLikeCasts(), $this->casts);
 
         parent::__construct($attributes);
     }

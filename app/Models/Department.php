@@ -6,6 +6,8 @@
 
 namespace App\Models;
 
+use App\Casts\SanitizedInt;
+use App\Casts\SanitizedString;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -30,7 +32,12 @@ class Department extends Model {
 	public $timestamps = false;
 
 	protected $casts = [
-		'location_id' => 'int'
+		'displayName' => SanitizedString::class,
+		'department_manager_id' => SanitizedInt::class,
+		'departmentNumber' => SanitizedString::class,
+		'departmentNumber2' => SanitizedString::class,
+		'location_id' => SanitizedInt::class,
+		'status_id' => SanitizedInt::class
 	];
 
 	protected $fillable = [

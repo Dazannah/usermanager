@@ -3,6 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Casts\SanitizedBool;
+use App\Casts\SanitizedInt;
+use App\Casts\SanitizedString;
 use Exception;
 use Illuminate\Notifications\Notifiable;
 use LdapRecord\Laravel\Auth\HasLdapUser;
@@ -16,6 +20,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements LdapAuthenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, AuthenticatesWithLdap, HasLdapUser;
+
+    protected $casts = [
+        'name' => SanitizedString::class,
+        'username' => SanitizedString::class,
+        'email' =>  SanitizedString::class,
+        'auth_level' => SanitizedInt::class,
+        'is_local' => SanitizedBool::class,
+        'status_id' => SanitizedInt::class
+    ];
 
     /**
      * The attributes that are mass assignable.
