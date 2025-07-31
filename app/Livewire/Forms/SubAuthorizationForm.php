@@ -103,20 +103,16 @@ class SubAuthorizationForm extends Form {
     }
 
     public function delete() {
-        $delete_result = $this->subAuthItem->delete();
+        DB::transaction(function () {
+            $delete_result = $this->subAuthItem->delete();
 
-        if (!isset($delete_result))
-            throw new Exception('Törölni kívánt aljogosultság nem található.');
+            if (!isset($delete_result))
+                throw new Exception('Törölni kívánt aljogosultság nem található.');
 
-        $sub_authItems = SubAuthItem::where('authItem_id', $this->subAuthItem->authItem_id)->get();
-
-        /** @var SubAuthItem $sub_authItem */
-        foreach ($sub_authItems as $sub_authItem) {
-            if ($sub_authItem->position >= $this->subAuthItem->position) {
-                $sub_authItem->position--;
-                $sub_authItem->save();
-            }
-        }
+            SubAuthItem::where('authItem_id', $this->subAuthItem->authItem_id)
+                ->where('position', '>=', $this->subAuthItem->position)
+                ->decrement('position');
+        });
 
         $this->reset();
     }

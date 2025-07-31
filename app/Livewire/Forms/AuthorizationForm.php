@@ -86,17 +86,16 @@ class AuthorizationForm extends Form {
     }
 
     public function delete() {
-        $delete_result = $this->authItem->delete();
+        DB::transaction(function () {
+            $delete_result = $this->authItem->delete();
 
-        if (!isset($delete_result))
-            throw new Exception('Törölni kívánt oszlop nem található.');
+            if (!isset($delete_result))
+                throw new Exception('Törölni kívánt jogosultság nem található.');
 
-        $authItems = AuthItem::where([['position', '>', $this->authItem->position], ['column_id', $this->authItem->column_id]])->get();
-
-        foreach ($authItems as $authItem) {
-            $authItem->position--;
-            $authItem->save();
-        }
+            AuthItem::where('position', '>', $this->authItem->position)
+                ->where('column_id', $this->authItem->column_id)
+                ->decrement('position');
+        });
 
         $this->reset();
     }

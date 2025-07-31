@@ -79,17 +79,15 @@ class ColumnForm extends Form {
     }
 
     public function delete() {
-        $delete_result = $this->column->delete();
+        DB::transaction(function () {
+            $delete_result = $this->column->delete();
 
-        if (!isset($delete_result))
-            throw new Exception('Törölni kívánt oszlop nem található.');
+            if (!isset($delete_result))
+                throw new Exception('Törölni kívánt oszlop nem található.');
 
-        $columns = Column::where([['position', '>', $this->column->position]])->get();
-
-        foreach ($columns as $column) {
-            $column->position--;
-            $column->save();
-        }
+            Column::where('position', '>', $this->column->position)
+                ->decrement('position');
+        });
 
         $this->reset();
     }
