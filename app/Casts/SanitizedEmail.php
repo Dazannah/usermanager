@@ -2,8 +2,9 @@
 
 namespace App\Casts;
 
-use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use App\Services\SanitizationService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class SanitizedEmail implements CastsAttributes {
     /**
@@ -21,6 +22,6 @@ class SanitizedEmail implements CastsAttributes {
      * @param  array<string, mixed>  $attributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed {
-        return strtolower(trim($value));
+        return SanitizationService::email($value);
     }
 }

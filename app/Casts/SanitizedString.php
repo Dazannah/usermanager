@@ -2,6 +2,7 @@
 
 namespace App\Casts;
 
+use App\Services\SanitizationService;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +22,6 @@ class SanitizedString implements CastsAttributes {
      * @param  array<string, mixed>  $attributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed {
-        return trim(strip_tags($value));
+        return SanitizationService::string($value);
     }
 }
