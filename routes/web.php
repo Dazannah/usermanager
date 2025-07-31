@@ -38,9 +38,6 @@ Route::middleware(['auth', 'isLocalUserEnabled'])->group(function () {
         Route::get('/departments', Departments::class)
             ->name('admin-departments');
 
-        Route::get('/locations', Locations::class)
-            ->name('admin-locations');
-
         Route::get('/requests', Requests::class)
             ->name('admin-requests');
 
