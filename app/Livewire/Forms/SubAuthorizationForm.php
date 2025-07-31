@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\SubAuthItem;
+use Illuminate\Support\Facades\DB;
 
 class SubAuthorizationForm extends Form {
     public SubAuthItem|null $subAuthItem;
@@ -76,15 +77,27 @@ class SubAuthorizationForm extends Form {
         if ($this->subAuthItem->authItem_id != $this->authItem_id)
             $this->set_position_in_new_authItem();
 
-        if ($this->subAuthItem->position != $this->position)
-            $this->change_sub_authItems_position();
+        DB::transaction(function () {
+            $original_position = $this->subAuthItem->position;
+            $new_position = $this->position;
 
-        $this->subAuthItem->displayName = $this->displayName;
-        $this->subAuthItem->authItem_id = $this->authItem_id;
-        $this->subAuthItem->status_id = $this->status_id;
-        $this->subAuthItem->position = $this->position;
+            if ($new_position > $original_position) {
+                SubAuthItem::where('position', '>', $original_position)
+                    ->where('position', '<=', $new_position)
+                    ->decrement('position');
+            } elseif ($new_position < $original_position) {
+                SubAuthItem::where('position', '>=', $new_position)
+                    ->where('position', '<', $original_position)
+                    ->increment('position');
+            }
 
-        $this->subAuthItem->save();
+            $this->subAuthItem->displayName = $this->displayName;
+            $this->subAuthItem->authItem_id = $this->authItem_id;
+            $this->subAuthItem->status_id = $this->status_id;
+            $this->subAuthItem->position = $this->position;
+
+            $this->subAuthItem->save();
+        });
 
         $this->set_subAuthItem($this->subAuthItem->id);
     }
@@ -109,45 +122,7 @@ class SubAuthorizationForm extends Form {
     }
 
     public function set_position_in_new_authItem() {
-
         $new_authItem_last_item = SubAuthItem::where('authItem_id', $this->authItem_id)->orderBy('position', 'desc')->first();
         $this->subAuthItem->position = $new_authItem_last_item?->position + 1 ?? 1;
-
-        // $original_authItem_items = SubAuthItem::where('authItem_id', $this->subAuthItem->authItem_id)->get();
-
-        // foreach ($original_authItem_items as $original_authItem_item) {
-        //     if ($original_authItem_item->id === $this->subAuthItem->id) {
-        //         continue;
-        //     }
-
-        //     if ($original_authItem_item->position > $this->subAuthItem->position) {
-        //         $original_authItem_item->position--;
-        //         $original_authItem_item->save();
-        //     }
-        // }
-    }
-
-    public function change_sub_authItems_position() {
-
-        $subAuthItems = SubAuthItem::where('authItem_id', $this->subAuthItem->authItem_id)->get();
-
-        $original_position = $this->subAuthItem->position;
-        $new_position = $this->position;
-
-        foreach ($subAuthItems as $subAuthItem) {
-            if ($subAuthItem->id == $this->subAuthItem->id)
-                continue;
-
-            if ($new_position > $original_position && $subAuthItem->position <= $new_position && $original_position <= $subAuthItem->position) {
-                $subAuthItem->position--;
-                $subAuthItem->save();
-            }
-
-            if ($new_position < $original_position && $subAuthItem->position >= $new_position && $original_position >= $subAuthItem->position) {
-
-                $subAuthItem->position++;
-                $subAuthItem->save();
-            }
-        };
     }
 }
