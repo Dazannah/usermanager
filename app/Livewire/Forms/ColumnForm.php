@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use Exception;
 use Livewire\Form;
 use App\Models\Column;
+use Illuminate\Support\Facades\DB;
 
 class ColumnForm extends Form {
     // livewire view properties
@@ -55,36 +56,26 @@ class ColumnForm extends Form {
     public function update() {
         $this->validate();
 
-        $this->change_columns_position();
+        DB::transaction(function () {
+            $original_position = $this->column->position;
+            $new_position = $this->position;
 
-        $this->column->displayName = $this->displayName;
-        $this->column->status_id = $this->status_id;
-        $this->column->position = $this->position;
-
-        $this->column->save();
-    }
-
-    public function change_columns_position() {
-        $all_columns = Column::all();
-
-        $original_position = $this->column->position;
-        $new_position = $this->position;
-
-        foreach ($all_columns as $all_column) {
-            if ($all_column->id == $this->column->id)
-                continue;
-
-            if ($new_position > $original_position && $all_column->position <= $new_position && $original_position <= $all_column->position) {
-                $all_column->position--;
-                $all_column->save();
+            if ($new_position > $original_position) {
+                Column::where('position', '>', $original_position)
+                    ->where('position', '<=', $new_position)
+                    ->decrement('position');
+            } elseif ($new_position < $original_position) {
+                Column::where('position', '>=', $new_position)
+                    ->where('position', '<', $original_position)
+                    ->increment('position');
             }
 
-            if ($new_position < $original_position && $all_column->position >= $new_position && $original_position >= $all_column->position) {
+            $this->column->displayName = $this->displayName;
+            $this->column->status_id = $this->status_id;
+            $this->column->position = $new_position;
 
-                $all_column->position++;
-                $all_column->save();
-            }
-        };
+            $this->column->save();
+        });
     }
 
     public function delete() {
