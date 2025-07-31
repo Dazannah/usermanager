@@ -1,12 +1,14 @@
 <div x-data="{
     show_store_department_field: false,
     show_update_department_field: false,
-    show_manage_department_manager: false
+    show_manage_department_manager: false,
+    show_manage_locations: false
 }">
 
     <x-submenu :title="'Osztályok'">
         <x-submenu-button :text="'Osztály hozzáadás'" :properti_to_change="'show_store_department_field'" />
         <x-submenu-button :text="'Osztályvezetők'" :properti_to_change="'show_manage_department_manager'" />
+        <x-submenu-button :text="'Helyszínek'" :properti_to_change="'show_manage_locations'" />
     </x-submenu>
 
 
@@ -134,6 +136,7 @@
     </div>
 
     {{-- department modal --}}
-    <livewire:admin.components.department-form-panel :$statuses :$department_managers :$locations :key="'dept-panel-' . count($department_managers)" />
+    <livewire:admin.components.department-form-panel :$statuses :$department_managers :$locations :key="'dept-panel-' . count($department_managers) . count($locations)" />
     <livewire:admin.components.department-manager-modal :$statuses />
+    <livewire:admin.components.locations-modal :$statuses />
 </div>
