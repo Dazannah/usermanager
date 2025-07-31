@@ -16,14 +16,14 @@ class LocationFormPanel extends Component {
 
     public LocationForm $form;
 
-    protected $listeners = ['update_location_id'];
+    protected $listeners = ['update_location_id', 'show_add_location'];
 
     public function update_location_id($location_id) {
         $this->form->set_location($location_id);
     }
 
     public function show_add_location() {
-        $this->form->delete_current_data();
+        $this->form->reset();
     }
 
     //edit save
@@ -32,6 +32,7 @@ class LocationFormPanel extends Component {
         try {
             $this->form->update();
 
+            $this->dispatch('refresh_departments_mount');
             $this->dispatch('location_success');
             $this->dispatch('refresh_locations_mount');
         } catch (ValidationException $err) {
@@ -49,6 +50,7 @@ class LocationFormPanel extends Component {
         try {
             $this->form->delete();
 
+            $this->dispatch('refresh_departments_mount');
             $this->dispatch('save_delete_location_success');
         } catch (QueryException $err) {
             $err_message = $err->getMessage();
@@ -71,6 +73,7 @@ class LocationFormPanel extends Component {
         try {
             $this->form->store();
 
+            $this->dispatch('refresh_departments_mount');
             $this->dispatch('location_success');
             $this->dispatch('refresh_locations_mount');
         } catch (ValidationException $err) {
